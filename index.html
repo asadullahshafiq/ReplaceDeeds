@@ -549,14 +549,14 @@ input:focus, textarea:focus {
   cursor: pointer;
   z-index: 2002;
 }
-/* Joystick - Bottom Center */
+/* Joystick - Bottom Center - Fixed Lag */
 .joystick-container {
   position: absolute;
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   z-index: 2002;
 }
 .joystick-base {
@@ -565,19 +565,22 @@ input:focus, textarea:focus {
   background: rgba(255,255,255,0.25);
   border-radius: 50%;
   position: relative;
-  border: 2px solid rgba(0,242,255,0.5);
+  border: 2px solid rgba(0,242,255,0.6);
+  touch-action: none;
 }
 .joystick-thumb {
   width: 45px;
   height: 45px;
-  background: rgba(0,242,255,0.9);
+  background: rgba(0,242,255,0.95);
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
-  box-shadow: 0 0 10px #00f2ff;
+  box-shadow: 0 0 15px #00f2ff;
+  transition: transform 0.02s linear;
+  touch-action: none;
 }
 
 /* Gallery */
@@ -899,6 +902,47 @@ const STORAGE = {
   clear() { Object.keys(localStorage).filter(k => k.startsWith(this._prefix)).forEach(k => localStorage.removeItem(k)); }
 };
 
+// ===== OFFLINE ALARM / NOTIFICATION =====
+function playBeep() {
+  try {
+    // Create audio context for beep (works offline)
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+    oscillator.frequency.value = 880;
+    gain.gain.value = 0.3;
+    oscillator.start();
+    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
+    oscillator.stop(ctx.currentTime + 0.5);
+  } catch(e) { console.log("Beep error", e); }
+}
+
+function vibrateDevice() {
+  if (window.navigator && window.navigator.vibrate) {
+    window.navigator.vibrate([200, 100, 200]);
+  }
+}
+
+function sendNotification(title, body) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission === "granted") {
+    new Notification(title, { body: body, icon: "/icon-192.svg", silent: false });
+    playBeep();
+    vibrateDevice();
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(perm => {
+      if (perm === "granted") {
+        new Notification(title, { body: body, icon: "/icon-192.svg" });
+        playBeep();
+        vibrateDevice();
+      }
+    });
+  }
+}
+
 // ===== ACTIVITY HISTORY =====
 function addHistory(action, details = "") {
   const history = STORAGE.get('history', []);
@@ -1070,7 +1114,7 @@ function renderTimetable() {
   cont.innerHTML = `<div class="timetable-grid">${tt.map(t => `<div class="timetable-row"><div class="timetable-time">${esc(t.time)}</div><div class="timetable-item" onclick="editTimetable('${t.id}')"><div class="timetable-subject">${esc(t.subject)}</div>${t.note?`<div class="timetable-note">${esc(t.note)}</div>`:''}</div></div>`).join('')}</div>`;
 }
 function showAddTimetable() {
-  showModal(`<h3>Add Timetable Entry</h3><div class="field-group"><label>Time (HH:MM)</label><input type="time" id="ttTime" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Subject</label><input type="text" id="ttSubject" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Notes</label><input type="text" id="ttNote" style="width:100%;margin-bottom:12px;padding:10px"></div><div class="field-group"><label>Alarm</label><input type="time" id="ttAlarm" style="width:100%;margin-bottom:12px;padding:10px"></div><button class="btn-primary" onclick="addTimetable()">Save</button>`);
+  showModal(`<h3>Add Timetable Entry</h3><div class="field-group"><label>Time (HH:MM)</label><input type="time" id="ttTime" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Subject</label><input type="text" id="ttSubject" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Notes</label><input type="text" id="ttNote" style="width:100%;margin-bottom:12px;padding:10px"></div><div class="field-group"><label>Alarm (offline beep + notification)</label><input type="time" id="ttAlarm" style="width:100%;margin-bottom:12px;padding:10px"></div><button class="btn-primary" onclick="addTimetable()">Save</button>`);
 }
 function addTimetable() {
   let time = document.getElementById('ttTime')?.value;
@@ -1101,22 +1145,21 @@ function deleteTimetableItem(id) {
   setTimetable(tt); addHistory(`Deleted timetable`, item?.subject); closeModal(); renderTimetable();
 }
 function scheduleTTAlarm(item) {
-  if(!("Notification" in window)) return;
-  if(Notification.permission !== "granted") Notification.requestPermission();
   let [h,m] = item.alarmTime.split(':');
   let now = new Date();
   let alarm = new Date();
   alarm.setHours(parseInt(h), parseInt(m), 0, 0);
   if(alarm <= now) alarm.setDate(alarm.getDate()+1);
-  setTimeout(() => {
-    if(Notification.permission === "granted") new Notification("📅 Timetable", { body: `${item.time} - ${item.subject}` });
-    let audio = new Audio('https://actions.google.com/sounds/olfaction/notification/notification_default.ogg');
-    audio.play().catch(e=>console.log);
-    scheduleTTAlarm(item);
-  }, alarm - now);
+  let delay = alarm - now;
+  if(delay > 0) {
+    setTimeout(() => {
+      sendNotification("📅 Timetable Reminder", `${item.time} - ${item.subject}`);
+      scheduleTTAlarm(item);
+    }, delay);
+  }
 }
 
-// ===== NOTES + DRAWING (Separate Save) =====
+// ===== NOTES + DRAWING =====
 let drawing = false, ctx = null, canvas = null, currentDrawing = null;
 function initCanvas() {
   canvas = document.getElementById('drawCanvas');
@@ -1215,7 +1258,7 @@ function deleteNoteItem(id, show=true) {
   loadNotesList();
 }
 
-// ===== TASKS =====
+// ===== TASKS WITH OFFLINE ALARMS =====
 function getTasks() { return STORAGE.get('tasks', []); }
 function setTasks(t) { STORAGE.set('tasks', t); }
 function getTaskComps() { return STORAGE.get('taskComps', {}); }
@@ -1229,21 +1272,21 @@ function renderTasks() {
   cont.innerHTML = tasks.map(t => `<div class="task-item"><div class="task-check ${comps[t.id]?'done':''}" onclick="toggleTask('${t.id}')">${comps[t.id]?'✓':''}</div><div class="task-info"><div><strong>${esc(t.name)}</strong> ${t.alarm?`<span class="alarm-badge">⏰ ${t.alarmTime}</span>`:''}</div>${t.note?`<div style="font-size:0.8rem;color:var(--text2)">${esc(t.note)}</div>`:''}</div><button class="btn-secondary" style="padding:4px 8px" onclick="editTaskItem('${t.id}')">✏️</button><button class="btn-danger" style="padding:4px 8px" onclick="deleteTaskItem('${t.id}')">🗑️</button></div>`).join('');
 }
 function showAddTask() {
-  showModal(`<h3>Add Task</h3><input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea><div class="field-group"><label>Alarm Time</label><input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Ringtone URL (optional)</label><input type="text" id="taskRingtone" placeholder="https://..." style="width:100%;margin:12px 0;padding:10px"></div><label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label><button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>`);
+  showModal(`<h3>Add Task</h3><input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea><div class="field-group"><label>Alarm Time (offline beep + notification)</label><input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px"></div><label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label><button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>`);
 }
 function addTask() {
   let name = document.getElementById('taskName')?.value.trim();
   if(!name) return;
   let tasks = getTasks();
   let alarm = document.getElementById('taskAlarm')?.value;
-  let newTask = { id: genId(), name, note: document.getElementById('taskNote')?.value, alarm: !!alarm, alarmTime: alarm, repeatDaily: document.getElementById('alarmRepeat')?.checked, ringtone: document.getElementById('taskRingtone')?.value, createdAt: new Date().toISOString() };
+  let newTask = { id: genId(), name, note: document.getElementById('taskNote')?.value, alarm: !!alarm, alarmTime: alarm, repeatDaily: document.getElementById('alarmRepeat')?.checked, createdAt: new Date().toISOString() };
   tasks.push(newTask); setTasks(tasks); addHistory(`Added task`, name); closeModal(); renderTasks();
   if(alarm) scheduleTaskAlarm(newTask);
 }
 function editTaskItem(id) {
   let tasks = getTasks();
   let t = tasks.find(tt => tt.id === id);
-  showModal(`<h3>Edit Task</h3><input type="text" id="taskName" value="${esc(t.name)}" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" style="width:100%;margin:12px 0;padding:10px">${esc(t.note||'')}</textarea><input type="time" id="taskAlarm" value="${t.alarmTime||''}" style="width:100%;margin:12px 0;padding:10px"><input type="text" id="taskRingtone" value="${esc(t.ringtone||'')}" placeholder="Ringtone URL" style="width:100%;margin:12px 0;padding:10px"><label><input type="checkbox" id="alarmRepeat" ${t.repeatDaily?'checked':''}> Repeat Daily</label><button class="btn-primary" onclick="updateTaskItem('${id}')" style="margin-top:12px">Update</button>`);
+  showModal(`<h3>Edit Task</h3><input type="text" id="taskName" value="${esc(t.name)}" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" style="width:100%;margin:12px 0;padding:10px">${esc(t.note||'')}</textarea><input type="time" id="taskAlarm" value="${t.alarmTime||''}" style="width:100%;margin:12px 0;padding:10px"><label><input type="checkbox" id="alarmRepeat" ${t.repeatDaily?'checked':''}> Repeat Daily</label><button class="btn-primary" onclick="updateTaskItem('${id}')" style="margin-top:12px">Update</button>`);
 }
 function updateTaskItem(id) {
   let name = document.getElementById('taskName')?.value.trim();
@@ -1251,7 +1294,7 @@ function updateTaskItem(id) {
   let tasks = getTasks();
   let idx = tasks.findIndex(tt => tt.id === id);
   if(idx !== -1) {
-    tasks[idx] = { ...tasks[idx], name, note: document.getElementById('taskNote')?.value, alarm: !!document.getElementById('taskAlarm')?.value, alarmTime: document.getElementById('taskAlarm')?.value, repeatDaily: document.getElementById('alarmRepeat')?.checked, ringtone: document.getElementById('taskRingtone')?.value };
+    tasks[idx] = { ...tasks[idx], name, note: document.getElementById('taskNote')?.value, alarm: !!document.getElementById('taskAlarm')?.value, alarmTime: document.getElementById('taskAlarm')?.value, repeatDaily: document.getElementById('alarmRepeat')?.checked };
     setTasks(tasks); addHistory(`Updated task`, name); closeModal(); renderTasks();
     if(tasks[idx].alarm) scheduleTaskAlarm(tasks[idx]);
   }
@@ -1271,19 +1314,18 @@ function toggleTask(id) {
   renderTasks(); updateAnalytics();
 }
 function scheduleTaskAlarm(task) {
-  if(!("Notification" in window)) return;
-  if(Notification.permission !== "granted") Notification.requestPermission();
   let [h,m] = task.alarmTime.split(':');
   let now = new Date();
   let alarm = new Date();
   alarm.setHours(parseInt(h), parseInt(m), 0, 0);
   if(alarm <= now) alarm.setDate(alarm.getDate()+1);
-  setTimeout(() => {
-    if(Notification.permission === "granted") new Notification("⏰ Task", { body: task.name });
-    if(task.ringtone) { let audio = new Audio(task.ringtone); audio.play().catch(e=>console.log); }
-    else { let audio = new Audio('https://actions.google.com/sounds/olfaction/notification/notification_default.ogg'); audio.play().catch(e=>console.log); }
-    if(task.repeatDaily) scheduleTaskAlarm(task);
-  }, alarm - now);
+  let delay = alarm - now;
+  if(delay > 0) {
+    setTimeout(() => {
+      sendNotification("⏰ Task Reminder", task.name);
+      if(task.repeatDaily) scheduleTaskAlarm(task);
+    }, delay);
+  }
 }
 
 // ===== CALCULATOR =====
@@ -1390,44 +1432,130 @@ function viewFull(id) {
 }
 function deleteGallery(id) { galleryItems = galleryItems.filter(i => i.id !== id); STORAGE.set('galleryItems', galleryItems); addHistory(`Deleted from gallery`, `1 item`); renderGallery(); }
 
-// ===== GAME WITH JOYSTICK (Bottom Center) =====
-let gameActive = false, gameAnim = null, gameCtx=null, gameCanvas=null, gamePlayer=null, gameStars=[], gameEnemies=[], gameScore=0, gameMouse={x:0,y:0}, joyVec={x:0,y:0}, joyActive=false;
+// ===== GAME WITH SMOOTH JOYSTICK (Bottom Center, No Lag) =====
+let gameActive = false, gameAnim = null, gameCtx=null, gameCanvas=null, gamePlayer=null, gameStars=[], gameEnemies=[], gameScore=0;
+let gameTargetX = 0, gameTargetY = 0;
+let joyVecX = 0, joyVecY = 0, joyActiveFlag = false;
+
 function openGame() {
   let cont = document.createElement('div'); cont.className = 'game-container'; cont.id='gameCont';
   cont.innerHTML = `<canvas id="gameCanvasEl" class="game-canvas"></canvas><div id="gameUIEl" class="game-ui"><h1 style="font-family:Orbitron;color:#00f2ff">WITTY STAR</h1><p id="gameMsgEl">Use Joystick | Avoid Red</p><button class="btn-primary" style="width:auto;padding:12px 30px" onclick="startGameInstance()">START</button></div><div id="gameScoreEl" class="game-score">Stars: 0</div><button class="game-close" onclick="closeGame()">✕</button><div class="joystick-container" id="joyCont"><div class="joystick-base" id="joyBase"><div class="joystick-thumb" id="joyThumb"></div></div></div>`;
   document.body.appendChild(cont);
   gameCanvas = document.getElementById('gameCanvasEl'); gameCtx = gameCanvas.getContext('2d');
-  function resizeGame() { if(gameCanvas) { gameCanvas.width = window.innerWidth; gameCanvas.height = window.innerHeight; gameMouse.x = gameCanvas.width/2; gameMouse.y = gameCanvas.height/2; } }
+  function resizeGame() { if(gameCanvas) { gameCanvas.width = window.innerWidth; gameCanvas.height = window.innerHeight; gameTargetX = gameCanvas.width/2; gameTargetY = gameCanvas.height/2; } }
   resizeGame(); window.addEventListener('resize', resizeGame);
+  
   let joyBase = document.getElementById('joyBase'), joyThumb = document.getElementById('joyThumb');
-  let joyRadius = 40;
-  function updateJoy(e) {
+  let joyRadius = 45;
+  let centerX = 0, centerY = 0;
+  
+  function updateJoystickPos(e) {
     let touch = e.touches ? e.touches[0] : e;
     let rect = joyBase.getBoundingClientRect();
-    let centerX = rect.left + rect.width/2, centerY = rect.top + rect.height/2;
-    let dx = touch.clientX - centerX, dy = touch.clientY - centerY;
-    let dist = Math.hypot(dx,dy);
+    centerX = rect.left + rect.width/2;
+    centerY = rect.top + rect.height/2;
+    let dx = touch.clientX - centerX;
+    let dy = touch.clientY - centerY;
+    let dist = Math.hypot(dx, dy);
     if(dist > joyRadius) { dx = dx/dist * joyRadius; dy = dy/dist * joyRadius; }
     joyThumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-    joyVec.x = dx/joyRadius; joyVec.y = dy/joyRadius;
-    if(gameActive && gameCanvas) {
-      gameMouse.x = Math.min(Math.max(gameMouse.x + joyVec.x * 6, 20), gameCanvas.width-20);
-      gameMouse.y = Math.min(Math.max(gameMouse.y + joyVec.y * 6, 20), gameCanvas.height-20);
+    joyVecX = dx / joyRadius;
+    joyVecY = dy / joyRadius;
+  }
+  
+  function resetJoystick() {
+    joyThumb.style.transform = 'translate(-50%, -50%)';
+    joyVecX = 0; joyVecY = 0;
+  }
+  
+  function onJoystickStart(e) { e.preventDefault(); joyActiveFlag = true; updateJoystickPos(e); }
+  function onJoystickMove(e) { e.preventDefault(); if(joyActiveFlag) updateJoystickPos(e); }
+  function onJoystickEnd() { joyActiveFlag = false; resetJoystick(); }
+  
+  joyBase.addEventListener('touchstart', onJoystickStart);
+  joyBase.addEventListener('touchmove', onJoystickMove);
+  joyBase.addEventListener('touchend', onJoystickEnd);
+  joyBase.addEventListener('mousedown', onJoystickStart);
+  window.addEventListener('mousemove', (e) => { if(joyActiveFlag) updateJoystickPos(e); });
+  window.addEventListener('mouseup', onJoystickEnd);
+  
+  class GamePlayer {
+    constructor() { this.x=gameCanvas.width/2; this.y=gameCanvas.height/2; this.history=[]; }
+    update() {
+      if(gameActive) {
+        gameTargetX += joyVecX * 7;
+        gameTargetY += joyVecY * 7;
+        gameTargetX = Math.min(Math.max(gameTargetX, 20), gameCanvas.width-20);
+        gameTargetY = Math.min(Math.max(gameTargetY, 20), gameCanvas.height-20);
+        this.x += (gameTargetX - this.x) * 0.15;
+        this.y += (gameTargetY - this.y) * 0.15;
+      }
+      this.history.push({x:this.x,y:this.y});
+      if(this.history.length>8) this.history.shift();
+    }
+    draw() {
+      gameCtx.beginPath(); gameCtx.strokeStyle="#00f2ff"; gameCtx.lineWidth=3;
+      for(let p of this.history) gameCtx.lineTo(p.x,p.y);
+      gameCtx.stroke();
+      gameCtx.beginPath(); gameCtx.arc(this.x,this.y,8,0,Math.PI*2);
+      gameCtx.fillStyle="#fff"; gameCtx.fill();
+      gameCtx.beginPath(); gameCtx.arc(this.x,this.y,10,0,Math.PI*2);
+      gameCtx.strokeStyle="#00f2ff"; gameCtx.stroke();
     }
   }
-  function resetJoy() { joyThumb.style.transform = 'translate(-50%, -50%)'; joyVec = {x:0,y:0}; }
-  joyBase.addEventListener('touchstart', e => { e.preventDefault(); joyActive=true; updateJoy(e); });
-  joyBase.addEventListener('touchmove', e => { e.preventDefault(); if(joyActive) updateJoy(e); });
-  joyBase.addEventListener('touchend', () => { joyActive=false; resetJoy(); });
-  joyBase.addEventListener('mousedown', e => { joyActive=true; updateJoy(e); });
-  window.addEventListener('mousemove', e => { if(joyActive) updateJoy(e); });
-  window.addEventListener('mouseup', () => { joyActive=false; resetJoy(); });
-  class GamePlayer { constructor() { this.x=gameCanvas.width/2; this.y=gameCanvas.height/2; this.history=[]; } update() { this.x += (gameMouse.x-this.x)*0.1; this.x = Math.min(Math.max(this.x,15),gameCanvas.width-15); this.y += (gameMouse.y-this.y)*0.1; this.y = Math.min(Math.max(this.y,15),gameCanvas.height-15); this.history.push({x:this.x,y:this.y}); if(this.history.length>8) this.history.shift(); } draw() { gameCtx.beginPath(); gameCtx.strokeStyle="#00f2ff"; gameCtx.lineWidth=3; for(let p of this.history) gameCtx.lineTo(p.x,p.y); gameCtx.stroke(); gameCtx.beginPath(); gameCtx.arc(this.x,this.y,8,0,Math.PI*2); gameCtx.fillStyle="#fff"; gameCtx.fill(); } }
-  class GameStar { constructor() { this.reset(); } reset() { this.x=20+Math.random()*(gameCanvas.width-40); this.y=20+Math.random()*(gameCanvas.height-40); } draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,6,0,Math.PI*2); gameCtx.fillStyle="#FFD700"; gameCtx.fill(); } }
-  class GameEnemy { constructor() { let side=Math.floor(Math.random()*4); if(side===0){this.x=-20;this.y=Math.random()*gameCanvas.height;} else if(side===1){this.x=gameCanvas.width+20;this.y=Math.random()*gameCanvas.height;} else if(side===2){this.x=Math.random()*gameCanvas.width;this.y=-20;} else{this.x=Math.random()*gameCanvas.width;this.y=gameCanvas.height+20;} this.speed=2+(gameScore*0.03); let dx=gamePlayer?gamePlayer.x-this.x:gameCanvas.width/2-this.x; let dy=gamePlayer?gamePlayer.y-this.y:gameCanvas.height/2-this.y; this.angle=Math.atan2(dy,dx); } update() { this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; } draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,10,0,Math.PI*2); gameCtx.fillStyle="#ff3333"; gameCtx.fill(); } }
-  window.startGameInstance = function() { gameScore=0; gameStars=[]; gameEnemies=[]; gameActive=true; document.getElementById('gameUIEl').style.display='none'; document.getElementById('gameScoreEl').innerText='Stars: 0'; gamePlayer=new GamePlayer(); for(let i=0;i<8;i++) gameStars.push(new GameStar()); addHistory(`Started game`, `Witty Star`); };
-  function gameOverInstance() { gameActive=false; document.getElementById('gameUIEl').style.display='flex'; document.getElementById('gameMsgEl').innerText = "GAME OVER! Score: "+gameScore; let xp=Math.floor(gameScore/2); if(xp>0) { addXP(xp,"Witty Star"); addHistory(`Game over`,`Score: ${gameScore}, +${xp} XP`); showNotification(`+${xp} XP from game! ⭐`,"success"); } }
-  function gameLoop() { if(!gameCanvas||!gameCtx) return; gameCtx.fillStyle="#000"; gameCtx.fillRect(0,0,gameCanvas.width,gameCanvas.height); if(gameActive && gamePlayer) { gamePlayer.update(); gamePlayer.draw(); gameStars.forEach(s=>{ s.draw(); if(Math.hypot(gamePlayer.x-s.x,gamePlayer.y-s.y)<25){ gameScore++; document.getElementById('gameScoreEl').innerText="Stars: "+gameScore; s.reset(); if(gameScore%5===0){ addXP(5,"Witty Star"); addHistory(`Game milestone`,`${gameScore} stars`); } } }); if(Math.random()<0.02+(gameScore/500)) gameEnemies.push(new GameEnemy()); for(let i=gameEnemies.length-1;i>=0;i--){ let e=gameEnemies[i]; e.update(); e.draw(); if(Math.hypot(gamePlayer.x-e.x,gamePlayer.y-e.y)<16) gameOverInstance(); if(e.x<-100||e.x>gameCanvas.width+100||e.y<-100||e.y>gameCanvas.height+100) gameEnemies.splice(i,1); } } gameAnim = requestAnimationFrame(gameLoop); }
+  
+  class GameStar {
+    constructor() { this.reset(); }
+    reset() { this.x=20+Math.random()*(gameCanvas.width-40); this.y=20+Math.random()*(gameCanvas.height-40); }
+    draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,6,0,Math.PI*2); gameCtx.fillStyle="#FFD700"; gameCtx.fill(); }
+  }
+  
+  class GameEnemy {
+    constructor() {
+      let side=Math.floor(Math.random()*4);
+      if(side===0){this.x=-20;this.y=Math.random()*gameCanvas.height;}
+      else if(side===1){this.x=gameCanvas.width+20;this.y=Math.random()*gameCanvas.height;}
+      else if(side===2){this.x=Math.random()*gameCanvas.width;this.y=-20;}
+      else{this.x=Math.random()*gameCanvas.width;this.y=gameCanvas.height+20;}
+      this.speed=2+(gameScore*0.03);
+      let dx=gamePlayer?gamePlayer.x-this.x:gameCanvas.width/2-this.x;
+      let dy=gamePlayer?gamePlayer.y-this.y:gameCanvas.height/2-this.y;
+      this.angle=Math.atan2(dy,dx);
+    }
+    update() { this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; }
+    draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,10,0,Math.PI*2); gameCtx.fillStyle="#ff3333"; gameCtx.fill(); }
+  }
+  
+  window.startGameInstance = function() {
+    gameScore=0; gameStars=[]; gameEnemies=[]; gameActive=true;
+    document.getElementById('gameUIEl').style.display='none';
+    document.getElementById('gameScoreEl').innerText='Stars: 0';
+    gamePlayer=new GamePlayer();
+    gameTargetX = gameCanvas.width/2; gameTargetY = gameCanvas.height/2;
+    for(let i=0;i<8;i++) gameStars.push(new GameStar());
+    addHistory(`Started game`, `Witty Star`);
+  };
+  
+  function gameOverInstance() {
+    gameActive=false;
+    document.getElementById('gameUIEl').style.display='flex';
+    document.getElementById('gameMsgEl').innerText = "GAME OVER! Score: "+gameScore;
+    let xp=Math.floor(gameScore/2);
+    if(xp>0) { addXP(xp,"Witty Star"); addHistory(`Game over`,`Score: ${gameScore}, +${xp} XP`); showNotification(`+${xp} XP from game! ⭐`,"success"); }
+  }
+  
+  function gameLoop() {
+    if(!gameCanvas||!gameCtx) return;
+    gameCtx.fillStyle="#000"; gameCtx.fillRect(0,0,gameCanvas.width,gameCanvas.height);
+    if(gameActive && gamePlayer) {
+      gamePlayer.update(); gamePlayer.draw();
+      gameStars.forEach(s=>{ s.draw(); if(Math.hypot(gamePlayer.x-s.x,gamePlayer.y-s.y)<25){ gameScore++; document.getElementById('gameScoreEl').innerText="Stars: "+gameScore; s.reset(); if(gameScore%5===0){ addXP(5,"Witty Star"); addHistory(`Game milestone`,`${gameScore} stars`); } } });
+      if(Math.random()<0.02+(gameScore/500)) gameEnemies.push(new GameEnemy());
+      for(let i=gameEnemies.length-1;i>=0;i--){ let e=gameEnemies[i]; e.update(); e.draw(); if(Math.hypot(gamePlayer.x-e.x,gamePlayer.y-e.y)<16) gameOverInstance(); if(e.x<-100||e.x>gameCanvas.width+100||e.y<-100||e.y>gameCanvas.height+100) gameEnemies.splice(i,1); }
+    }
+    gameAnim = requestAnimationFrame(gameLoop);
+  }
+  
   window.closeGame = function() { if(gameAnim) cancelAnimationFrame(gameAnim); document.getElementById('gameCont')?.remove(); gameActive=false; };
   gameLoop();
 }
