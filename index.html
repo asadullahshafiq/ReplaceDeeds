@@ -4,11 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#0d1117">
-<title>Replace Deeds - Ultimate Edition</title>
+<title>Replace Deeds - Ultimate</title>
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
-/* ===== CSS VARIABLES & THEMES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
 :root {
   --bg: #0d1117;
   --bg2: #161b22;
@@ -46,7 +52,6 @@
   --accent2: #ff9f1c;
   --text: #4a2c00;
   --text2: #8b6914;
-  --border: rgba(255,107,53,0.2);
 }
 
 [data-theme="sad"] {
@@ -83,12 +88,6 @@
   --accent2: #f97316;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: var(--font-body);
   background: var(--bg);
@@ -98,7 +97,9 @@ body {
   transition: all 0.3s ease;
 }
 
-/* ===== SPLASH ===== */
+.hidden { display: none !important; }
+
+/* Splash */
 .splash {
   position: fixed;
   inset: 0;
@@ -109,42 +110,16 @@ body {
   z-index: 10000;
   transition: opacity 0.8s;
 }
-
-.splash.fade-out {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.splash-logo {
-  text-align: center;
-  animation: splashIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes splashIn {
-  from {
-    opacity: 0;
-    transform: scale(0.5) translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
+.splash.fade-out { opacity: 0; pointer-events: none; }
 .splash-title {
   font-family: var(--font-head);
   font-size: 2rem;
-  font-weight: 900;
   background: linear-gradient(135deg, var(--accent), #fff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.hidden {
-  display: none !important;
-}
-
-/* ===== ONBOARDING ===== */
+/* Onboarding */
 .onboard-container {
   min-height: 100vh;
   display: flex;
@@ -152,44 +127,26 @@ body {
   justify-content: center;
   padding: 24px;
 }
-
 .onboard-step {
   display: none;
   text-align: center;
   max-width: 400px;
   width: 100%;
 }
-
-.onboard-step.active {
-  display: block;
-  animation: fadeUp 0.5s ease;
-}
-
+.onboard-step.active { display: block; animation: fadeUp 0.5s; }
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .field-group {
   margin-bottom: 16px;
   text-align: left;
 }
-
 .field-group label {
-  display: block;
   font-size: 0.75rem;
   color: var(--text2);
-  margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 1px;
 }
-
 input, textarea, select {
   width: 100%;
   padding: 12px 16px;
@@ -200,12 +157,12 @@ input, textarea, select {
   font-family: var(--font-body);
   outline: none;
 }
-
 input:focus, textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(0, 212, 180, 0.1);
+  box-shadow: 0 0 0 3px rgba(0,212,180,0.1);
 }
 
+/* Buttons */
 .btn-primary {
   width: 100%;
   padding: 14px;
@@ -215,15 +172,9 @@ input:focus, textarea:focus {
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  font-family: var(--font-body);
   transition: all 0.2s;
 }
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 212, 180, 0.3);
-}
-
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,180,0.3); }
 .btn-secondary {
   padding: 10px 20px;
   background: transparent;
@@ -231,14 +182,9 @@ input:focus, textarea:focus {
   color: var(--accent);
   border-radius: 10px;
   cursor: pointer;
-  font-family: var(--font-body);
   transition: all 0.2s;
 }
-
-.btn-secondary:hover {
-  background: rgba(0, 212, 180, 0.1);
-}
-
+.btn-secondary:hover { background: rgba(0,212,180,0.1); }
 .btn-danger {
   padding: 10px 20px;
   background: transparent;
@@ -246,14 +192,10 @@ input:focus, textarea:focus {
   color: var(--danger);
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s;
 }
+.btn-danger:hover { background: rgba(248,81,73,0.1); }
 
-.btn-danger:hover {
-  background: rgba(248, 81, 73, 0.1);
-}
-
-/* ===== TOP BAR ===== */
+/* Top Bar */
 .topbar {
   position: sticky;
   top: 0;
@@ -265,7 +207,6 @@ input:focus, textarea:focus {
   border-bottom: 1px solid var(--border);
   z-index: 100;
 }
-
 .xp-badge {
   display: flex;
   align-items: center;
@@ -273,27 +214,19 @@ input:focus, textarea:focus {
   background: var(--bg2);
   padding: 6px 12px;
   border-radius: 100px;
-  border: 1px solid var(--border);
   cursor: pointer;
 }
-
-.xp-icon {
-  font-size: 1.2rem;
-}
-
 .xp-num {
   font-family: var(--font-mono);
   font-weight: 600;
   color: var(--accent);
 }
-
 .level-badge {
   font-size: 0.75rem;
-  background: rgba(0, 212, 180, 0.2);
+  background: rgba(0,212,180,0.2);
   padding: 4px 8px;
   border-radius: 100px;
 }
-
 .avatar-btn {
   width: 36px;
   height: 36px;
@@ -306,7 +239,7 @@ input:focus, textarea:focus {
   cursor: pointer;
 }
 
-/* ===== BOTTOM NAV ===== */
+/* Bottom Nav */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -320,10 +253,9 @@ input:focus, textarea:focus {
   margin: 0 auto;
   overflow-x: auto;
 }
-
 .nav-btn {
   flex: 1;
-  min-width: 60px;
+  min-width: 55px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -335,52 +267,31 @@ input:focus, textarea:focus {
   color: var(--text2);
   transition: all 0.2s;
 }
+.nav-btn.active { color: var(--accent); }
+.nav-icon { font-size: 1.3rem; }
+.nav-label { font-size: 0.55rem; margin-top: 2px; }
 
-.nav-btn.active {
-  color: var(--accent);
-}
-
-.nav-icon {
-  font-size: 1.3rem;
-}
-
-.nav-label {
-  font-size: 0.6rem;
-  margin-top: 2px;
-}
-
-/* ===== MAIN CONTENT ===== */
+/* Main Content */
 .main-content {
   padding-bottom: 80px;
   min-height: 100vh;
   max-width: 600px;
   margin: 0 auto;
 }
-
 .tab-panel {
   display: none;
   padding: 16px;
 }
+.tab-panel.active { display: block; animation: fadeUp 0.3s; }
 
-.tab-panel.active {
-  display: block;
-  animation: fadeUp 0.3s ease;
-}
-
-/* ===== XP CARD ===== */
+/* XP Card */
 .xp-card {
   background: linear-gradient(135deg, var(--bg2), var(--bg3));
   border-radius: var(--radius);
   padding: 20px;
   margin-bottom: 20px;
-  border: 1px solid var(--border);
   text-align: center;
 }
-
-.level-progress {
-  margin-top: 12px;
-}
-
 .progress-bar {
   height: 8px;
   background: var(--bg3);
@@ -388,15 +299,14 @@ input:focus, textarea:focus {
   overflow: hidden;
   margin-top: 8px;
 }
-
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--accent), var(--accent2));
   border-radius: 100px;
-  transition: width 0.5s ease;
+  transition: width 0.5s;
 }
 
-/* ===== SECTION CARDS ===== */
+/* Section Cards */
 .section-card {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -404,7 +314,6 @@ input:focus, textarea:focus {
   margin-bottom: 16px;
   overflow: hidden;
 }
-
 .section-header {
   display: flex;
   align-items: center;
@@ -412,36 +321,23 @@ input:focus, textarea:focus {
   padding: 14px 16px;
   cursor: pointer;
 }
-
-.section-title-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .section-name {
   font-family: var(--font-head);
   font-size: 1rem;
   font-weight: 700;
 }
-
 .section-progress-bar {
   height: 3px;
   background: var(--bg3);
   border-radius: 100px;
   margin-top: 4px;
 }
-
 .section-progress-fill {
   height: 100%;
   background: var(--accent);
   border-radius: 100px;
 }
-
-.habits-list {
-  padding: 0 16px 16px;
-}
-
+.habits-list { padding: 0 16px 16px; }
 .habit-row {
   display: flex;
   align-items: center;
@@ -449,7 +345,6 @@ input:focus, textarea:focus {
   padding: 12px 0;
   border-bottom: 1px solid var(--border);
 }
-
 .habit-check {
   width: 28px;
   height: 28px;
@@ -461,22 +356,15 @@ input:focus, textarea:focus {
   justify-content: center;
   transition: all 0.2s;
 }
-
 .habit-check.done {
   background: var(--accent);
   border-color: var(--accent);
   color: #000;
 }
+.habit-info { flex: 1; }
+.habit-name { font-size: 0.9rem; }
 
-.habit-info {
-  flex: 1;
-}
-
-.habit-name {
-  font-size: 0.9rem;
-}
-
-/* ===== TIME TABLE ===== */
+/* Time Table */
 .timetable-header {
   display: flex;
   justify-content: space-between;
@@ -485,23 +373,15 @@ input:focus, textarea:focus {
   flex-wrap: wrap;
   gap: 10px;
 }
-
 .timetable-grid {
   background: var(--bg2);
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  overflow-x: auto;
 }
-
 .timetable-row {
   display: flex;
   border-bottom: 1px solid var(--border);
 }
-
-.timetable-row:last-child {
-  border-bottom: none;
-}
-
 .timetable-time {
   width: 100px;
   padding: 12px;
@@ -510,30 +390,16 @@ input:focus, textarea:focus {
   border-right: 1px solid var(--border);
   background: var(--bg3);
 }
-
 .timetable-item {
   flex: 1;
   padding: 12px;
   cursor: pointer;
-  transition: background 0.2s;
 }
+.timetable-item:hover { background: rgba(0,212,180,0.1); }
+.timetable-subject { font-weight: 600; font-size: 0.85rem; }
+.timetable-note { font-size: 0.7rem; color: var(--text2); margin-top: 4px; }
 
-.timetable-item:hover {
-  background: rgba(0, 212, 180, 0.1);
-}
-
-.timetable-subject {
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.timetable-note {
-  font-size: 0.7rem;
-  color: var(--text2);
-  margin-top: 4px;
-}
-
-/* ===== NOTES ===== */
+/* Notes Toolbar */
 .notes-toolbar {
   display: flex;
   gap: 8px;
@@ -543,41 +409,33 @@ input:focus, textarea:focus {
   background: var(--bg2);
   border-radius: var(--radius-sm);
 }
-
 .note-editor-area {
   background: var(--bg2);
   border-radius: var(--radius);
   padding: 16px;
   margin-bottom: 16px;
 }
-
 .note-title {
   width: 100%;
   margin-bottom: 12px;
   font-size: 1.1rem;
   font-weight: 600;
 }
-
 .note-content {
   width: 100%;
-  min-height: 200px;
+  min-height: 150px;
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px;
-  color: var(--text);
-  font-family: var(--font-body);
   resize: vertical;
 }
-
 .canvas-container {
   margin-top: 16px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--bg3);
-  position: relative;
 }
-
 #drawCanvas {
   display: block;
   width: 100%;
@@ -587,14 +445,13 @@ input:focus, textarea:focus {
   cursor: crosshair;
 }
 
-/* ===== TOOLS SECTION ===== */
+/* Tools Grid */
 .tools-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-bottom: 20px;
 }
-
 .tool-card {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -604,18 +461,10 @@ input:focus, textarea:focus {
   cursor: pointer;
   transition: all 0.2s;
 }
+.tool-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.tool-icon { font-size: 1.8rem; margin-bottom: 8px; }
 
-.tool-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.tool-icon {
-  font-size: 1.8rem;
-  margin-bottom: 8px;
-}
-
-/* ===== CALCULATOR ===== */
+/* Calculator */
 .calculator-display {
   background: var(--bg3);
   padding: 20px;
@@ -626,13 +475,11 @@ input:focus, textarea:focus {
   margin-bottom: 12px;
   overflow-x: auto;
 }
-
 .calc-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
-
 .calc-btn {
   padding: 14px;
   background: var(--bg3);
@@ -641,31 +488,20 @@ input:focus, textarea:focus {
   color: var(--text);
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s;
 }
+.calc-btn:hover { background: var(--accent); color: #000; }
 
-.calc-btn:hover {
-  background: var(--accent);
-  color: #000;
-}
-
-/* ===== CONVERTER ===== */
-.converter-group {
-  margin-bottom: 16px;
-}
-
+/* Converter */
+.converter-group { margin-bottom: 16px; }
 .converter-row {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
   flex-wrap: wrap;
 }
+.converter-row select, .converter-row input { flex: 1; }
 
-.converter-row select, .converter-row input {
-  flex: 1;
-}
-
-/* ===== GAME WITH JOYSTICK ===== */
+/* Game Container */
 .game-container {
   position: fixed;
   inset: 0;
@@ -674,14 +510,12 @@ input:focus, textarea:focus {
   display: flex;
   flex-direction: column;
 }
-
 .game-canvas {
   flex: 1;
   display: block;
   width: 100%;
   touch-action: none;
 }
-
 .game-ui {
   position: absolute;
   inset: 0;
@@ -692,7 +526,6 @@ input:focus, textarea:focus {
   background: rgba(0,0,0,0.85);
   z-index: 2001;
 }
-
 .game-score {
   position: absolute;
   top: 15px;
@@ -701,9 +534,7 @@ input:focus, textarea:focus {
   color: #00f2ff;
   font-family: 'Orbitron', monospace;
   z-index: 2002;
-  pointer-events: none;
 }
-
 .game-close {
   position: absolute;
   top: 15px;
@@ -717,67 +548,58 @@ input:focus, textarea:focus {
   border-radius: 50%;
   cursor: pointer;
   z-index: 2002;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
+/* Joystick - Bottom Center */
 .joystick-container {
   position: absolute;
-  bottom: 30px;
-  left: 30px;
-  width: 120px;
-  height: 120px;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
   z-index: 2002;
 }
-
 .joystick-base {
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.25);
   border-radius: 50%;
   position: relative;
-  touch-action: none;
+  border: 2px solid rgba(0,242,255,0.5);
 }
-
 .joystick-thumb {
-  width: 50px;
-  height: 50px;
-  background: rgba(0,242,255,0.8);
+  width: 45px;
+  height: 45px;
+  background: rgba(0,242,255,0.9);
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
+  box-shadow: 0 0 10px #00f2ff;
 }
 
-/* ===== SAFE GALLERY ===== */
+/* Gallery */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin-top: 12px;
 }
-
 .gallery-item {
   aspect-ratio: 1;
   background: var(--bg3);
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
   overflow: hidden;
   position: relative;
+  cursor: pointer;
 }
-
 .gallery-item img, .gallery-item video {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
 .gallery-delete {
   position: absolute;
   top: 4px;
@@ -791,8 +613,8 @@ input:focus, textarea:focus {
   justify-content: center;
   font-size: 12px;
   cursor: pointer;
+  color: white;
 }
-
 .fullscreen-view {
   position: fixed;
   inset: 0;
@@ -803,13 +625,12 @@ input:focus, textarea:focus {
   justify-content: center;
   flex-direction: column;
 }
-
 .fullscreen-view img, .fullscreen-view video {
   max-width: 90%;
   max-height: 80%;
 }
 
-/* ===== TASKS WITH ALARMS ===== */
+/* Tasks */
 .task-item {
   display: flex;
   align-items: flex-start;
@@ -820,7 +641,6 @@ input:focus, textarea:focus {
   padding: 14px;
   margin-bottom: 10px;
 }
-
 .task-check {
   width: 22px;
   height: 22px;
@@ -831,12 +651,7 @@ input:focus, textarea:focus {
   align-items: center;
   justify-content: center;
 }
-
-.task-check.done {
-  background: var(--success);
-  border-color: var(--success);
-}
-
+.task-check.done { background: var(--success); border-color: var(--success); }
 .alarm-badge {
   background: var(--warn);
   color: #000;
@@ -846,29 +661,21 @@ input:focus, textarea:focus {
   margin-left: 8px;
 }
 
-/* ===== ACTIVITY HISTORY ===== */
+/* History */
 .history-item {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px;
   margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
-
 .history-time {
   font-size: 0.7rem;
   color: var(--text2);
   font-family: var(--font-mono);
 }
 
-.history-action {
-  font-size: 0.85rem;
-}
-
-/* ===== THEME BUTTONS ===== */
+/* Theme Buttons */
 .theme-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -876,15 +683,7 @@ input:focus, textarea:focus {
   margin-bottom: 16px;
 }
 
-.theme-btn {
-  padding: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-align: center;
-  font-size: 0.8rem;
-}
-
-/* ===== MODAL ===== */
+/* Modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -896,7 +695,6 @@ input:focus, textarea:focus {
   justify-content: center;
   padding: 20px;
 }
-
 .modal {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -908,7 +706,7 @@ input:focus, textarea:focus {
   overflow-y: auto;
 }
 
-/* ===== LEVEL UP ANIMATION ===== */
+/* Level Up Animation */
 .levelup-anim {
   position: fixed;
   inset: 0;
@@ -920,38 +718,19 @@ input:focus, textarea:focus {
   flex-direction: column;
   animation: fadeOut 2s forwards;
 }
-
 @keyframes fadeOut {
   0% { opacity: 1; }
   70% { opacity: 1; }
   100% { opacity: 0; visibility: hidden; }
 }
-
-.levelup-inner {
-  text-align: center;
-  animation: bounce 0.5s ease;
-}
-
+.levelup-inner { text-align: center; animation: bounce 0.5s; }
 @keyframes bounce {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.3); }
 }
 
-/* ===== RESPONSIVE ===== */
 @media (min-width: 600px) {
-  .bottom-nav {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
-
-@media (max-width: 500px) {
-  .tools-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .theme-buttons {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .bottom-nav { left: 50%; transform: translateX(-50%); }
 }
 </style>
 </head>
@@ -966,7 +745,7 @@ input:focus, textarea:focus {
 </div>
 
 <!-- ONBOARDING -->
-<div id="onboarding" class="screen hidden">
+<div id="onboarding" class="hidden">
   <div class="onboard-container">
     <div class="onboard-step active" data-step="0">
       <div style="font-size:4rem;margin-bottom:16px">⭐</div>
@@ -986,24 +765,22 @@ input:focus, textarea:focus {
 </div>
 
 <!-- MAIN APP -->
-<div id="app" class="screen hidden">
+<div id="app" class="hidden">
   <header class="topbar">
     <div class="xp-badge" onclick="showXPInfo()">
-      <span class="xp-icon">⭐</span>
+      <span>⭐</span>
       <span class="xp-num" id="xpNum">0</span>
     </div>
-    <div class="level-badge" id="levelBadge">🌱 Seed Lv.1</div>
+    <div class="level-badge" id="levelBadge">🌱 Seed</div>
     <div class="avatar-btn" id="avatarBtn" onclick="showTab('settings')">U</div>
   </header>
 
   <main class="main-content">
-    <!-- HABITS TAB -->
     <div class="tab-panel active" id="tab-habits">
       <div class="sections-container" id="sectionsContainer"></div>
       <button class="btn-primary" style="margin-top:12px" onclick="showAddSection()">+ Add Section</button>
     </div>
 
-    <!-- TIME TABLE TAB -->
     <div class="tab-panel" id="tab-timetable">
       <div class="timetable-header">
         <h2>📅 Time Table</h2>
@@ -1012,7 +789,6 @@ input:focus, textarea:focus {
       <div id="timetableContainer"></div>
     </div>
 
-    <!-- NOTES TAB -->
     <div class="tab-panel" id="tab-notes">
       <div class="notes-toolbar">
         <button class="btn-secondary" onclick="noteSetFont('bold')">B</button>
@@ -1021,7 +797,7 @@ input:focus, textarea:focus {
         <button class="btn-secondary" onclick="noteSetFont('size-')">A-</button>
         <input type="color" id="noteColorPicker" value="#00d4b4" onchange="noteSetColor(this.value)">
         <button class="btn-secondary" onclick="toggleDrawing()">✏️ Draw</button>
-        <button class="btn-secondary" onclick="clearCanvas()">🗑️ Clear</button>
+        <button class="btn-secondary" onclick="clearCanvas()">🗑️ Clear Draw</button>
       </div>
       <div class="note-editor-area">
         <input type="text" id="noteTitle" class="note-title" placeholder="Note title...">
@@ -1030,14 +806,14 @@ input:focus, textarea:focus {
           <canvas id="drawCanvas" width="500" height="300" style="width:100%;height:auto;background:white"></canvas>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn-primary" onclick="saveCurrentNote()">💾 Save Note</button>
+          <button class="btn-primary" onclick="saveNoteWithDrawing()">💾 Save Note + Drawing</button>
+          <button class="btn-secondary" onclick="saveNoteOnly()">📝 Save Note Only</button>
           <button class="btn-secondary" onclick="loadNotesList()">📋 My Notes</button>
         </div>
       </div>
       <div id="notesList"></div>
     </div>
 
-    <!-- TASKS TAB -->
     <div class="tab-panel" id="tab-tasks">
       <div style="display:flex;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
         <h2>✅ Tasks</h2>
@@ -1046,30 +822,16 @@ input:focus, textarea:focus {
       <div id="tasksList"></div>
     </div>
 
-    <!-- TOOLS TAB -->
     <div class="tab-panel" id="tab-tools">
       <div class="tools-grid">
-        <div class="tool-card" onclick="showCalculator()">
-          <div class="tool-icon">🔢</div>
-          <div>Calculator</div>
-        </div>
-        <div class="tool-card" onclick="showConverter()">
-          <div class="tool-icon">🔄</div>
-          <div>Converter</div>
-        </div>
-        <div class="tool-card" onclick="showSafeGallery()">
-          <div class="tool-icon">🖼️</div>
-          <div>Safe Gallery</div>
-        </div>
-        <div class="tool-card" onclick="openGame()">
-          <div class="tool-icon">🎮</div>
-          <div>Witty Star</div>
-        </div>
+        <div class="tool-card" onclick="showCalculator()"><div class="tool-icon">🔢</div><div>Calculator</div></div>
+        <div class="tool-card" onclick="showConverter()"><div class="tool-icon">🔄</div><div>Converter</div></div>
+        <div class="tool-card" onclick="showSafeGallery()"><div class="tool-icon">🖼️</div><div>Safe Gallery</div></div>
+        <div class="tool-card" onclick="openGame()"><div class="tool-icon">🎮</div><div>Witty Star</div></div>
       </div>
       <div id="toolsContent"></div>
     </div>
 
-    <!-- ANALYTICS TAB -->
     <div class="tab-panel" id="tab-analytics">
       <div class="xp-card">
         <div style="font-size:2rem" id="rankIcon">🌱</div>
@@ -1079,18 +841,15 @@ input:focus, textarea:focus {
           <div class="progress-bar"><div class="progress-fill" id="xpProgress" style="width:0%"></div></div>
         </div>
       </div>
-      <div class="analytics-grid" id="analyticsGrid"></div>
-      
+      <div id="analyticsGrid"></div>
       <h3 style="margin: 20px 0 10px">📜 Activity History</h3>
       <div id="historyList"></div>
     </div>
 
-    <!-- SETTINGS TAB -->
     <div class="tab-panel" id="tab-settings">
       <div class="settings-container">
         <h2>⚙️ Settings</h2>
-        
-        <div class="settings-section" style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
+        <div style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
           <h3>🎨 Themes</h3>
           <div class="theme-buttons">
             <button class="btn-secondary" onclick="setTheme('dark')">🌙 Dark</button>
@@ -1102,13 +861,11 @@ input:focus, textarea:focus {
             <button class="btn-secondary" onclick="setTheme('sunset')">🌅 Sunset</button>
           </div>
         </div>
-        
-        <div class="settings-section" style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
+        <div style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
           <h3>👤 Profile</h3>
           <div id="profileCard"></div>
         </div>
-        
-        <div class="settings-section" style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
+        <div style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
           <h3>💾 Data</h3>
           <button class="btn-danger" onclick="exportData()">📤 Export Data</button>
           <button class="btn-danger" onclick="confirmReset()">🗑️ Reset App</button>
@@ -1128,162 +885,91 @@ input:focus, textarea:focus {
   </nav>
 </div>
 
-<!-- MODAL -->
 <div id="modalOverlay" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
-  <div class="modal" id="modalBox"><div id="modalContent"></div></div>
+  <div class="modal"><div id="modalContent"></div></div>
 </div>
 
 <script>
 // ===== STORAGE =====
 const STORAGE = {
-  _prefix: 'rd_ultimate_',
-  
-  set(key, val) {
-    localStorage.setItem(this._prefix + key, JSON.stringify(val));
-  },
-  
-  get(key, fallback = null) {
-    const raw = localStorage.getItem(this._prefix + key);
-    if (!raw) return fallback;
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return fallback;
-    }
-  },
-  
-  del(key) {
-    localStorage.removeItem(this._prefix + key);
-  },
-  
-  clear() {
-    Object.keys(localStorage).forEach(k => {
-      if (k.startsWith(this._prefix)) localStorage.removeItem(k);
-    });
-  }
+  _prefix: 'rd_ult_',
+  set(k, v) { localStorage.setItem(this._prefix + k, JSON.stringify(v)); },
+  get(k, f = null) { try { return JSON.parse(localStorage.getItem(this._prefix + k)) || f; } catch { return f; } },
+  del(k) { localStorage.removeItem(this._prefix + k); },
+  clear() { Object.keys(localStorage).filter(k => k.startsWith(this._prefix)).forEach(k => localStorage.removeItem(k)); }
 };
 
 // ===== ACTIVITY HISTORY =====
 function addHistory(action, details = "") {
   const history = STORAGE.get('history', []);
-  history.unshift({
-    id: Date.now(),
-    action: action,
-    details: details,
-    timestamp: new Date().toISOString(),
-    date: new Date().toLocaleString()
-  });
+  history.unshift({ id: Date.now(), action, details, date: new Date().toLocaleString(), timestamp: new Date().toISOString() });
   STORAGE.set('history', history.slice(0, 200));
   renderHistory();
 }
 
 function renderHistory() {
-  const history = STORAGE.get('history', []);
-  const container = document.getElementById('historyList');
-  if (!container) return;
-  
-  if (history.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No activity yet</div>';
-    return;
-  }
-  
-  container.innerHTML = history.slice(0, 30).map(h => `
-    <div class="history-item">
-      <div>
-        <div class="history-action">${escHtml(h.action)} ${h.details ? `<span style="font-size:0.75rem;color:var(--text2)">${escHtml(h.details)}</span>` : ''}</div>
-        <div class="history-time">${h.date}</div>
-      </div>
-    </div>
-  `).join('');
+  const h = STORAGE.get('history', []);
+  const cont = document.getElementById('historyList');
+  if (!cont) return;
+  if (!h.length) { cont.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No activity yet</div>'; return; }
+  cont.innerHTML = h.slice(0, 30).map(hh => `<div class="history-item"><div class="history-time">${hh.date}</div><div><strong>${hh.action}</strong> ${hh.details}</div></div>`).join('');
 }
 
 // ===== XP SYSTEM =====
-const XP_RANKS = [
-  { minXP: 0, name: "Seed", icon: "🌱", nextXP: 100 },
-  { minXP: 100, name: "Sprout", icon: "🌿", nextXP: 300 },
-  { minXP: 300, name: "Sapling", icon: "🪴", nextXP: 600 },
-  { minXP: 600, name: "Growing", icon: "🌳", nextXP: 1000 },
-  { minXP: 1000, name: "Bronze", icon: "🥉", nextXP: 1500 },
-  { minXP: 1500, name: "Silver", icon: "🥈", nextXP: 2200 },
-  { minXP: 2200, name: "Gold", icon: "🥇", nextXP: 3200 },
-  { minXP: 3200, name: "Platinum", icon: "💎", nextXP: 4500 },
-  { minXP: 4500, name: "Diamond", icon: "👑", nextXP: 6000 },
-  { minXP: 6000, name: "Legend", icon: "🔥", nextXP: Infinity }
+const RANKS = [
+  { min: 0, name: "Seed", icon: "🌱", next: 100 },
+  { min: 100, name: "Sprout", icon: "🌿", next: 300 },
+  { min: 300, name: "Sapling", icon: "🪴", next: 600 },
+  { min: 600, name: "Growing", icon: "🌳", next: 1000 },
+  { min: 1000, name: "Bronze", icon: "🥉", next: 1500 },
+  { min: 1500, name: "Silver", icon: "🥈", next: 2200 },
+  { min: 2200, name: "Gold", icon: "🥇", next: 3200 },
+  { min: 3200, name: "Platinum", icon: "💎", next: 4500 },
+  { min: 4500, name: "Diamond", icon: "👑", next: 6000 },
+  { min: 6000, name: "Legend", icon: "🔥", next: Infinity }
 ];
 
-function getRank(xp) {
-  for (let i = XP_RANKS.length - 1; i >= 0; i--) {
-    if (xp >= XP_RANKS[i].minXP) return XP_RANKS[i];
-  }
-  return XP_RANKS[0];
-}
+function getRank(xp) { for (let i = RANKS.length-1; i>=0; i--) if (xp >= RANKS[i].min) return RANKS[i]; return RANKS[0]; }
 
-function addXP(amount, reason = "") {
+function addXP(amt, reason) {
   let xp = STORAGE.get('xp', 0);
-  const oldRank = getRank(xp);
-  xp += amount;
+  let old = getRank(xp);
+  xp += amt;
   STORAGE.set('xp', xp);
-  
-  const newRank = getRank(xp);
   updateXPDisplay();
-  
-  addHistory(`+${amount} XP`, reason);
-  
-  if (oldRank.name !== newRank.name) {
-    showLevelUp(newRank);
-    addHistory(`LEVEL UP!`, `Reached ${newRank.name} rank!`);
-  }
-  
-  return xp;
+  addHistory(`+${amt} XP`, reason);
+  let newRank = getRank(xp);
+  if (old.name !== newRank.name) { showLevelUp(newRank); addHistory(`LEVEL UP!`, `${newRank.name} rank!`); }
 }
 
 function updateXPDisplay() {
-  const xp = STORAGE.get('xp', 0);
-  const rank = getRank(xp);
-  const nextRank = XP_RANKS[XP_RANKS.findIndex(r => r.name === rank.name) + 1] || rank;
-  const xpForCurrent = rank.minXP;
-  const xpNeeded = nextRank.nextXP - xpForCurrent;
-  const currentProgress = xp - xpForCurrent;
-  const percent = (currentProgress / xpNeeded) * 100;
-  
-  const xpNum = document.getElementById('xpNum');
-  const levelBadge = document.getElementById('levelBadge');
-  const rankIcon = document.getElementById('rankIcon');
-  const rankName = document.getElementById('rankName');
-  const currentXP = document.getElementById('currentXP');
-  const nextXP = document.getElementById('nextXP');
-  const xpProgress = document.getElementById('xpProgress');
-  
-  if (xpNum) xpNum.textContent = xp;
-  if (levelBadge) levelBadge.textContent = `${rank.icon} ${rank.name}`;
-  if (rankIcon) rankIcon.textContent = rank.icon;
-  if (rankName) rankName.textContent = rank.name;
-  if (currentXP) currentXP.textContent = xp;
-  if (nextXP) nextXP.textContent = nextRank.nextXP === Infinity ? "MAX" : nextRank.nextXP;
-  if (xpProgress) xpProgress.style.width = Math.min(100, percent) + '%';
+  let xp = STORAGE.get('xp', 0);
+  let r = getRank(xp);
+  let nextR = RANKS[RANKS.findIndex(rr => rr.name === r.name) + 1] || r;
+  let percent = ((xp - r.min) / (nextR.next - r.min)) * 100;
+  document.getElementById('xpNum') && (document.getElementById('xpNum').innerText = xp);
+  document.getElementById('levelBadge') && (document.getElementById('levelBadge').innerText = `${r.icon} ${r.name}`);
+  document.getElementById('rankIcon') && (document.getElementById('rankIcon').innerText = r.icon);
+  document.getElementById('rankName') && (document.getElementById('rankName').innerText = r.name);
+  document.getElementById('currentXP') && (document.getElementById('currentXP').innerText = xp);
+  document.getElementById('nextXP') && (document.getElementById('nextXP').innerText = nextR.next === Infinity ? "MAX" : nextR.next);
+  document.getElementById('xpProgress') && (document.getElementById('xpProgress').style.width = Math.min(100, percent) + '%');
 }
 
-function showLevelUp(rank) {
-  const anim = document.createElement('div');
-  anim.className = 'levelup-anim';
-  anim.innerHTML = `
-    <div class="levelup-inner">
-      <div style="font-size:5rem">${rank.icon}</div>
-      <div style="font-size:2rem;font-weight:900;color:var(--accent)">LEVEL UP!</div>
-      <div style="font-size:1.2rem;margin-top:8px">${rank.name} Rank Unlocked!</div>
-      <div style="margin-top:12px">🎉 Amazing! Keep going! 🎉</div>
-    </div>
-  `;
-  document.body.appendChild(anim);
-  setTimeout(() => anim.remove(), 2000);
+function showLevelUp(r) {
+  let div = document.createElement('div');
+  div.className = 'levelup-anim';
+  div.innerHTML = `<div class="levelup-inner"><div style="font-size:5rem">${r.icon}</div><div style="font-size:2rem;color:var(--accent)">LEVEL UP!</div><div>${r.name} Rank!</div></div>`;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 2000);
 }
 
-// ===== GENERIC FUNCTIONS =====
+// ===== UTILS =====
 function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 6); }
 function today() { return new Date().toISOString().split('T')[0]; }
-function escHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, function(m){if(m==='&')return '&amp;';if(m==='<')return '&lt;';if(m==='>')return '&gt;';return m;}); }
+function esc(s) { if(!s) return ''; return s.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
 
-// ===== HABITS SYSTEM =====
+// ===== HABITS =====
 function getSections() { return STORAGE.get('sections', []); }
 function setSections(s) { STORAGE.set('sections', s); }
 function getHabits() { return STORAGE.get('habits', []); }
@@ -1292,1619 +978,539 @@ function getCompletions() { return STORAGE.get('completions', {}); }
 function setCompletions(c) { STORAGE.set('completions', c); }
 
 function renderSections() {
-  const container = document.getElementById('sectionsContainer');
-  if (!container) return;
-  const sections = getSections();
-  const habits = getHabits();
-  const completions = getCompletions();
-  const todayStr = today();
-  const todayComp = completions[todayStr] || {};
-  
-  if (sections.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)">No sections yet. Tap + to add!</div>';
-    return;
-  }
-  
-  container.innerHTML = sections.map(section => {
-    const sectionHabits = habits.filter(h => h.sectionId === section.id);
-    const doneCount = sectionHabits.filter(h => todayComp[h.id]).length;
-    const pct = sectionHabits.length > 0 ? (doneCount / sectionHabits.length) * 100 : 0;
-    
-    return `
-      <div class="section-card">
-        <div class="section-header">
-          <div class="section-title-row">
-            <span>${section.emoji || '📌'}</span>
-            <div>
-              <div class="section-name">${escHtml(section.name)}</div>
-              <div class="section-progress-bar"><div class="section-progress-fill" style="width:${pct}%"></div></div>
-            </div>
-          </div>
-          <div><span style="font-size:0.75rem">${doneCount}/${sectionHabits.length}</span></div>
-        </div>
-        <div class="habits-list">
-          ${sectionHabits.map(h => `
-            <div class="habit-row">
-              <div class="habit-check ${todayComp[h.id] ? 'done' : ''}" onclick="toggleHabit('${h.id}')">${todayComp[h.id] ? '✓' : ''}</div>
-              <div class="habit-info">
-                <div class="habit-name">${escHtml(h.name)}</div>
-                ${h.desc ? `<div style="font-size:0.7rem;color:var(--text2)">${escHtml(h.desc)}</div>` : ''}
-              </div>
-              <button class="btn-secondary" style="padding:4px 8px" onclick="showHabitHistory('${h.id}')">📅</button>
-              <button class="btn-secondary" style="padding:4px 8px" onclick="editHabit('${h.id}')">✏️</button>
-              <button class="btn-danger" style="padding:4px 8px" onclick="deleteHabit('${h.id}')">✕</button>
-            </div>
-          `).join('')}
-          <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="showAddHabit('${section.id}')">+ Add Habit</button>
-        </div>
-      </div>
-    `;
+  let cont = document.getElementById('sectionsContainer');
+  if (!cont) return;
+  let sections = getSections();
+  let habits = getHabits();
+  let comps = getCompletions();
+  let todayStr = today();
+  let todayComp = comps[todayStr] || {};
+  if (!sections.length) { cont.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)">No sections. Tap + to add!</div>'; return; }
+  cont.innerHTML = sections.map(sec => {
+    let secHabits = habits.filter(h => h.sectionId === sec.id);
+    let done = secHabits.filter(h => todayComp[h.id]).length;
+    let pct = secHabits.length ? (done/secHabits.length)*100 : 0;
+    return `<div class="section-card"><div class="section-header"><div class="section-title-row"><span>${sec.emoji||'📌'}</span><div><div class="section-name">${esc(sec.name)}</div><div class="section-progress-bar"><div class="section-progress-fill" style="width:${pct}%"></div></div></div></div><div><span style="font-size:0.75rem">${done}/${secHabits.length}</span></div></div><div class="habits-list">${secHabits.map(h => `<div class="habit-row"><div class="habit-check ${todayComp[h.id]?'done':''}" onclick="toggleHabit('${h.id}')">${todayComp[h.id]?'✓':''}</div><div class="habit-info"><div class="habit-name">${esc(h.name)}</div>${h.desc?`<div style="font-size:0.7rem;color:var(--text2)">${esc(h.desc)}</div>`:''}</div><button class="btn-secondary" style="padding:4px 8px" onclick="showHabitHistory('${h.id}')">📅</button><button class="btn-secondary" style="padding:4px 8px" onclick="editHabit('${h.id}')">✏️</button><button class="btn-danger" style="padding:4px 8px" onclick="deleteHabit('${h.id}')">✕</button></div>`).join('')}<button class="btn-secondary" style="width:100%;margin-top:8px" onclick="showAddHabit('${sec.id}')">+ Add Habit</button></div></div>`;
   }).join('');
 }
 
-function showHabitHistory(habitId) {
-  const habits = getHabits();
-  const habit = habits.find(h => h.id === habitId);
-  const completions = getCompletions();
-  
-  // Get last 30 days
-  const days = [];
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const ds = d.toISOString().split('T')[0];
-    const done = completions[ds] && completions[ds][habitId];
-    days.push({ date: ds, done: done || false, dayName: d.toLocaleDateString('en', { weekday: 'short' }) });
+function showHabitHistory(id) {
+  let h = getHabits().find(hh => hh.id === id);
+  let comps = getCompletions();
+  let days = [];
+  for(let i=29; i>=0; i--) {
+    let d = new Date(); d.setDate(d.getDate()-i);
+    let ds = d.toISOString().split('T')[0];
+    days.push({ date: ds, done: comps[ds] && comps[ds][id], day: d.toLocaleDateString('en',{weekday:'short'}) });
   }
-  
-  showModal(`
-    <h3>📊 ${escHtml(habit?.name)} - History</h3>
-    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:16px">
-      ${days.map(d => `
-        <div style="text-align:center">
-          <div style="font-size:0.6rem;color:var(--text2)">${d.dayName}</div>
-          <div style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:${d.done ? 'var(--success)' : 'var(--bg3)'};border-radius:8px;margin:2px auto">
-            ${d.done ? '✅' : '❌'}
-          </div>
-          <div style="font-size:0.6rem">${d.date.slice(5)}</div>
-        </div>
-      `).join('')}
-    </div>
-  `);
+  showModal(`<h3>📊 ${esc(h?.name)} - History</h3><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">${days.map(d=>`<div style="text-align:center"><div style="font-size:0.6rem">${d.day}</div><div style="width:30px;height:30px;background:${d.done?'var(--success)':'var(--bg3)'};border-radius:8px;margin:2px auto;display:flex;align-items:center;justify-content:center">${d.done?'✅':'❌'}</div><div style="font-size:0.6rem">${d.date.slice(5)}</div></div>`).join('')}</div>`);
 }
 
-function editHabit(habitId) {
-  const habits = getHabits();
-  const habit = habits.find(h => h.id === habitId);
-  if (!habit) return;
-  
-  showModal(`
-    <h3>✏️ Edit Habit</h3>
-    <input type="text" id="editHabitName" value="${escHtml(habit.name)}" placeholder="Habit name" style="width:100%;margin:12px 0;padding:10px">
-    <input type="text" id="editHabitDesc" value="${escHtml(habit.desc || '')}" placeholder="Description" style="width:100%;margin-bottom:12px;padding:10px">
-    <button class="btn-primary" onclick="updateHabit('${habitId}')">Save Changes</button>
-  `);
+function editHabit(id) {
+  let h = getHabits().find(hh => hh.id === id);
+  showModal(`<h3>✏️ Edit Habit</h3><input type="text" id="editHName" value="${esc(h.name)}" style="width:100%;margin:12px 0;padding:10px"><input type="text" id="editHDesc" value="${esc(h.desc||'')}" style="width:100%;margin-bottom:12px;padding:10px"><button class="btn-primary" onclick="updateHabit('${id}')">Save</button>`);
 }
 
-function updateHabit(habitId) {
-  const newName = document.getElementById('editHabitName')?.value.trim();
-  const newDesc = document.getElementById('editHabitDesc')?.value;
-  if (!newName) return;
-  
+function updateHabit(id) {
+  let name = document.getElementById('editHName')?.value.trim();
+  if(!name) return;
   let habits = getHabits();
-  const index = habits.findIndex(h => h.id === habitId);
-  if (index !== -1) {
-    habits[index].name = newName;
-    habits[index].desc = newDesc;
-    setHabits(habits);
-    addHistory(`Edited habit`, newName);
-    closeModal();
-    renderSections();
-  }
+  let idx = habits.findIndex(h => h.id === id);
+  if(idx !== -1) { habits[idx].name = name; habits[idx].desc = document.getElementById('editHDesc')?.value; setHabits(habits); addHistory(`Edited habit`, name); closeModal(); renderSections(); }
 }
 
-function toggleHabit(habitId) {
-  const completions = getCompletions();
-  const todayStr = today();
-  if (!completions[todayStr]) completions[todayStr] = {};
-  
-  const wasDone = completions[todayStr][habitId];
-  
-  if (!wasDone) {
-    completions[todayStr][habitId] = true;
-    addXP(10, "Habit completed");
-    showNotification("+10 XP! 🌟 Keep going!", "success");
-    addHistory(`Completed habit`, `+10 XP`);
-  } else {
-    completions[todayStr][habitId] = false;
-    addXP(-10, "Habit undone");
-  }
-  
-  setCompletions(completions);
-  renderSections();
-  updateAnalytics();
+function toggleHabit(id) {
+  let comps = getCompletions();
+  let todayStr = today();
+  if(!comps[todayStr]) comps[todayStr] = {};
+  let was = comps[todayStr][id];
+  comps[todayStr][id] = !was;
+  setCompletions(comps);
+  if(!was) { addXP(10, "Habit completed"); addHistory(`Completed habit`, `+10 XP`); showNotification("+10 XP! 🌟", "success"); }
+  else addXP(-10, "Habit undone");
+  renderSections(); updateAnalytics();
 }
 
 function showAddSection() {
-  showModal(`
-    <h3>Add Section</h3>
-    <input type="text" id="secName" placeholder="Section name" style="width:100%;margin:12px 0;padding:10px">
-    <input type="text" id="secEmoji" placeholder="Emoji" style="width:100%;margin-bottom:12px;padding:10px" value="📌">
-    <button class="btn-primary" onclick="addSection()">Add</button>
-  `);
+  showModal(`<h3>Add Section</h3><input type="text" id="secName" placeholder="Section name" style="width:100%;margin:12px 0;padding:10px"><input type="text" id="secEmoji" placeholder="Emoji" style="width:100%;margin-bottom:12px;padding:10px" value="📌"><button class="btn-primary" onclick="addSection()">Add</button>`);
 }
-
 function addSection() {
-  const name = document.getElementById('secName').value.trim();
-  const emoji = document.getElementById('secEmoji').value.trim() || '📌';
-  if (!name) return;
-  const sections = getSections();
-  sections.push({ id: genId(), name, emoji, collapsed: false });
-  setSections(sections);
-  addHistory(`Added section`, name);
-  closeModal();
-  renderSections();
+  let name = document.getElementById('secName')?.value.trim();
+  if(!name) return;
+  let sections = getSections();
+  sections.push({ id: genId(), name, emoji: document.getElementById('secEmoji')?.value||'📌' });
+  setSections(sections); addHistory(`Added section`, name); closeModal(); renderSections();
 }
-
-function showAddHabit(sectionId) {
-  showModal(`
-    <h3>Add Habit</h3>
-    <input type="text" id="habitName" placeholder="Habit name" style="width:100%;margin:12px 0;padding:10px">
-    <input type="text" id="habitDesc" placeholder="Description (optional)" style="width:100%;margin-bottom:12px;padding:10px">
-    <button class="btn-primary" onclick="addHabit('${sectionId}')">Add</button>
-  `);
+function showAddHabit(sid) {
+  showModal(`<h3>Add Habit</h3><input type="text" id="habitName" placeholder="Habit name" style="width:100%;margin:12px 0;padding:10px"><input type="text" id="habitDesc" placeholder="Description" style="width:100%;margin-bottom:12px;padding:10px"><button class="btn-primary" onclick="addHabit('${sid}')">Add</button>`);
 }
-
-function addHabit(sectionId) {
-  const name = document.getElementById('habitName').value.trim();
-  if (!name) return;
-  const habits = getHabits();
-  habits.push({ id: genId(), name, desc: document.getElementById('habitDesc').value, sectionId, streak: 0, createdAt: new Date().toISOString() });
-  setHabits(habits);
-  addHistory(`Added habit`, name);
-  closeModal();
-  renderSections();
+function addHabit(sid) {
+  let name = document.getElementById('habitName')?.value.trim();
+  if(!name) return;
+  let habits = getHabits();
+  habits.push({ id: genId(), name, desc: document.getElementById('habitDesc')?.value, sectionId: sid });
+  setHabits(habits); addHistory(`Added habit`, name); closeModal(); renderSections();
 }
-
 function deleteHabit(id) {
   let habits = getHabits();
-  const habit = habits.find(h => h.id === id);
-  habits = habits.filter(h => h.id !== id);
-  setHabits(habits);
-  addHistory(`Deleted habit`, habit?.name);
-  renderSections();
+  let h = habits.find(hh => hh.id === id);
+  habits = habits.filter(hh => hh.id !== id);
+  setHabits(habits); addHistory(`Deleted habit`, h?.name); renderSections();
 }
 
-// ===== TIME TABLE with custom time =====
+// ===== TIME TABLE =====
 function getTimetable() { return STORAGE.get('timetable', []); }
 function setTimetable(t) { STORAGE.set('timetable', t); }
-
 function renderTimetable() {
-  const container = document.getElementById('timetableContainer');
-  if (!container) return;
-  const timetable = getTimetable();
-  
-  // Sort by time
-  timetable.sort((a, b) => a.time.localeCompare(b.time));
-  
-  if (timetable.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)">No entries. Tap + to add your schedule!</div>';
-    return;
-  }
-  
-  container.innerHTML = `
-    <div class="timetable-grid">
-      ${timetable.map(item => `
-        <div class="timetable-row">
-          <div class="timetable-time">${escHtml(item.time)}</div>
-          <div class="timetable-item" onclick="editTimetable('${item.id}')">
-            <div class="timetable-subject">${escHtml(item.subject)}</div>
-            ${item.note ? `<div class="timetable-note">${escHtml(item.note)}</div>` : ''}
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `;
+  let cont = document.getElementById('timetableContainer');
+  if(!cont) return;
+  let tt = getTimetable();
+  tt.sort((a,b)=>a.time.localeCompare(b.time));
+  if(!tt.length) { cont.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)">No entries. Tap + to add!</div>'; return; }
+  cont.innerHTML = `<div class="timetable-grid">${tt.map(t => `<div class="timetable-row"><div class="timetable-time">${esc(t.time)}</div><div class="timetable-item" onclick="editTimetable('${t.id}')"><div class="timetable-subject">${esc(t.subject)}</div>${t.note?`<div class="timetable-note">${esc(t.note)}</div>`:''}</div></div>`).join('')}</div>`;
 }
-
 function showAddTimetable() {
-  showModal(`
-    <h3>Add Timetable Entry</h3>
-    <div class="field-group">
-      <label>Time (HH:MM)</label>
-      <input type="time" id="ttTime" style="width:100%;margin:12px 0;padding:10px">
-    </div>
-    <div class="field-group">
-      <label>Subject/Activity</label>
-      <input type="text" id="ttSubject" placeholder="What to do?" style="width:100%;margin:12px 0;padding:10px">
-    </div>
-    <div class="field-group">
-      <label>Notes (optional)</label>
-      <input type="text" id="ttNote" placeholder="Details..." style="width:100%;margin-bottom:12px;padding:10px">
-    </div>
-    <div class="field-group">
-      <label>Alarm (optional)</label>
-      <input type="time" id="ttAlarm" style="width:100%;margin-bottom:12px;padding:10px">
-    </div>
-    <button class="btn-primary" onclick="addTimetable()">Save</button>
-  `);
+  showModal(`<h3>Add Timetable Entry</h3><div class="field-group"><label>Time (HH:MM)</label><input type="time" id="ttTime" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Subject</label><input type="text" id="ttSubject" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Notes</label><input type="text" id="ttNote" style="width:100%;margin-bottom:12px;padding:10px"></div><div class="field-group"><label>Alarm</label><input type="time" id="ttAlarm" style="width:100%;margin-bottom:12px;padding:10px"></div><button class="btn-primary" onclick="addTimetable()">Save</button>`);
 }
-
 function addTimetable() {
-  const time = document.getElementById('ttTime').value;
-  const subject = document.getElementById('ttSubject').value.trim();
-  const note = document.getElementById('ttNote').value;
-  const alarmTime = document.getElementById('ttAlarm').value;
-  
-  if (!time || !subject) {
-    alert("Please fill time and subject");
-    return;
-  }
-  
-  const timetable = getTimetable();
-  const newItem = { id: genId(), time, subject, note, alarmTime, createdAt: new Date().toISOString() };
-  timetable.push(newItem);
-  setTimetable(timetable);
-  
-  if (alarmTime) {
-    scheduleTimetableAlarm(newItem);
-  }
-  
-  addHistory(`Added timetable entry`, `${time} - ${subject}`);
-  closeModal();
-  renderTimetable();
+  let time = document.getElementById('ttTime')?.value;
+  let subj = document.getElementById('ttSubject')?.value.trim();
+  if(!time || !subj) return;
+  let tt = getTimetable();
+  let newItem = { id: genId(), time, subject: subj, note: document.getElementById('ttNote')?.value, alarmTime: document.getElementById('ttAlarm')?.value };
+  tt.push(newItem); setTimetable(tt); addHistory(`Added timetable`, `${time} - ${subj}`); closeModal(); renderTimetable();
+  if(newItem.alarmTime) scheduleTTAlarm(newItem);
 }
-
 function editTimetable(id) {
-  const timetable = getTimetable();
-  const item = timetable.find(t => t.id === id);
-  if (!item) return;
-  
-  showModal(`
-    <h3>Edit Timetable</h3>
-    <div class="field-group">
-      <label>Time (HH:MM)</label>
-      <input type="time" id="ttTime" value="${item.time}" style="width:100%;margin:12px 0;padding:10px">
-    </div>
-    <div class="field-group">
-      <label>Subject/Activity</label>
-      <input type="text" id="ttSubject" value="${escHtml(item.subject)}" style="width:100%;margin:12px 0;padding:10px">
-    </div>
-    <div class="field-group">
-      <label>Notes</label>
-      <input type="text" id="ttNote" value="${escHtml(item.note || '')}" style="width:100%;margin-bottom:12px;padding:10px">
-    </div>
-    <div class="field-group">
-      <label>Alarm</label>
-      <input type="time" id="ttAlarm" value="${item.alarmTime || ''}" style="width:100%;margin-bottom:12px;padding:10px">
-    </div>
-    <button class="btn-primary" onclick="updateTimetable('${id}')">Save Changes</button>
-    <button class="btn-danger" onclick="deleteTimetableItem('${id}')" style="margin-top:8px">Delete</button>
-  `);
+  let tt = getTimetable();
+  let item = tt.find(t => t.id === id);
+  showModal(`<h3>Edit Timetable</h3><input type="time" id="ttTime" value="${item.time}" style="width:100%;margin:12px 0;padding:10px"><input type="text" id="ttSubject" value="${esc(item.subject)}" style="width:100%;margin:12px 0;padding:10px"><input type="text" id="ttNote" value="${esc(item.note||'')}" style="width:100%;margin-bottom:12px;padding:10px"><input type="time" id="ttAlarm" value="${item.alarmTime||''}" style="width:100%;margin-bottom:12px;padding:10px"><button class="btn-primary" onclick="updateTimetable('${id}')">Save</button><button class="btn-danger" onclick="deleteTimetableItem('${id}')" style="margin-top:8px">Delete</button>`);
 }
-
 function updateTimetable(id) {
-  const time = document.getElementById('ttTime').value;
-  const subject = document.getElementById('ttSubject').value.trim();
-  const note = document.getElementById('ttNote').value;
-  const alarmTime = document.getElementById('ttAlarm').value;
-  
-  if (!time || !subject) return;
-  
-  let timetable = getTimetable();
-  const index = timetable.findIndex(t => t.id === id);
-  if (index !== -1) {
-    timetable[index] = { ...timetable[index], time, subject, note, alarmTime };
-    setTimetable(timetable);
-    if (alarmTime) scheduleTimetableAlarm(timetable[index]);
-    addHistory(`Updated timetable`, `${time} - ${subject}`);
-  }
-  closeModal();
-  renderTimetable();
+  let time = document.getElementById('ttTime')?.value;
+  let subj = document.getElementById('ttSubject')?.value.trim();
+  if(!time || !subj) return;
+  let tt = getTimetable();
+  let idx = tt.findIndex(t => t.id === id);
+  if(idx !== -1) { tt[idx] = { ...tt[idx], time, subject: subj, note: document.getElementById('ttNote')?.value, alarmTime: document.getElementById('ttAlarm')?.value }; setTimetable(tt); addHistory(`Updated timetable`, `${time} - ${subj}`); closeModal(); renderTimetable(); }
 }
-
 function deleteTimetableItem(id) {
-  let timetable = getTimetable();
-  const item = timetable.find(t => t.id === id);
-  timetable = timetable.filter(t => t.id !== id);
-  setTimetable(timetable);
-  addHistory(`Deleted timetable entry`, item?.subject);
-  closeModal();
-  renderTimetable();
+  let tt = getTimetable();
+  let item = tt.find(t => t.id === id);
+  tt = tt.filter(t => t.id !== id);
+  setTimetable(tt); addHistory(`Deleted timetable`, item?.subject); closeModal(); renderTimetable();
 }
-
-function scheduleTimetableAlarm(item) {
-  if (!("Notification" in window)) return;
-  if (Notification.permission !== "granted") Notification.requestPermission();
-  
-  const [hours, minutes] = item.alarmTime.split(':');
-  const now = new Date();
-  let alarmTime = new Date();
-  alarmTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-  
-  if (alarmTime <= now) {
-    alarmTime.setDate(alarmTime.getDate() + 1);
-  }
-  
-  const delay = alarmTime - now;
+function scheduleTTAlarm(item) {
+  if(!("Notification" in window)) return;
+  if(Notification.permission !== "granted") Notification.requestPermission();
+  let [h,m] = item.alarmTime.split(':');
+  let now = new Date();
+  let alarm = new Date();
+  alarm.setHours(parseInt(h), parseInt(m), 0, 0);
+  if(alarm <= now) alarm.setDate(alarm.getDate()+1);
   setTimeout(() => {
-    if (Notification.permission === "granted") {
-      new Notification("📅 Timetable Reminder", {
-        body: `${item.time} - ${item.subject}`,
-        icon: "/icon-192.svg"
-      });
-      // Play sound if available
-      const audio = new Audio('https://actions.google.com/sounds/olfaction/notification/notification_default.ogg');
-      audio.play().catch(e => console.log('Audio play failed'));
-    }
-    // Reschedule for next day
-    scheduleTimetableAlarm(item);
-  }, delay);
+    if(Notification.permission === "granted") new Notification("📅 Timetable", { body: `${item.time} - ${item.subject}` });
+    let audio = new Audio('https://actions.google.com/sounds/olfaction/notification/notification_default.ogg');
+    audio.play().catch(e=>console.log);
+    scheduleTTAlarm(item);
+  }, alarm - now);
 }
 
-// ===== NOTES WITH DRAWING =====
-let drawing = false;
-let ctx = null;
-let canvas = null;
-let currentDrawingData = null;
-
-function toggleDrawing() {
-  const container = document.getElementById('canvasContainer');
-  if (container) container.classList.toggle('hidden');
-  setTimeout(initCanvas, 100);
-}
-
+// ===== NOTES + DRAWING (Separate Save) =====
+let drawing = false, ctx = null, canvas = null, currentDrawing = null;
 function initCanvas() {
   canvas = document.getElementById('drawCanvas');
-  if (!canvas) return;
-  canvas.width = 500;
-  canvas.height = 300;
+  if(!canvas) return;
+  canvas.width = 500; canvas.height = 300;
   ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'white';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = '#000';
-  ctx.lineWidth = 2;
-  
-  const startDraw = (e) => {
-    drawing = true;
-    const pos = getCanvasPos(e);
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-  };
-  
-  const draw = (e) => {
-    if (!drawing) return;
-    const pos = getCanvasPos(e);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-  };
-  
-  const stopDraw = () => { drawing = false; };
-  
-  canvas.removeEventListener('mousedown', startDraw);
-  canvas.removeEventListener('mousemove', draw);
-  canvas.removeEventListener('mouseup', stopDraw);
-  canvas.removeEventListener('touchstart', startDraw);
-  canvas.removeEventListener('touchmove', draw);
-  canvas.removeEventListener('touchend', stopDraw);
-  
-  canvas.addEventListener('mousedown', startDraw);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDraw);
-  canvas.addEventListener('touchstart', startDraw);
-  canvas.addEventListener('touchmove', draw);
-  canvas.addEventListener('touchend', stopDraw);
-  
-  // Restore previous drawing if exists
-  if (currentDrawingData) {
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
-    img.src = currentDrawingData;
-  }
+  ctx.fillStyle = 'white'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle = '#000'; ctx.lineWidth = 2;
+  let start = (e) => { drawing=true; let p = getCanvasPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); };
+  let draw = (e) => { if(!drawing) return; let p = getCanvasPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); };
+  let stop = () => { drawing=false; };
+  canvas.removeEventListener('mousedown', start); canvas.removeEventListener('mousemove', draw); canvas.removeEventListener('mouseup', stop);
+  canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stop);
+  canvas.addEventListener('touchstart', start); canvas.addEventListener('touchmove', draw); canvas.addEventListener('touchend', stop);
+  if(currentDrawing) { let img = new Image(); img.onload = () => ctx.drawImage(img,0,0); img.src = currentDrawing; }
 }
-
 function getCanvasPos(e) {
-  if (!canvas) return { x: 0, y: 0 };
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  let clientX, clientY;
-  if (e.touches) {
-    clientX = e.touches[0].clientX;
-    clientY = e.touches[0].clientY;
-  } else {
-    clientX = e.clientX;
-    clientY = e.clientY;
-  }
-  return {
-    x: Math.min(Math.max(0, (clientX - rect.left) * scaleX), canvas.width),
-    y: Math.min(Math.max(0, (clientY - rect.top) * scaleY), canvas.height)
-  };
+  let rect = canvas.getBoundingClientRect();
+  let sx = canvas.width/rect.width, sy = canvas.height/rect.height;
+  let cx = e.touches ? e.touches[0].clientX : e.clientX;
+  let cy = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: (cx - rect.left)*sx, y: (cy - rect.top)*sy };
 }
-
-function clearCanvas() {
-  if (ctx && canvas) {
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    currentDrawingData = null;
-  }
+function toggleDrawing() {
+  let cont = document.getElementById('canvasContainer');
+  if(cont) cont.classList.toggle('hidden');
+  setTimeout(initCanvas, 100);
 }
-
-function noteSetFont(style) {
-  const textarea = document.getElementById('noteContent');
-  if (!textarea) return;
-  if (style === 'bold') textarea.style.fontWeight = textarea.style.fontWeight === 'bold' ? 'normal' : 'bold';
-  if (style === 'italic') textarea.style.fontStyle = textarea.style.fontStyle === 'italic' ? 'normal' : 'italic';
-  if (style === 'size+') {
-    let size = parseInt(textarea.style.fontSize) || 14;
-    textarea.style.fontSize = (size + 2) + 'px';
-  }
-  if (style === 'size-') {
-    let size = parseInt(textarea.style.fontSize) || 14;
-    textarea.style.fontSize = Math.max(10, size - 2) + 'px';
-  }
+function clearCanvas() { if(ctx) { ctx.fillStyle='white'; ctx.fillRect(0,0,canvas.width,canvas.height); currentDrawing=null; } }
+function noteSetFont(s) {
+  let ta = document.getElementById('noteContent');
+  if(s==='bold') ta.style.fontWeight = ta.style.fontWeight==='bold'?'normal':'bold';
+  if(s==='italic') ta.style.fontStyle = ta.style.fontStyle==='italic'?'normal':'italic';
+  if(s==='size+') { let sz = parseInt(ta.style.fontSize)||14; ta.style.fontSize = (sz+2)+'px'; }
+  if(s==='size-') { let sz = parseInt(ta.style.fontSize)||14; ta.style.fontSize = Math.max(10,sz-2)+'px'; }
 }
-
-function noteSetColor(color) {
-  const textarea = document.getElementById('noteContent');
-  if (textarea) textarea.style.color = color;
-}
-
+function noteSetColor(c) { document.getElementById('noteContent').style.color = c; }
 function getNotes() { return STORAGE.get('notes', []); }
 function setNotes(n) { STORAGE.set('notes', n); }
-
-function saveCurrentNote() {
-  const title = document.getElementById('noteTitle')?.value.trim() || '';
-  const content = document.getElementById('noteContent')?.value || '';
-  if (!title && !content && !currentDrawingData) return;
-  
-  const notes = getNotes();
-  let canvasData = null;
-  if (canvas && ctx) {
-    canvasData = canvas.toDataURL();
-  }
-  
-  notes.unshift({ 
-    id: genId(), 
-    title: title || "Untitled", 
-    content, 
-    canvasData, 
-    date: new Date().toISOString(),
-    hasDrawing: !!canvasData
-  });
-  setNotes(notes.slice(0, 50));
-  
-  if (document.getElementById('noteTitle')) document.getElementById('noteTitle').value = '';
-  if (document.getElementById('noteContent')) document.getElementById('noteContent').value = '';
-  if (canvas) clearCanvas();
-  currentDrawingData = null;
-  
-  addHistory(`Saved note`, title || "Untitled");
+function saveNoteWithDrawing() {
+  let title = document.getElementById('noteTitle')?.value.trim() || '';
+  let content = document.getElementById('noteContent')?.value || '';
+  if(!title && !content && !currentDrawing) return;
+  let notes = getNotes();
+  let drawingData = canvas ? canvas.toDataURL() : null;
+  notes.unshift({ id: genId(), title: title||"Untitled", content, drawingData, hasDrawing: !!drawingData, date: new Date().toISOString() });
+  setNotes(notes.slice(0,50));
+  document.getElementById('noteTitle').value = '';
+  document.getElementById('noteContent').value = '';
+  if(canvas) clearCanvas();
+  addHistory(`Saved note + drawing`, title||"Untitled");
+  showNotification("Note + Drawing saved! 📝🎨", "success");
+  loadNotesList();
+}
+function saveNoteOnly() {
+  let title = document.getElementById('noteTitle')?.value.trim() || '';
+  let content = document.getElementById('noteContent')?.value || '';
+  if(!title && !content) return;
+  let notes = getNotes();
+  notes.unshift({ id: genId(), title: title||"Untitled", content, drawingData: null, hasDrawing: false, date: new Date().toISOString() });
+  setNotes(notes.slice(0,50));
+  document.getElementById('noteTitle').value = '';
+  document.getElementById('noteContent').value = '';
+  addHistory(`Saved note only`, title||"Untitled");
   showNotification("Note saved! 📝", "success");
   loadNotesList();
 }
-
 function loadNotesList() {
-  const notes = getNotes();
-  const container = document.getElementById('notesList');
-  if (!container) return;
-  
-  if (notes.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No notes yet. Create your first note!</div>';
-    return;
-  }
-  
-  container.innerHTML = notes.map(n => `
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-        <strong>${escHtml(n.title)}</strong>
-        <div style="display:flex;gap:8px">
-          <button class="btn-secondary" style="padding:4px 8px" onclick="editNote('${n.id}')">✏️ Edit</button>
-          <button class="btn-danger" style="padding:4px 8px" onclick="deleteNote('${n.id}')">Delete</button>
-        </div>
-      </div>
-      <div style="font-size:0.7rem;color:var(--text2);margin-top:4px">${new Date(n.date).toLocaleString()}</div>
-      <div style="margin-top:8px;font-size:0.85rem">${escHtml(n.content.substring(0, 100))}${n.content.length > 100 ? '...' : ''}</div>
-      ${n.canvasData ? `<div style="margin-top:8px"><img src="${n.canvasData}" style="max-width:100%;height:auto;border-radius:8px;max-height:150px;object-fit:cover"></div>` : ''}
-    </div>
-  `).join('');
+  let notes = getNotes();
+  let cont = document.getElementById('notesList');
+  if(!cont) return;
+  if(!notes.length) { cont.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text2)">No notes yet</div>'; return; }
+  cont.innerHTML = notes.map(n => `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><strong>${esc(n.title)}</strong><div><button class="btn-secondary" style="padding:4px 8px" onclick="editNote('${n.id}')">✏️</button><button class="btn-danger" style="padding:4px 8px" onclick="deleteNoteItem('${n.id}')">🗑️</button></div></div><div style="font-size:0.7rem;color:var(--text2);margin-top:4px">${new Date(n.date).toLocaleString()}</div><div style="margin-top:8px;font-size:0.85rem">${esc(n.content.substring(0,100))}${n.content.length>100?'...':''}</div>${n.drawingData?`<div style="margin-top:8px"><img src="${n.drawingData}" style="max-width:100%;height:auto;border-radius:8px;max-height:150px"></div>`:''}</div>`).join('');
 }
-
 function editNote(id) {
-  const notes = getNotes();
-  const note = notes.find(n => n.id === id);
-  if (!note) return;
-  
-  // Load note data into editor
-  const titleInput = document.getElementById('noteTitle');
-  const contentArea = document.getElementById('noteContent');
-  if (titleInput) titleInput.value = note.title;
-  if (contentArea) contentArea.value = note.content;
-  
-  if (note.canvasData && canvas) {
-    currentDrawingData = note.canvasData;
-    const container = document.getElementById('canvasContainer');
-    if (container) container.classList.remove('hidden');
-    setTimeout(() => {
-      const img = new Image();
-      img.onload = () => {
-        if (ctx) {
-          ctx.fillStyle = 'white';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        }
-      };
-      img.src = note.canvasData;
-    }, 200);
+  let notes = getNotes();
+  let note = notes.find(n => n.id === id);
+  if(!note) return;
+  document.getElementById('noteTitle').value = note.title;
+  document.getElementById('noteContent').value = note.content;
+  if(note.drawingData && canvas) {
+    currentDrawing = note.drawingData;
+    let cont = document.getElementById('canvasContainer');
+    if(cont) cont.classList.remove('hidden');
+    setTimeout(() => { let img = new Image(); img.onload = () => { if(ctx){ ctx.fillStyle='white'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0,canvas.width,canvas.height); } }; img.src = note.drawingData; }, 200);
   }
-  
-  // Delete old note
-  deleteNote(id, false);
+  deleteNoteItem(id, false);
   addHistory(`Editing note`, note.title);
 }
-
-function deleteNote(id, showNotif = true) {
+function deleteNoteItem(id, show=true) {
   let notes = getNotes();
-  const note = notes.find(n => n.id === id);
+  let note = notes.find(n => n.id === id);
   notes = notes.filter(n => n.id !== id);
   setNotes(notes);
-  if (showNotif) addHistory(`Deleted note`, note?.title);
+  if(show) addHistory(`Deleted note`, note?.title);
   loadNotesList();
 }
 
-// ===== TASKS WITH REAL ALARMS =====
+// ===== TASKS =====
 function getTasks() { return STORAGE.get('tasks', []); }
 function setTasks(t) { STORAGE.set('tasks', t); }
-function getTaskCompletions() { return STORAGE.get('taskCompletions', {}); }
-function setTaskCompletions(t) { STORAGE.set('taskCompletions', t); }
-
+function getTaskComps() { return STORAGE.get('taskComps', {}); }
+function setTaskComps(t) { STORAGE.set('taskComps', t); }
 function renderTasks() {
-  const tasks = getTasks();
-  const completions = getTaskCompletions();
-  const container = document.getElementById('tasksList');
-  if (!container) return;
-  
-  if (tasks.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:60px">No tasks yet. Tap + to add!</div>';
-    return;
-  }
-  
-  container.innerHTML = tasks.map(task => `
-    <div class="task-item">
-      <div class="task-check ${completions[task.id] ? 'done' : ''}" onclick="toggleTask('${task.id}')">${completions[task.id] ? '✓' : ''}</div>
-      <div class="task-info">
-        <div><strong>${escHtml(task.name)}</strong> ${task.alarm ? `<span class="alarm-badge">⏰ ${task.alarmTime}</span>` : ''}</div>
-        ${task.note ? `<div style="font-size:0.8rem;color:var(--text2)">${escHtml(task.note)}</div>` : ''}
-        <div style="font-size:0.7rem;color:var(--text2);margin-top:4px">Added: ${new Date(task.createdAt).toLocaleDateString()}</div>
-      </div>
-      <button class="btn-secondary" style="padding:4px 8px" onclick="editTaskItem('${task.id}')">✏️</button>
-      <button class="btn-danger" style="padding:4px 8px" onclick="deleteTaskItem('${task.id}')">🗑️</button>
-    </div>
-  `).join('');
-}
-
-function showAddTask() {
-  showModal(`
-    <h3>Add Task</h3>
-    <input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px">
-    <textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea>
-    <div class="field-group">
-      <label>Alarm Time</label>
-      <input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px">
-    </div>
-    <div class="field-group">
-      <label>Ringtone URL (optional)</label>
-      <input type="text" id="taskRingtone" placeholder="https://example.com/sound.mp3" style="width:100%;margin:12px 0;padding:10px">
-    </div>
-    <label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label>
-    <button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>
-  `);
-}
-
-function addTask() {
-  const name = document.getElementById('taskName').value.trim();
-  if (!name) return;
-  const tasks = getTasks();
-  const alarmTime = document.getElementById('taskAlarm').value;
-  const repeat = document.getElementById('alarmRepeat').checked;
-  const ringtone = document.getElementById('taskRingtone').value;
-  
-  const newTask = {
-    id: genId(),
-    name,
-    note: document.getElementById('taskNote').value,
-    alarm: alarmTime ? true : false,
-    alarmTime,
-    repeatDaily: repeat,
-    ringtone: ringtone || null,
-    createdAt: new Date().toISOString()
-  };
-  tasks.push(newTask);
-  setTasks(tasks);
-  addHistory(`Added task`, name);
-  
-  if (alarmTime) {
-    scheduleTaskAlarm(newTask);
-  }
-  
-  closeModal();
-  renderTasks();
-}
-
-function editTaskItem(id) {
-  const tasks = getTasks();
-  const task = tasks.find(t => t.id === id);
-  if (!task) return;
-  
-  showModal(`
-    <h3>Edit Task</h3>
-    <input type="text" id="taskName" value="${escHtml(task.name)}" style="width:100%;margin:12px 0;padding:10px">
-    <textarea id="taskNote" style="width:100%;margin:12px 0;padding:10px">${escHtml(task.note || '')}</textarea>
-    <input type="time" id="taskAlarm" value="${task.alarmTime || ''}" style="width:100%;margin:12px 0;padding:10px">
-    <input type="text" id="taskRingtone" value="${escHtml(task.ringtone || '')}" placeholder="Ringtone URL" style="width:100%;margin:12px 0;padding:10px">
-    <label><input type="checkbox" id="alarmRepeat" ${task.repeatDaily ? 'checked' : ''}> Repeat Daily</label>
-    <button class="btn-primary" onclick="updateTaskItem('${id}')" style="margin-top:12px">Update</button>
-  `);
-}
-
-function updateTaskItem(id) {
-  const name = document.getElementById('taskName').value.trim();
-  if (!name) return;
   let tasks = getTasks();
-  const index = tasks.findIndex(t => t.id === id);
-  if (index !== -1) {
-    tasks[index] = {
-      ...tasks[index],
-      name,
-      note: document.getElementById('taskNote').value,
-      alarm: !!document.getElementById('taskAlarm').value,
-      alarmTime: document.getElementById('taskAlarm').value,
-      repeatDaily: document.getElementById('alarmRepeat').checked,
-      ringtone: document.getElementById('taskRingtone').value || null
-    };
-    setTasks(tasks);
-    addHistory(`Updated task`, name);
-    if (tasks[index].alarm) scheduleTaskAlarm(tasks[index]);
-  }
-  closeModal();
-  renderTasks();
+  let comps = getTaskComps();
+  let cont = document.getElementById('tasksList');
+  if(!cont) return;
+  if(!tasks.length) { cont.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)">No tasks. Tap + to add!</div>'; return; }
+  cont.innerHTML = tasks.map(t => `<div class="task-item"><div class="task-check ${comps[t.id]?'done':''}" onclick="toggleTask('${t.id}')">${comps[t.id]?'✓':''}</div><div class="task-info"><div><strong>${esc(t.name)}</strong> ${t.alarm?`<span class="alarm-badge">⏰ ${t.alarmTime}</span>`:''}</div>${t.note?`<div style="font-size:0.8rem;color:var(--text2)">${esc(t.note)}</div>`:''}</div><button class="btn-secondary" style="padding:4px 8px" onclick="editTaskItem('${t.id}')">✏️</button><button class="btn-danger" style="padding:4px 8px" onclick="deleteTaskItem('${t.id}')">🗑️</button></div>`).join('');
 }
-
+function showAddTask() {
+  showModal(`<h3>Add Task</h3><input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea><div class="field-group"><label>Alarm Time</label><input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Ringtone URL (optional)</label><input type="text" id="taskRingtone" placeholder="https://..." style="width:100%;margin:12px 0;padding:10px"></div><label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label><button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>`);
+}
+function addTask() {
+  let name = document.getElementById('taskName')?.value.trim();
+  if(!name) return;
+  let tasks = getTasks();
+  let alarm = document.getElementById('taskAlarm')?.value;
+  let newTask = { id: genId(), name, note: document.getElementById('taskNote')?.value, alarm: !!alarm, alarmTime: alarm, repeatDaily: document.getElementById('alarmRepeat')?.checked, ringtone: document.getElementById('taskRingtone')?.value, createdAt: new Date().toISOString() };
+  tasks.push(newTask); setTasks(tasks); addHistory(`Added task`, name); closeModal(); renderTasks();
+  if(alarm) scheduleTaskAlarm(newTask);
+}
+function editTaskItem(id) {
+  let tasks = getTasks();
+  let t = tasks.find(tt => tt.id === id);
+  showModal(`<h3>Edit Task</h3><input type="text" id="taskName" value="${esc(t.name)}" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" style="width:100%;margin:12px 0;padding:10px">${esc(t.note||'')}</textarea><input type="time" id="taskAlarm" value="${t.alarmTime||''}" style="width:100%;margin:12px 0;padding:10px"><input type="text" id="taskRingtone" value="${esc(t.ringtone||'')}" placeholder="Ringtone URL" style="width:100%;margin:12px 0;padding:10px"><label><input type="checkbox" id="alarmRepeat" ${t.repeatDaily?'checked':''}> Repeat Daily</label><button class="btn-primary" onclick="updateTaskItem('${id}')" style="margin-top:12px">Update</button>`);
+}
+function updateTaskItem(id) {
+  let name = document.getElementById('taskName')?.value.trim();
+  if(!name) return;
+  let tasks = getTasks();
+  let idx = tasks.findIndex(tt => tt.id === id);
+  if(idx !== -1) {
+    tasks[idx] = { ...tasks[idx], name, note: document.getElementById('taskNote')?.value, alarm: !!document.getElementById('taskAlarm')?.value, alarmTime: document.getElementById('taskAlarm')?.value, repeatDaily: document.getElementById('alarmRepeat')?.checked, ringtone: document.getElementById('taskRingtone')?.value };
+    setTasks(tasks); addHistory(`Updated task`, name); closeModal(); renderTasks();
+    if(tasks[idx].alarm) scheduleTaskAlarm(tasks[idx]);
+  }
+}
 function deleteTaskItem(id) {
   let tasks = getTasks();
-  const task = tasks.find(t => t.id === id);
-  tasks = tasks.filter(t => t.id !== id);
-  setTasks(tasks);
-  addHistory(`Deleted task`, task?.name);
-  renderTasks();
+  let t = tasks.find(tt => tt.id === id);
+  tasks = tasks.filter(tt => tt.id !== id);
+  setTasks(tasks); addHistory(`Deleted task`, t?.name); renderTasks();
 }
-
 function toggleTask(id) {
-  const completions = getTaskCompletions();
-  completions[id] = !completions[id];
-  setTaskCompletions(completions);
-  
-  if (completions[id]) {
-    addXP(15, "Task completed");
-    addHistory(`Completed task`, `+15 XP`);
-    showNotification("+15 XP! ✅ Task done!", "success");
-  } else {
-    addXP(-15, "Task undone");
-  }
-  
-  renderTasks();
-  updateAnalytics();
+  let comps = getTaskComps();
+  comps[id] = !comps[id];
+  setTaskComps(comps);
+  if(comps[id]) { addXP(15, "Task completed"); addHistory(`Completed task`, `+15 XP`); showNotification("+15 XP! ✅", "success"); }
+  else addXP(-15, "Task undone");
+  renderTasks(); updateAnalytics();
 }
-
 function scheduleTaskAlarm(task) {
-  if (!("Notification" in window)) return;
-  if (Notification.permission !== "granted") Notification.requestPermission();
-  
-  const [hours, minutes] = task.alarmTime.split(':');
-  const now = new Date();
-  let alarmTime = new Date();
-  alarmTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-  
-  if (alarmTime <= now) {
-    alarmTime.setDate(alarmTime.getDate() + 1);
-  }
-  
-  const delay = alarmTime - now;
+  if(!("Notification" in window)) return;
+  if(Notification.permission !== "granted") Notification.requestPermission();
+  let [h,m] = task.alarmTime.split(':');
+  let now = new Date();
+  let alarm = new Date();
+  alarm.setHours(parseInt(h), parseInt(m), 0, 0);
+  if(alarm <= now) alarm.setDate(alarm.getDate()+1);
   setTimeout(() => {
-    if (Notification.permission === "granted") {
-      new Notification("⏰ Task Reminder", {
-        body: `${task.name} - Time to complete!`,
-        icon: "/icon-192.svg"
-      });
-    }
-    // Play ringtone if provided
-    if (task.ringtone) {
-      const audio = new Audio(task.ringtone);
-      audio.play().catch(e => console.log('Ringtone error:', e));
-    } else {
-      // Default beep
-      const audio = new Audio('https://actions.google.com/sounds/olfaction/notification/notification_default.ogg');
-      audio.play().catch(e => console.log('Audio play failed'));
-    }
-    
-    if (task.repeatDaily) scheduleTaskAlarm(task);
-  }, delay);
+    if(Notification.permission === "granted") new Notification("⏰ Task", { body: task.name });
+    if(task.ringtone) { let audio = new Audio(task.ringtone); audio.play().catch(e=>console.log); }
+    else { let audio = new Audio('https://actions.google.com/sounds/olfaction/notification/notification_default.ogg'); audio.play().catch(e=>console.log); }
+    if(task.repeatDaily) scheduleTaskAlarm(task);
+  }, alarm - now);
 }
 
-// ===== SCIENTIFIC CALCULATOR =====
-let calcExpression = "";
-
+// ===== CALCULATOR =====
+let calcExpr = "";
 function showCalculator() {
-  showModal(`
-    <h3>🧮 Scientific Calculator</h3>
-    <div class="calculator-display" id="calcDisplay">0</div>
-    <div class="calc-buttons">
-      <button class="calc-btn" onclick="calcInput('7')">7</button>
-      <button class="calc-btn" onclick="calcInput('8')">8</button>
-      <button class="calc-btn" onclick="calcInput('9')">9</button>
-      <button class="calc-btn" onclick="calcInput('/')">/</button>
-      <button class="calc-btn" onclick="calcInput('4')">4</button>
-      <button class="calc-btn" onclick="calcInput('5')">5</button>
-      <button class="calc-btn" onclick="calcInput('6')">6</button>
-      <button class="calc-btn" onclick="calcInput('*')">*</button>
-      <button class="calc-btn" onclick="calcInput('1')">1</button>
-      <button class="calc-btn" onclick="calcInput('2')">2</button>
-      <button class="calc-btn" onclick="calcInput('3')">3</button>
-      <button class="calc-btn" onclick="calcInput('-')">-</button>
-      <button class="calc-btn" onclick="calcInput('0')">0</button>
-      <button class="calc-btn" onclick="calcInput('.')">.</button>
-      <button class="calc-btn" onclick="calcInput('+')">+</button>
-      <button class="calc-btn" onclick="calcResult()">=</button>
-      <button class="calc-btn" onclick="calcClear()">C</button>
-      <button class="calc-btn" onclick="calcInput('**')">^</button>
-      <button class="calc-btn" onclick="calcInput('Math.sqrt(')">√</button>
-      <button class="calc-btn" onclick="calcInput('Math.sin(')">sin</button>
-      <button class="calc-btn" onclick="calcInput('Math.cos(')">cos</button>
-      <button class="calc-btn" onclick="calcInput('Math.tan(')">tan</button>
-      <button class="calc-btn" onclick="calcInput('Math.log(')">log</button>
-      <button class="calc-btn" onclick="calcInput('Math.PI')">π</button>
-      <button class="calc-btn" onclick="calcInput('Math.E')">e</button>
-      <button class="calc-btn" onclick="calcInput('(')">(</button>
-      <button class="calc-btn" onclick="calcInput(')')">)</button>
-    </div>
-  `);
+  showModal(`<h3>🧮 Scientific Calculator</h3><div class="calculator-display" id="calcDisplay">0</div><div class="calc-buttons">${['7','8','9','/','4','5','6','*','1','2','3','-','0','.','+','=','C','^','√','sin','cos','tan','log','π','e','(',')'].map(b=>`<button class="calc-btn" onclick="calcInput('${b}')">${b}</button>`).join('')}</div>`);
+}
+function calcInput(v) {
+  if(v==='=') { try { let expr = calcExpr.replace(/\^/g,'**').replace(/√/g,'Math.sqrt'); let res = eval(expr); document.getElementById('calcDisplay').innerText = res; calcExpr = res.toString(); addHistory(`Calculator`, `${expr} = ${res}`); } catch { document.getElementById('calcDisplay').innerText = "Error"; calcExpr=""; } }
+  else if(v==='C') { calcExpr=""; document.getElementById('calcDisplay').innerText="0"; }
+  else { calcExpr += v==='π'?'Math.PI':v==='e'?'Math.E':v; document.getElementById('calcDisplay').innerText = calcExpr; }
 }
 
-function calcInput(val) {
-  calcExpression += val;
-  const display = document.getElementById('calcDisplay');
-  if (display) display.textContent = calcExpression;
-}
-
-function calcResult() {
-  try {
-    let expr = calcExpression.replace(/\^/g, '**');
-    const result = eval(expr);
-    const display = document.getElementById('calcDisplay');
-    if (display) display.textContent = result;
-    calcExpression = result.toString();
-    addHistory(`Calculator`, `${expr} = ${result}`);
-  } catch {
-    const display = document.getElementById('calcDisplay');
-    if (display) display.textContent = "Error";
-    calcExpression = "";
-  }
-}
-
-function calcClear() {
-  calcExpression = "";
-  const display = document.getElementById('calcDisplay');
-  if (display) display.textContent = "0";
-}
-
-// ===== UNIVERSAL CONVERTER =====
+// ===== CONVERTER =====
 function showConverter() {
-  showModal(`
-    <h3>🔄 Universal Converter</h3>
-    <div class="converter-group">
-      <select id="convType" onchange="updateConverterUI()" style="width:100%;padding:10px;margin-bottom:16px">
-        <option value="length">📏 Length</option>
-        <option value="weight">⚖️ Weight</option>
-        <option value="temperature">🌡️ Temperature</option>
-        <option value="time">⏰ Time</option>
-        <option value="currency">💰 Currency</option>
-        <option value="age">🎂 Age Calculator</option>
-        <option value="budget">💵 Budget</option>
-      </select>
-      <div id="converterUI"></div>
-    </div>
-  `);
-  updateConverterUI();
+  showModal(`<h3>🔄 Universal Converter</h3><select id="convType" onchange="updateConvUI()" style="width:100%;padding:10px;margin-bottom:16px"><option value="length">📏 Length</option><option value="weight">⚖️ Weight</option><option value="temp">🌡️ Temperature</option><option value="age">🎂 Age</option><option value="budget">💰 Budget</option></select><div id="convUI"></div>`);
+  updateConvUI();
 }
-
-function updateConverterUI() {
-  const type = document.getElementById('convType')?.value || 'length';
-  const container = document.getElementById('converterUI');
-  if (!container) return;
-  
-  if (type === 'length') {
-    container.innerHTML = `
-      <div class="converter-row">
-        <input type="number" id="lengthValue" placeholder="Value" oninput="convertLength()">
-        <select id="lengthFrom" onchange="convertLength()">
-          <option value="m">Meters</option><option value="km">Kilometers</option>
-          <option value="cm">Centimeters</option><option value="mm">Millimeters</option>
-          <option value="ft">Feet</option><option value="in">Inches</option>
-        </select>
-        <span>→</span>
-        <select id="lengthTo" onchange="convertLength()">
-          <option value="m">Meters</option><option value="km">Kilometers</option>
-          <option value="cm">Centimeters</option><option value="mm">Millimeters</option>
-          <option value="ft">Feet</option><option value="in">Inches</option>
-        </select>
-      </div>
-      <div id="lengthResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center;font-weight:bold"></div>
-    `;
-  } else if (type === 'weight') {
-    container.innerHTML = `
-      <div class="converter-row">
-        <input type="number" id="weightValue" placeholder="Value" oninput="convertWeight()">
-        <select id="weightFrom" onchange="convertWeight()">
-          <option value="kg">Kilograms</option><option value="g">Grams</option>
-          <option value="lb">Pounds</option><option value="oz">Ounces</option>
-        </select>
-        <span>→</span>
-        <select id="weightTo" onchange="convertWeight()">
-          <option value="kg">Kilograms</option><option value="g">Grams</option>
-          <option value="lb">Pounds</option><option value="oz">Ounces</option>
-        </select>
-      </div>
-      <div id="weightResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center;font-weight:bold"></div>
-    `;
-  } else if (type === 'temperature') {
-    container.innerHTML = `
-      <div class="converter-row">
-        <input type="number" id="tempValue" placeholder="Value" oninput="convertTemp()">
-        <select id="tempFrom" onchange="convertTemp()">
-          <option value="c">Celsius</option><option value="f">Fahrenheit</option>
-          <option value="k">Kelvin</option>
-        </select>
-        <span>→</span>
-        <select id="tempTo" onchange="convertTemp()">
-          <option value="c">Celsius</option><option value="f">Fahrenheit</option>
-          <option value="k">Kelvin</option>
-        </select>
-      </div>
-      <div id="tempResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center;font-weight:bold"></div>
-    `;
-  } else if (type === 'age') {
-    container.innerHTML = `
-      <div class="converter-row">
-        <label>Date of Birth</label>
-        <input type="date" id="dobDate" onchange="calculateAge()">
-      </div>
-      <div id="ageResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center"></div>
-    `;
-  } else if (type === 'budget') {
-    container.innerHTML = `
-      <div class="converter-row">
-        <input type="number" id="budgetIncome" placeholder="Monthly Income" oninput="calculateBudget()">
-        <input type="number" id="budgetExpense" placeholder="Monthly Expenses" oninput="calculateBudget()">
-      </div>
-      <div id="budgetResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center"></div>
-    `;
-  } else if (type === 'currency') {
-    container.innerHTML = `
-      <div class="converter-row">
-        <input type="number" id="currencyValue" placeholder="Amount" oninput="convertCurrency()">
-        <input type="text" id="currencyRate" placeholder="Exchange Rate" oninput="convertCurrency()">
-      </div>
-      <div id="currencyResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center;font-weight:bold"></div>
-      <div style="font-size:0.7rem;color:var(--text2);margin-top:8px">Enter rate (e.g., 1 USD = 280 PKR → rate 280)</div>
-    `;
-  }
+function updateConvUI() {
+  let type = document.getElementById('convType')?.value;
+  let div = document.getElementById('convUI');
+  if(type==='length') div.innerHTML = `<div class="converter-row"><input type="number" id="lenVal" placeholder="Value" oninput="convLen()"><select id="lenFrom" onchange="convLen()"><option value="m">Meters</option><option value="km">KM</option><option value="cm">CM</option><option value="ft">Feet</option><option value="in">Inches</option></select><span>→</span><select id="lenTo" onchange="convLen()"><option value="m">Meters</option><option value="km">KM</option><option value="cm">CM</option><option value="ft">Feet</option><option value="in">Inches</option></select></div><div id="lenRes" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px"></div>`;
+  if(type==='weight') div.innerHTML = `<div class="converter-row"><input type="number" id="wtVal" placeholder="Value" oninput="convWt()"><select id="wtFrom" onchange="convWt()"><option value="kg">KG</option><option value="g">Grams</option><option value="lb">Pounds</option></select><span>→</span><select id="wtTo" onchange="convWt()"><option value="kg">KG</option><option value="g">Grams</option><option value="lb">Pounds</option></select></div><div id="wtRes" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px"></div>`;
+  if(type==='temp') div.innerHTML = `<div class="converter-row"><input type="number" id="tempVal" placeholder="Value" oninput="convTemp()"><select id="tempFrom" onchange="convTemp()"><option value="c">Celsius</option><option value="f">Fahrenheit</option><option value="k">Kelvin</option></select><span>→</span><select id="tempTo" onchange="convTemp()"><option value="c">Celsius</option><option value="f">Fahrenheit</option><option value="k">Kelvin</option></select></div><div id="tempRes" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px"></div>`;
+  if(type==='age') div.innerHTML = `<div class="converter-row"><label>Date of Birth</label><input type="date" id="ageDob" oninput="calcAge()"></div><div id="ageRes" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px"></div>`;
+  if(type==='budget') div.innerHTML = `<div class="converter-row"><input type="number" id="income" placeholder="Monthly Income" oninput="calcBudget()"><input type="number" id="expense" placeholder="Monthly Expenses" oninput="calcBudget()"></div><div id="budgetRes" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px"></div>`;
 }
-
-window.convertLength = function() {
-  const value = parseFloat(document.getElementById('lengthValue')?.value) || 0;
-  const from = document.getElementById('lengthFrom')?.value;
-  const to = document.getElementById('lengthTo')?.value;
-  const meters = { m:1, km:1000, cm:0.01, mm:0.001, ft:0.3048, in:0.0254 };
-  const result = value * meters[from] / meters[to];
-  const resultDiv = document.getElementById('lengthResult');
-  if (resultDiv) resultDiv.innerHTML = `${value} ${from} = ${result.toFixed(4)} ${to}`;
-};
-
-window.convertWeight = function() {
-  const value = parseFloat(document.getElementById('weightValue')?.value) || 0;
-  const from = document.getElementById('weightFrom')?.value;
-  const to = document.getElementById('weightTo')?.value;
-  const kgs = { kg:1, g:0.001, lb:0.453592, oz:0.0283495 };
-  const result = value * kgs[from] / kgs[to];
-  const resultDiv = document.getElementById('weightResult');
-  if (resultDiv) resultDiv.innerHTML = `${value} ${from} = ${result.toFixed(4)} ${to}`;
-};
-
-window.convertTemp = function() {
-  let value = parseFloat(document.getElementById('tempValue')?.value) || 0;
-  const from = document.getElementById('tempFrom')?.value;
-  const to = document.getElementById('tempTo')?.value;
-  let celsius;
-  if (from === 'c') celsius = value;
-  else if (from === 'f') celsius = (value - 32) * 5/9;
-  else celsius = value - 273.15;
-  let result;
-  if (to === 'c') result = celsius;
-  else if (to === 'f') result = celsius * 9/5 + 32;
-  else result = celsius + 273.15;
-  const resultDiv = document.getElementById('tempResult');
-  if (resultDiv) resultDiv.innerHTML = `${value}°${from.toUpperCase()} = ${result.toFixed(2)}°${to.toUpperCase()}`;
-};
-
-window.calculateAge = function() {
-  const dob = document.getElementById('dobDate')?.value;
-  if (!dob) return;
-  const birth = new Date(dob);
-  const today = new Date();
-  let years = today.getFullYear() - birth.getFullYear();
-  let months = today.getMonth() - birth.getMonth();
-  let days = today.getDate() - birth.getDate();
-  if (days < 0) { months--; days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
-  if (months < 0) { years--; months += 12; }
-  const resultDiv = document.getElementById('ageResult');
-  if (resultDiv) resultDiv.innerHTML = `🎂 ${years} years, ${months} months, ${days} days old`;
-};
-
-window.calculateBudget = function() {
-  const income = parseFloat(document.getElementById('budgetIncome')?.value) || 0;
-  const expense = parseFloat(document.getElementById('budgetExpense')?.value) || 0;
-  const remaining = income - expense;
-  const resultDiv = document.getElementById('budgetResult');
-  if (resultDiv) {
-    if (remaining >= 0) {
-      resultDiv.innerHTML = `💰 Remaining: ${remaining.toFixed(2)} (${(remaining/income*100).toFixed(1)}% savings) 🎉`;
-    } else {
-      resultDiv.innerHTML = `⚠️ Deficit: ${Math.abs(remaining).toFixed(2)} (Reduce expenses!)`;
-    }
-  }
-};
-
-window.convertCurrency = function() {
-  const value = parseFloat(document.getElementById('currencyValue')?.value) || 0;
-  const rate = parseFloat(document.getElementById('currencyRate')?.value) || 1;
-  const result = value * rate;
-  const resultDiv = document.getElementById('currencyResult');
-  if (resultDiv) resultDiv.innerHTML = `${value} × ${rate} = ${result.toFixed(2)}`;
-};
+function convLen() {
+  let v = parseFloat(document.getElementById('lenVal')?.value)||0;
+  let f = document.getElementById('lenFrom')?.value;
+  let t = document.getElementById('lenTo')?.value;
+  let m = { m:1, km:1000, cm:0.01, ft:0.3048, in:0.0254 };
+  let res = v * m[f] / m[t];
+  document.getElementById('lenRes') && (document.getElementById('lenRes').innerHTML = `${v} ${f} = ${res.toFixed(4)} ${t}`);
+}
+function convWt() {
+  let v = parseFloat(document.getElementById('wtVal')?.value)||0;
+  let f = document.getElementById('wtFrom')?.value;
+  let t = document.getElementById('wtTo')?.value;
+  let kg = { kg:1, g:0.001, lb:0.453592 };
+  let res = v * kg[f] / kg[t];
+  document.getElementById('wtRes') && (document.getElementById('wtRes').innerHTML = `${v} ${f} = ${res.toFixed(4)} ${t}`);
+}
+function convTemp() {
+  let v = parseFloat(document.getElementById('tempVal')?.value)||0;
+  let f = document.getElementById('tempFrom')?.value;
+  let t = document.getElementById('tempTo')?.value;
+  let c;
+  if(f==='c') c=v; else if(f==='f') c=(v-32)*5/9; else c=v-273.15;
+  let res;
+  if(t==='c') res=c; else if(t==='f') res=c*9/5+32; else res=c+273.15;
+  document.getElementById('tempRes') && (document.getElementById('tempRes').innerHTML = `${v}°${f.toUpperCase()} = ${res.toFixed(2)}°${t.toUpperCase()}`);
+}
+function calcAge() {
+  let dob = document.getElementById('ageDob')?.value;
+  if(!dob) return;
+  let birth = new Date(dob);
+  let today = new Date();
+  let y = today.getFullYear() - birth.getFullYear();
+  let m = today.getMonth() - birth.getMonth();
+  let d = today.getDate() - birth.getDate();
+  if(d<0) { m--; d+=new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
+  if(m<0) { y--; m+=12; }
+  document.getElementById('ageRes') && (document.getElementById('ageRes').innerHTML = `🎂 ${y} years, ${m} months, ${d} days`);
+}
+function calcBudget() {
+  let inc = parseFloat(document.getElementById('income')?.value)||0;
+  let exp = parseFloat(document.getElementById('expense')?.value)||0;
+  let rem = inc - exp;
+  document.getElementById('budgetRes') && (document.getElementById('budgetRes').innerHTML = rem>=0 ? `💰 Savings: ${rem.toFixed(2)} (${(rem/inc*100).toFixed(1)}%)` : `⚠️ Deficit: ${Math.abs(rem).toFixed(2)}`);
+}
 
 // ===== SAFE GALLERY =====
 let galleryLock = STORAGE.get('galleryLock', null);
 let galleryItems = STORAGE.get('galleryItems', []);
-
 function showSafeGallery() {
-  if (!galleryLock) {
-    showModal(`
-      <h3>🔒 First Time Setup</h3>
-      <p>Set a PIN to lock your gallery</p>
-      <input type="password" id="newLockPin" placeholder="Enter 4-digit PIN" maxlength="4" style="width:100%;margin:12px 0;padding:10px">
-      <button class="btn-primary" onclick="setGalleryLock()">Set Lock</button>
-    `);
-  } else {
-    showModal(`
-      <h3>🔒 Enter PIN</h3>
-      <input type="password" id="lockPin" placeholder="PIN" maxlength="4" style="width:100%;margin:12px 0;padding:10px">
-      <button class="btn-primary" onclick="unlockGallery()">Unlock</button>
-    `);
-  }
+  if(!galleryLock) showModal(`<h3>🔒 First Time Setup</h3><input type="password" id="newPin" placeholder="4-digit PIN" maxlength="4" style="width:100%;margin:12px 0;padding:10px"><button class="btn-primary" onclick="setGalleryLock()">Set Lock</button>`);
+  else showModal(`<h3>🔒 Enter PIN</h3><input type="password" id="enterPin" placeholder="PIN" maxlength="4" style="width:100%;margin:12px 0;padding:10px"><button class="btn-primary" onclick="unlockGallery()">Unlock</button>`);
 }
-
-function setGalleryLock() {
-  const pin = document.getElementById('newLockPin')?.value;
-  if (pin && pin.length === 4) {
-    STORAGE.set('galleryLock', pin);
-    galleryLock = pin;
-    closeModal();
-    showGalleryContent();
-  } else {
-    alert("PIN must be 4 digits");
-  }
-}
-
-function unlockGallery() {
-  const pin = document.getElementById('lockPin')?.value;
-  if (pin === galleryLock) {
-    closeModal();
-    showGalleryContent();
-  } else {
-    alert("Wrong PIN!");
-  }
-}
-
+function setGalleryLock() { let pin = document.getElementById('newPin')?.value; if(pin?.length===4) { STORAGE.set('galleryLock', pin); galleryLock=pin; closeModal(); showGalleryContent(); } else alert("PIN must be 4 digits"); }
+function unlockGallery() { let pin = document.getElementById('enterPin')?.value; if(pin===galleryLock) { closeModal(); showGalleryContent(); } else alert("Wrong PIN!"); }
 function showGalleryContent() {
-  showModal(`
-    <h3>🖼️ Safe Gallery</h3>
-    <input type="file" id="galleryUpload" accept="image/*,video/*" style="margin:12px 0">
-    <button class="btn-primary" onclick="uploadToGallery()">Upload</button>
-    <div id="galleryGrid" style="margin-top:16px"></div>
-  `);
-  renderGalleryGrid();
+  showModal(`<h3>🖼️ Safe Gallery</h3><input type="file" id="galleryUpload" accept="image/*,video/*" style="margin:12px 0"><button class="btn-primary" onclick="uploadToGallery()">Upload</button><div id="galleryGrid" style="margin-top:16px"></div>`);
+  renderGallery();
 }
-
 function uploadToGallery() {
-  const file = document.getElementById('galleryUpload')?.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    galleryItems.push({
-      id: genId(),
-      type: file.type.startsWith('image') ? 'image' : 'video',
-      data: e.target.result,
-      date: new Date().toISOString()
-    });
-    STORAGE.set('galleryItems', galleryItems);
-    addHistory(`Uploaded to gallery`, file.name);
-    renderGalleryGrid();
-  };
+  let file = document.getElementById('galleryUpload')?.files[0];
+  if(!file) return;
+  let reader = new FileReader();
+  reader.onload = e => { galleryItems.push({ id: genId(), type: file.type.startsWith('image')?'image':'video', data: e.target.result, date: new Date().toISOString() }); STORAGE.set('galleryItems', galleryItems); addHistory(`Uploaded to gallery`, file.name); renderGallery(); };
   reader.readAsDataURL(file);
 }
-
-function renderGalleryGrid() {
-  const container = document.getElementById('galleryGrid');
-  if (!container) return;
-  if (galleryItems.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No items yet. Upload images/videos!</div>';
-    return;
-  }
-  container.innerHTML = `
-    <div class="gallery-grid">
-      ${galleryItems.map(item => `
-        <div class="gallery-item" onclick="viewFullscreen('${item.id}')">
-          ${item.type === 'image' ? `<img src="${item.data}" alt="gallery">` : `<video src="${item.data}"></video>`}
-          <div class="gallery-delete" onclick="event.stopPropagation();deleteGalleryItem('${item.id}')">✕</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
+function renderGallery() {
+  let cont = document.getElementById('galleryGrid');
+  if(!cont) return;
+  if(!galleryItems.length) { cont.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text2)">No items</div>'; return; }
+  cont.innerHTML = `<div class="gallery-grid">${galleryItems.map(i => `<div class="gallery-item" onclick="viewFull('${i.id}')">${i.type==='image'?`<img src="${i.data}">`:`<video src="${i.data}"></video>`}<div class="gallery-delete" onclick="event.stopPropagation();deleteGallery('${i.id}')">✕</div></div>`).join('')}</div>`;
 }
-
-function viewFullscreen(id) {
-  const item = galleryItems.find(i => i.id === id);
-  if (!item) return;
-  
-  const fullscreenDiv = document.createElement('div');
-  fullscreenDiv.className = 'fullscreen-view';
-  fullscreenDiv.onclick = () => fullscreenDiv.remove();
-  if (item.type === 'image') {
-    fullscreenDiv.innerHTML = `<img src="${item.data}" style="max-width:90%;max-height:80%"><button class="btn-secondary" style="margin-top:20px" onclick="this.parentElement.remove()">Close</button>`;
-  } else {
-    fullscreenDiv.innerHTML = `<video src="${item.data}" controls autoplay style="max-width:90%;max-height:80%"></video><button class="btn-secondary" style="margin-top:20px" onclick="this.parentElement.remove()">Close</button>`;
-  }
-  document.body.appendChild(fullscreenDiv);
+function viewFull(id) {
+  let i = galleryItems.find(ii => ii.id === id);
+  let div = document.createElement('div'); div.className = 'fullscreen-view'; div.onclick = () => div.remove();
+  div.innerHTML = i.type==='image' ? `<img src="${i.data}"><button class="btn-secondary" style="margin-top:20px" onclick="this.parentElement.remove()">Close</button>` : `<video src="${i.data}" controls autoplay></video><button class="btn-secondary" style="margin-top:20px" onclick="this.parentElement.remove()">Close</button>`;
+  document.body.appendChild(div);
 }
+function deleteGallery(id) { galleryItems = galleryItems.filter(i => i.id !== id); STORAGE.set('galleryItems', galleryItems); addHistory(`Deleted from gallery`, `1 item`); renderGallery(); }
 
-function deleteGalleryItem(id) {
-  galleryItems = galleryItems.filter(i => i.id !== id);
-  STORAGE.set('galleryItems', galleryItems);
-  renderGalleryGrid();
-  addHistory(`Deleted from gallery`, `1 item`);
-}
-
-// ===== WITTY STAR GAME WITH JOYSTICK =====
-let gameActiveInstance = false;
-let gameAnimationId = null;
-let gameCtx = null;
-let gameCanvas = null;
-let gamePlayer = null;
-let gameStars = [];
-let gameEnemies = [];
-let gameScore = 0;
-let gameMouse = { x: 0, y: 0 };
-let joystickActive = false;
-let joystickCenter = { x: 0, y: 0 };
-let joystickVector = { x: 0, y: 0 };
-
+// ===== GAME WITH JOYSTICK (Bottom Center) =====
+let gameActive = false, gameAnim = null, gameCtx=null, gameCanvas=null, gamePlayer=null, gameStars=[], gameEnemies=[], gameScore=0, gameMouse={x:0,y:0}, joyVec={x:0,y:0}, joyActive=false;
 function openGame() {
-  const gameContainer = document.createElement('div');
-  gameContainer.className = 'game-container';
-  gameContainer.id = 'gameContainer';
-  
-  gameContainer.innerHTML = `
-    <canvas id="gameCanvas" class="game-canvas"></canvas>
-    <div id="gameUI" class="game-ui">
-      <h1 style="font-family:'Orbitron'; color:#00f2ff; margin-bottom:5px;">WITTY STAR</h1>
-      <p id="gameMsg" style="margin-bottom:25px; opacity:0.7;">Use Joystick | Avoid Red | Catch Stars</p>
-      <button class="btn-primary" style="width:auto; padding:12px 30px;" onclick="startGameInstance()">START</button>
-    </div>
-    <div id="gameScoreDisplay" class="game-score">Stars: 0</div>
-    <button class="game-close" onclick="closeGame()">✕</button>
-    <div class="joystick-container" id="joystickContainer">
-      <div class="joystick-base" id="joystickBase">
-        <div class="joystick-thumb" id="joystickThumb"></div>
-      </div>
-    </div>
-  `;
-  
-  document.body.appendChild(gameContainer);
-  
-  gameCanvas = document.getElementById('gameCanvas');
-  gameCtx = gameCanvas.getContext('2d', { alpha: false });
-  
-  function resizeGame() {
-    if (gameCanvas) {
-      gameCanvas.width = window.innerWidth;
-      gameCanvas.height = window.innerHeight;
-      gameMouse.x = gameCanvas.width / 2;
-      gameMouse.y = gameCanvas.height / 2;
+  let cont = document.createElement('div'); cont.className = 'game-container'; cont.id='gameCont';
+  cont.innerHTML = `<canvas id="gameCanvasEl" class="game-canvas"></canvas><div id="gameUIEl" class="game-ui"><h1 style="font-family:Orbitron;color:#00f2ff">WITTY STAR</h1><p id="gameMsgEl">Use Joystick | Avoid Red</p><button class="btn-primary" style="width:auto;padding:12px 30px" onclick="startGameInstance()">START</button></div><div id="gameScoreEl" class="game-score">Stars: 0</div><button class="game-close" onclick="closeGame()">✕</button><div class="joystick-container" id="joyCont"><div class="joystick-base" id="joyBase"><div class="joystick-thumb" id="joyThumb"></div></div></div>`;
+  document.body.appendChild(cont);
+  gameCanvas = document.getElementById('gameCanvasEl'); gameCtx = gameCanvas.getContext('2d');
+  function resizeGame() { if(gameCanvas) { gameCanvas.width = window.innerWidth; gameCanvas.height = window.innerHeight; gameMouse.x = gameCanvas.width/2; gameMouse.y = gameCanvas.height/2; } }
+  resizeGame(); window.addEventListener('resize', resizeGame);
+  let joyBase = document.getElementById('joyBase'), joyThumb = document.getElementById('joyThumb');
+  let joyRadius = 40;
+  function updateJoy(e) {
+    let touch = e.touches ? e.touches[0] : e;
+    let rect = joyBase.getBoundingClientRect();
+    let centerX = rect.left + rect.width/2, centerY = rect.top + rect.height/2;
+    let dx = touch.clientX - centerX, dy = touch.clientY - centerY;
+    let dist = Math.hypot(dx,dy);
+    if(dist > joyRadius) { dx = dx/dist * joyRadius; dy = dy/dist * joyRadius; }
+    joyThumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+    joyVec.x = dx/joyRadius; joyVec.y = dy/joyRadius;
+    if(gameActive && gameCanvas) {
+      gameMouse.x = Math.min(Math.max(gameMouse.x + joyVec.x * 6, 20), gameCanvas.width-20);
+      gameMouse.y = Math.min(Math.max(gameMouse.y + joyVec.y * 6, 20), gameCanvas.height-20);
     }
   }
-  
-  resizeGame();
-  window.addEventListener('resize', resizeGame);
-  
-  // Joystick logic
-  const joystickBase = document.getElementById('joystickBase');
-  const joystickThumb = document.getElementById('joystickThumb');
-  const joystickContainer = document.getElementById('joystickContainer');
-  
-  let joystickRadius = 50;
-  let baseRect = { x: 0, y: 0 };
-  
-  function updateJoystickPos(e) {
-    const touch = e.touches ? e.touches[0] : e;
-    const rect = joystickBase.getBoundingClientRect();
-    baseRect = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
-    
-    let dx = touch.clientX - baseRect.x;
-    let dy = touch.clientY - baseRect.y;
-    let distance = Math.hypot(dx, dy);
-    
-    if (distance > joystickRadius) {
-      dx = dx / distance * joystickRadius;
-      dy = dy / distance * joystickRadius;
-    }
-    
-    joystickThumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-    
-    // Normalize vector
-    let normX = dx / joystickRadius;
-    let normY = dy / joystickRadius;
-    joystickVector = { x: normX, y: normY };
-    
-    // Update game mouse based on joystick
-    if (gameActiveInstance && gameCanvas) {
-      gameMouse.x = Math.min(Math.max(gameMouse.x + joystickVector.x * 8, 20), gameCanvas.width - 20);
-      gameMouse.y = Math.min(Math.max(gameMouse.y + joystickVector.y * 8, 20), gameCanvas.height - 20);
-    }
-  }
-  
-  function resetJoystick() {
-    joystickThumb.style.transform = 'translate(-50%, -50%)';
-    joystickVector = { x: 0, y: 0 };
-  }
-  
-  joystickBase.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    joystickActive = true;
-    updateJoystickPos(e);
-  });
-  
-  joystickBase.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (joystickActive) updateJoystickPos(e);
-  });
-  
-  joystickBase.addEventListener('touchend', () => {
-    joystickActive = false;
-    resetJoystick();
-  });
-  
-  // Mouse support for joystick (for testing)
-  joystickBase.addEventListener('mousedown', (e) => {
-    joystickActive = true;
-    updateJoystickPos(e);
-  });
-  
-  window.addEventListener('mousemove', (e) => {
-    if (joystickActive) updateJoystickPos(e);
-  });
-  
-  window.addEventListener('mouseup', () => {
-    joystickActive = false;
-    resetJoystick();
-  });
-  
-  function gameLoop() {
-    if (!gameCanvas || !gameCtx) return;
-    
-    gameCtx.fillStyle = "#000";
-    gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-    
-    if (gameActiveInstance && gamePlayer) {
-      gamePlayer.update();
-      gamePlayer.draw();
-      
-      gameStars.forEach(s => {
-        s.draw();
-        if (Math.hypot(gamePlayer.x - s.x, gamePlayer.y - s.y) < 25) {
-          gameScore++;
-          const scoreDisplay = document.getElementById('gameScoreDisplay');
-          if (scoreDisplay) scoreDisplay.innerText = "Stars: " + gameScore;
-          s.reset();
-          if (gameScore % 5 === 0) {
-            addXP(5, "Played Witty Star");
-            addHistory(`Game milestone`, `${gameScore} stars in Witty Star`);
-          }
-        }
-      });
-      
-      if (Math.random() < 0.02 + (gameScore / 500)) {
-        gameEnemies.push(new GameEnemy());
-      }
-      
-      for (let i = gameEnemies.length - 1; i >= 0; i--) {
-        let e = gameEnemies[i];
-        e.update();
-        e.draw();
-        if (Math.hypot(gamePlayer.x - e.x, gamePlayer.y - e.y) < 16) {
-          gameOverInstance();
-        }
-        if (e.x < -100 || e.x > gameCanvas.width + 100 || e.y < -100 || e.y > gameCanvas.height + 100) {
-          gameEnemies.splice(i, 1);
-        }
-      }
-    }
-    
-    gameAnimationId = requestAnimationFrame(gameLoop);
-  }
-  
-  class GamePlayer {
-    constructor() {
-      this.x = gameCanvas.width / 2;
-      this.y = gameCanvas.height / 2;
-      this.history = [];
-    }
-    update() {
-      // Smooth follow joystick position
-      this.x += (gameMouse.x - this.x) * 0.1;
-      this.y += (gameMouse.y - this.y) * 0.1;
-      // Keep in bounds
-      this.x = Math.min(Math.max(this.x, 15), gameCanvas.width - 15);
-      this.y = Math.min(Math.max(this.y, 15), gameCanvas.height - 15);
-      this.history.push({x: this.x, y: this.y});
-      if(this.history.length > 8) this.history.shift();
-    }
-    draw() {
-      gameCtx.beginPath();
-      gameCtx.strokeStyle = "#00f2ff";
-      gameCtx.lineWidth = 3;
-      for(let i=0; i<this.history.length; i++) {
-        gameCtx.lineTo(this.history[i].x, this.history[i].y);
-      }
-      gameCtx.stroke();
-      gameCtx.beginPath();
-      gameCtx.arc(this.x, this.y, 8, 0, Math.PI*2);
-      gameCtx.fillStyle = "#fff";
-      gameCtx.fill();
-      gameCtx.beginPath();
-      gameCtx.arc(this.x, this.y, 10, 0, Math.PI*2);
-      gameCtx.strokeStyle = "#00f2ff";
-      gameCtx.stroke();
-    }
-  }
-  
-  class GameStar {
-    constructor() { this.reset(); }
-    reset() {
-      this.x = 20 + Math.random() * (gameCanvas.width - 40);
-      this.y = 20 + Math.random() * (gameCanvas.height - 40);
-    }
-    draw() {
-      gameCtx.beginPath();
-      gameCtx.arc(this.x, this.y, 6, 0, Math.PI*2);
-      gameCtx.fillStyle = "#FFD700";
-      gameCtx.fill();
-      gameCtx.beginPath();
-      gameCtx.arc(this.x, this.y, 3, 0, Math.PI*2);
-      gameCtx.fillStyle = "#FFF8DC";
-      gameCtx.fill();
-    }
-  }
-  
-  class GameEnemy {
-    constructor() {
-      const side = Math.floor(Math.random() * 4);
-      if (side === 0) { this.x = -20; this.y = Math.random() * gameCanvas.height; }
-      else if (side === 1) { this.x = gameCanvas.width + 20; this.y = Math.random() * gameCanvas.height; }
-      else if (side === 2) { this.x = Math.random() * gameCanvas.width; this.y = -20; }
-      else { this.x = Math.random() * gameCanvas.width; this.y = gameCanvas.height + 20; }
-      this.speed = 2 + (gameScore * 0.03);
-      const dx = gamePlayer ? gamePlayer.x - this.x : gameCanvas.width/2 - this.x;
-      const dy = gamePlayer ? gamePlayer.y - this.y : gameCanvas.height/2 - this.y;
-      this.angle = Math.atan2(dy, dx);
-    }
-    update() {
-      this.x += Math.cos(this.angle) * this.speed;
-      this.y += Math.sin(this.angle) * this.speed;
-    }
-    draw() {
-      gameCtx.beginPath();
-      gameCtx.arc(this.x, this.y, 10, 0, Math.PI*2);
-      gameCtx.fillStyle = "#ff3333";
-      gameCtx.fill();
-      gameCtx.beginPath();
-      gameCtx.arc(this.x, this.y, 5, 0, Math.PI*2);
-      gameCtx.fillStyle = "#ff8888";
-      gameCtx.fill();
-    }
-  }
-  
-  window.startGameInstance = function() {
-    gameScore = 0;
-    gameStars = [];
-    gameEnemies = [];
-    gameActiveInstance = true;
-    const gameUI = document.getElementById('gameUI');
-    if (gameUI) gameUI.style.display = 'none';
-    const scoreDisplay = document.getElementById('gameScoreDisplay');
-    if (scoreDisplay) scoreDisplay.innerText = "Stars: 0";
-    gamePlayer = new GamePlayer();
-    for(let i=0; i<8; i++) gameStars.push(new GameStar());
-    addHistory(`Started game`, `Witty Star`);
-  };
-  
-  function gameOverInstance() {
-    gameActiveInstance = false;
-    const gameUI = document.getElementById('gameUI');
-    if (gameUI) {
-      gameUI.style.display = 'flex';
-      const msgEl = document.getElementById('gameMsg');
-      if (msgEl) msgEl.innerText = "GAME OVER! SCORE: " + gameScore;
-    }
-    const xpEarned = Math.floor(gameScore / 2);
-    if (xpEarned > 0) {
-      addXP(xpEarned, "Witty Star game score");
-      addHistory(`Game over`, `Score: ${gameScore}, +${xpEarned} XP`);
-      showNotification(`+${xpEarned} XP from Witty Star! ⭐`, "success");
-    }
-  }
-  
-  window.closeGame = function() {
-    if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
-    const container = document.getElementById('gameContainer');
-    if (container) container.remove();
-    gameActiveInstance = false;
-  };
-  
+  function resetJoy() { joyThumb.style.transform = 'translate(-50%, -50%)'; joyVec = {x:0,y:0}; }
+  joyBase.addEventListener('touchstart', e => { e.preventDefault(); joyActive=true; updateJoy(e); });
+  joyBase.addEventListener('touchmove', e => { e.preventDefault(); if(joyActive) updateJoy(e); });
+  joyBase.addEventListener('touchend', () => { joyActive=false; resetJoy(); });
+  joyBase.addEventListener('mousedown', e => { joyActive=true; updateJoy(e); });
+  window.addEventListener('mousemove', e => { if(joyActive) updateJoy(e); });
+  window.addEventListener('mouseup', () => { joyActive=false; resetJoy(); });
+  class GamePlayer { constructor() { this.x=gameCanvas.width/2; this.y=gameCanvas.height/2; this.history=[]; } update() { this.x += (gameMouse.x-this.x)*0.1; this.x = Math.min(Math.max(this.x,15),gameCanvas.width-15); this.y += (gameMouse.y-this.y)*0.1; this.y = Math.min(Math.max(this.y,15),gameCanvas.height-15); this.history.push({x:this.x,y:this.y}); if(this.history.length>8) this.history.shift(); } draw() { gameCtx.beginPath(); gameCtx.strokeStyle="#00f2ff"; gameCtx.lineWidth=3; for(let p of this.history) gameCtx.lineTo(p.x,p.y); gameCtx.stroke(); gameCtx.beginPath(); gameCtx.arc(this.x,this.y,8,0,Math.PI*2); gameCtx.fillStyle="#fff"; gameCtx.fill(); } }
+  class GameStar { constructor() { this.reset(); } reset() { this.x=20+Math.random()*(gameCanvas.width-40); this.y=20+Math.random()*(gameCanvas.height-40); } draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,6,0,Math.PI*2); gameCtx.fillStyle="#FFD700"; gameCtx.fill(); } }
+  class GameEnemy { constructor() { let side=Math.floor(Math.random()*4); if(side===0){this.x=-20;this.y=Math.random()*gameCanvas.height;} else if(side===1){this.x=gameCanvas.width+20;this.y=Math.random()*gameCanvas.height;} else if(side===2){this.x=Math.random()*gameCanvas.width;this.y=-20;} else{this.x=Math.random()*gameCanvas.width;this.y=gameCanvas.height+20;} this.speed=2+(gameScore*0.03); let dx=gamePlayer?gamePlayer.x-this.x:gameCanvas.width/2-this.x; let dy=gamePlayer?gamePlayer.y-this.y:gameCanvas.height/2-this.y; this.angle=Math.atan2(dy,dx); } update() { this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; } draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,10,0,Math.PI*2); gameCtx.fillStyle="#ff3333"; gameCtx.fill(); } }
+  window.startGameInstance = function() { gameScore=0; gameStars=[]; gameEnemies=[]; gameActive=true; document.getElementById('gameUIEl').style.display='none'; document.getElementById('gameScoreEl').innerText='Stars: 0'; gamePlayer=new GamePlayer(); for(let i=0;i<8;i++) gameStars.push(new GameStar()); addHistory(`Started game`, `Witty Star`); };
+  function gameOverInstance() { gameActive=false; document.getElementById('gameUIEl').style.display='flex'; document.getElementById('gameMsgEl').innerText = "GAME OVER! Score: "+gameScore; let xp=Math.floor(gameScore/2); if(xp>0) { addXP(xp,"Witty Star"); addHistory(`Game over`,`Score: ${gameScore}, +${xp} XP`); showNotification(`+${xp} XP from game! ⭐`,"success"); } }
+  function gameLoop() { if(!gameCanvas||!gameCtx) return; gameCtx.fillStyle="#000"; gameCtx.fillRect(0,0,gameCanvas.width,gameCanvas.height); if(gameActive && gamePlayer) { gamePlayer.update(); gamePlayer.draw(); gameStars.forEach(s=>{ s.draw(); if(Math.hypot(gamePlayer.x-s.x,gamePlayer.y-s.y)<25){ gameScore++; document.getElementById('gameScoreEl').innerText="Stars: "+gameScore; s.reset(); if(gameScore%5===0){ addXP(5,"Witty Star"); addHistory(`Game milestone`,`${gameScore} stars`); } } }); if(Math.random()<0.02+(gameScore/500)) gameEnemies.push(new GameEnemy()); for(let i=gameEnemies.length-1;i>=0;i--){ let e=gameEnemies[i]; e.update(); e.draw(); if(Math.hypot(gamePlayer.x-e.x,gamePlayer.y-e.y)<16) gameOverInstance(); if(e.x<-100||e.x>gameCanvas.width+100||e.y<-100||e.y>gameCanvas.height+100) gameEnemies.splice(i,1); } } gameAnim = requestAnimationFrame(gameLoop); }
+  window.closeGame = function() { if(gameAnim) cancelAnimationFrame(gameAnim); document.getElementById('gameCont')?.remove(); gameActive=false; };
   gameLoop();
 }
 
 // ===== THEMES =====
-function setTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  STORAGE.set('theme', theme);
-  addHistory(`Theme changed`, theme);
-  showNotification(`Theme: ${theme} 🎨`, "success");
-}
-
-function applySavedTheme() {
-  const savedTheme = STORAGE.get('theme', 'dark');
-  document.documentElement.setAttribute('data-theme', savedTheme);
-}
+function setTheme(t) { document.documentElement.setAttribute('data-theme', t); STORAGE.set('theme', t); addHistory(`Theme changed`, t); showNotification(`Theme: ${t} 🎨`, "success"); }
+function applySavedTheme() { let t = STORAGE.get('theme', 'dark'); document.documentElement.setAttribute('data-theme', t); }
 
 // ===== ANALYTICS =====
 function updateAnalytics() {
-  const habits = getHabits();
-  const completions = getCompletions();
-  const tasks = getTasks();
-  const taskCompletions = getTaskCompletions();
-  const xpHistory = STORAGE.get('xpHistory', []);
-  
-  const todayStr = today();
-  const todayHabitsDone = habits.filter(h => completions[todayStr] && completions[todayStr][h.id]).length;
-  const todayTasksDone = tasks.filter(t => taskCompletions[t.id]).length;
-  
-  const grid = document.getElementById('analyticsGrid');
-  if (grid) {
-    grid.innerHTML = `
-      <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:12px">
-        <div style="font-size:0.75rem;color:var(--text2)">Today's Habits</div>
-        <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">${todayHabitsDone}/${habits.length}</div>
-        <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${habits.length ? (todayHabitsDone/habits.length)*100 : 0}%"></div></div>
-      </div>
-      <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:12px">
-        <div style="font-size:0.75rem;color:var(--text2)">Today's Tasks</div>
-        <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">${todayTasksDone}/${tasks.length}</div>
-        <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${tasks.length ? (todayTasksDone/tasks.length)*100 : 0}%"></div></div>
-      </div>
-      <div style="background:var(--bg2);border-radius:12px;padding:16px">
-        <div style="font-size:0.75rem;color:var(--text2)">Total XP Earned</div>
-        <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">${STORAGE.get('xp', 0)}</div>
-      </div>
-    `;
-  }
+  let habits = getHabits();
+  let comps = getCompletions();
+  let tasks = getTasks();
+  let taskComps = getTaskComps();
+  let todayStr = today();
+  let todayHabits = habits.filter(h => comps[todayStr] && comps[todayStr][h.id]).length;
+  let todayTasks = tasks.filter(t => taskComps[t.id]).length;
+  let grid = document.getElementById('analyticsGrid');
+  if(grid) grid.innerHTML = `<div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:12px"><div style="font-size:0.75rem;color:var(--text2)">Today's Habits</div><div style="font-size:1.8rem;font-weight:700;color:var(--accent)">${todayHabits}/${habits.length}</div><div class="progress-bar"><div class="progress-fill" style="width:${habits.length?(todayHabits/habits.length)*100:0}%"></div></div></div><div style="background:var(--bg2);border-radius:12px;padding:16px"><div style="font-size:0.75rem;color:var(--text2)">Today's Tasks</div><div style="font-size:1.8rem;font-weight:700;color:var(--accent)">${todayTasks}/${tasks.length}</div><div class="progress-bar"><div class="progress-fill" style="width:${tasks.length?(todayTasks/tasks.length)*100:0}%"></div></div></div>`;
 }
 
-// ===== SETTINGS & PROFILE =====
+// ===== PROFILE =====
 function getProfile() { return STORAGE.get('profile', null); }
 function setProfile(p) { STORAGE.set('profile', p); }
-
 function saveProfile() {
-  const name = document.getElementById('pName').value.trim();
-  const username = document.getElementById('pUsername').value.trim();
-  const pin = document.getElementById('pPin').value;
-  if (!name || !username || pin.length !== 4) {
-    alert("Please fill all fields correctly");
-    return;
-  }
-  setProfile({ name, username, pin, createdAt: new Date().toISOString() });
-  const avatarBtn = document.getElementById('avatarBtn');
-  if (avatarBtn) avatarBtn.textContent = name.charAt(0).toUpperCase();
-  const onboarding = document.getElementById('onboarding');
-  const app = document.getElementById('app');
-  if (onboarding) onboarding.classList.add('hidden');
-  if (app) app.classList.remove('hidden');
+  let name = document.getElementById('pName')?.value.trim();
+  let user = document.getElementById('pUsername')?.value.trim();
+  let pin = document.getElementById('pPin')?.value;
+  if(!name || !user || pin?.length!==4) { alert("Fill all fields correctly"); return; }
+  setProfile({ name, username: user, pin, createdAt: new Date().toISOString() });
+  document.getElementById('avatarBtn').innerText = name.charAt(0).toUpperCase();
+  document.getElementById('onboarding').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
   addHistory(`Profile created`, name);
-  initAppAfterOnboard();
+  initApp();
 }
-
-function initAppAfterOnboard() {
-  renderSections();
-  renderTimetable();
-  renderTasks();
-  loadNotesList();
-  updateXPDisplay();
-  updateAnalytics();
-  renderHistory();
-  applySavedTheme();
-  
-  const profile = getProfile();
-  const profileCard = document.getElementById('profileCard');
-  if (profile && profileCard) {
-    profileCard.innerHTML = `
-      <div><strong>Name:</strong> ${escHtml(profile.name)}</div>
-      <div><strong>Username:</strong> @${escHtml(profile.username)}</div>
-      <div><strong>Member since:</strong> ${new Date(profile.createdAt).toLocaleDateString()}</div>
-      <div><strong>Total XP:</strong> ${STORAGE.get('xp', 0)}</div>
-    `;
-  }
+function initApp() {
+  renderSections(); renderTimetable(); renderTasks(); loadNotesList(); updateXPDisplay(); updateAnalytics(); renderHistory(); applySavedTheme();
+  let p = getProfile();
+  if(p && document.getElementById('profileCard')) document.getElementById('profileCard').innerHTML = `<div><strong>Name:</strong> ${esc(p.name)}</div><div><strong>Username:</strong> @${esc(p.username)}</div><div><strong>Member:</strong> ${new Date(p.createdAt).toLocaleDateString()}</div><div><strong>Total XP:</strong> ${STORAGE.get('xp',0)}</div>`;
 }
-
 function showTab(tab) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  const targetTab = document.getElementById(`tab-${tab}`);
-  if (targetTab) targetTab.classList.add('active');
+  document.getElementById(`tab-${tab}`)?.classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const activeBtn = document.querySelector(`.nav-btn[data-tab="${tab}"]`);
-  if (activeBtn) activeBtn.classList.add('active');
-  
-  if (tab === 'timetable') renderTimetable();
-  if (tab === 'notes') loadNotesList();
-  if (tab === 'tasks') renderTasks();
-  if (tab === 'analytics') {
-    updateAnalytics();
-    renderHistory();
-  }
+  document.querySelector(`.nav-btn[data-tab="${tab}"]`)?.classList.add('active');
+  if(tab==='timetable') renderTimetable();
+  if(tab==='notes') loadNotesList();
+  if(tab==='tasks') renderTasks();
+  if(tab==='analytics') { updateAnalytics(); renderHistory(); }
 }
-
-function showNotification(msg, type = "info") {
-  const notif = document.createElement('div');
-  notif.style.cssText = `
-    position:fixed;top:80px;left:50%;transform:translateX(-50%);
-    background:${type === 'success' ? 'var(--success)' : 'var(--accent)'};
-    color:#000;padding:12px 24px;border-radius:100px;
-    font-weight:600;z-index:5000;animation:fadeUp 0.3s ease;
-    box-shadow:0 4px 20px rgba(0,0,0,0.3);
-  `;
-  notif.textContent = msg;
-  document.body.appendChild(notif);
-  setTimeout(() => {
-    notif.style.opacity = '0';
-    setTimeout(() => notif.remove(), 500);
-  }, 3000);
+function showNotification(msg, type) {
+  let d = document.createElement('div');
+  d.style.cssText = `position:fixed;top:80px;left:50%;transform:translateX(-50%);background:${type==='success'?'var(--success)':'var(--accent)'};color:#000;padding:12px 24px;border-radius:100px;z-index:5000`;
+  d.innerText = msg;
+  document.body.appendChild(d);
+  setTimeout(() => { d.style.opacity='0'; setTimeout(()=>d.remove(),500); }, 3000);
 }
-
 function showXPInfo() {
-  const xp = STORAGE.get('xp', 0);
-  const rank = getRank(xp);
-  showModal(`
-    <h3>⭐ Your Progress</h3>
-    <div style="text-align:center;font-size:3rem">${rank.icon}</div>
-    <div style="text-align:center;font-size:1.5rem;font-weight:700">${rank.name}</div>
-    <div style="text-align:center;margin-top:8px">${xp} Total XP</div>
-    <div style="margin-top:16px">
-      <div>Next: ${XP_RANKS[XP_RANKS.findIndex(r => r.name === rank.name) + 1]?.name || "MAX"}</div>
-      <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${(xp - rank.minXP) / (XP_RANKS[XP_RANKS.findIndex(r => r.name === rank.name) + 1]?.nextXP - rank.minXP) * 100}%"></div></div>
-    </div>
-  `);
+  let xp = STORAGE.get('xp',0);
+  let r = getRank(xp);
+  let next = RANKS[RANKS.findIndex(rr=>rr.name===r.name)+1] || r;
+  showModal(`<h3>⭐ Your Progress</h3><div style="text-align:center;font-size:3rem">${r.icon}</div><div style="text-align:center;font-size:1.5rem">${r.name}</div><div>${xp} XP</div><div class="progress-bar"><div class="progress-fill" style="width:${((xp-r.min)/(next.next-r.min))*100}%"></div></div>`);
 }
-
 function exportData() {
-  const data = {
-    xp: STORAGE.get('xp', 0),
-    sections: getSections(),
-    habits: getHabits(),
-    completions: getCompletions(),
-    tasks: getTasks(),
-    taskCompletions: getTaskCompletions(),
-    timetable: getTimetable(),
-    notes: getNotes(),
-    profile: getProfile(),
-    history: STORAGE.get('history', [])
-  };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `replace-deeds-backup-${today()}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  let data = { xp: STORAGE.get('xp',0), sections: getSections(), habits: getHabits(), completions: getCompletions(), tasks: getTasks(), taskComps: getTaskComps(), timetable: getTimetable(), notes: getNotes(), profile: getProfile(), history: STORAGE.get('history',[]) };
+  let blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup-${today()}.json`; a.click(); URL.revokeObjectURL(a.href);
   addHistory(`Exported data`, `Backup created`);
-  showNotification("Data exported! 📁", "success");
 }
-
-function confirmReset() {
-  if (confirm("⚠️ Are you sure? This will delete ALL your data including XP, habits, tasks, notes, gallery, and history!\nThis cannot be undone!")) {
-    STORAGE.clear();
-    addHistory(`App reset`, `All data cleared`);
-    location.reload();
-  }
-}
-
-// ===== MODAL =====
-function showModal(content) {
-  const modalContent = document.getElementById('modalContent');
-  if (modalContent) modalContent.innerHTML = content;
-  const overlay = document.getElementById('modalOverlay');
-  if (overlay) overlay.classList.remove('hidden');
-}
-
-function closeModal() {
-  const overlay = document.getElementById('modalOverlay');
-  if (overlay) overlay.classList.add('hidden');
-}
-
-// ===== INIT =====
+function confirmReset() { if(confirm("⚠️ Delete ALL data? Cannot undo!")) { STORAGE.clear(); location.reload(); } }
+function showModal(c) { document.getElementById('modalContent').innerHTML = c; document.getElementById('modalOverlay').classList.remove('hidden'); }
+function closeModal() { document.getElementById('modalOverlay').classList.add('hidden'); }
+window.nextOnboard = function() { let steps = document.querySelectorAll('.onboard-step'); let cur = -1; steps.forEach((s,i)=> { if(s.classList.contains('active')) cur=i; }); if(cur+1 < steps.length) { steps[cur].classList.remove('active'); steps[cur+1].classList.add('active'); } };
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
-    const splash = document.getElementById('splash');
-    if (splash) {
-      splash.classList.add('fade-out');
-      setTimeout(() => {
-        splash.style.display = 'none';
-        const profile = getProfile();
-        const onboarding = document.getElementById('onboarding');
-        const app = document.getElementById('app');
-        if (!profile) {
-          if (onboarding) onboarding.classList.remove('hidden');
-        } else {
-          if (app) app.classList.remove('hidden');
-          initAppAfterOnboard();
-        }
-      }, 800);
-    }
+    let splash = document.getElementById('splash');
+    splash.classList.add('fade-out');
+    setTimeout(() => { splash.style.display = 'none'; if(!getProfile()) document.getElementById('onboarding').classList.remove('hidden'); else { document.getElementById('app').classList.remove('hidden'); initApp(); } }, 800);
   }, 1500);
-  
-  if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-    Notification.requestPermission();
-  }
+  if(Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
 });
-
-// Global functions
-window.nextOnboard = function() {
-  const steps = document.querySelectorAll('.onboard-step');
-  let current = -1;
-  steps.forEach((s, i) => { if (s.classList.contains('active')) current = i; });
-  if (current + 1 < steps.length) {
-    steps[current].classList.remove('active');
-    steps[current + 1].classList.add('active');
-  }
-};
-
-window.calcInput = calcInput;
-window.calcResult = calcResult;
-window.calcClear = calcClear;
-window.updateConverterUI = updateConverterUI;
-window.convertLength = convertLength;
-window.convertWeight = convertWeight;
-window.convertTemp = convertTemp;
-window.calculateAge = calculateAge;
-window.calculateBudget = calculateBudget;
-window.convertCurrency = convertCurrency;
+window.calcInput = calcInput; window.updateConvUI = updateConvUI; window.convLen = convLen; window.convWt = convWt; window.convTemp = convTemp; window.calcAge = calcAge; window.calcBudget = calcBudget;
 </script>
 </body>
 </html>
