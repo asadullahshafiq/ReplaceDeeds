@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Replace Deeds - XP Edition</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES & THEMES ===== */
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #21262d;
+  --accent: #00d4b4;
+  --accent2: #00a896;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --border: rgba(255,255,255,0.08);
+  --danger: #f85149;
+  --warn: #d29922;
+  --success: #3fb950;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-head: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-game: 'Orbitron', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== SPLASH SCREEN ===== */
+.splash {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.8s;
+}
+
+.splash.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-logo {
+  text-align: center;
+  animation: splashIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes splashIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.splash-title {
+  font-family: var(--font-head);
+  font-size: 2rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== HIDDEN UTILITY ===== */
+.hidden {
+  display: none !important;
+}
+
+/* ===== ONBOARDING ===== */
+.onboard-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.onboard-step {
+  display: none;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.onboard-step.active {
+  display: block;
+  animation: fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.field-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.field-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--font-body);
+  outline: none;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 212, 180, 0.1);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #000;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 212, 180, 0.3);
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 212, 180, 0.1);
+}
+
+.btn-danger {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background: rgba(248, 81, 73, 0.1);
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
+
+.xp-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg2);
+  padding: 6px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.xp-icon {
+  font-size: 1.2rem;
+}
+
+.xp-num {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.level-badge {
+  font-size: 0.75rem;
+  background: rgba(0, 212, 180, 0.2);
+  padding: 4px 8px;
+  border-radius: 100px;
+}
+
+.avatar-btn {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text2);
+  transition: all 0.2s;
+}
+
+.nav-btn.active {
+  color: var(--accent);
+}
+
+.nav-icon {
+  font-size: 1.3rem;
+}
+
+.nav-label {
+  font-size: 0.65rem;
+  margin-top: 2px;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  padding-bottom: 80px;
+  min-height: 100vh;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tab-panel {
+  display: none;
+  padding: 16px;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: fadeUp 0.3s ease;
+}
+
+/* ===== XP CARD ===== */
+.xp-card {
+  background: linear-gradient(135deg, var(--bg2), var(--bg3));
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.level-progress {
+  margin-top: 12px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--bg3);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 100px;
+  transition: width 0.5s ease;
+}
+
+/* ===== SECTION CARDS ===== */
+.section-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-name {
+  font-family: var(--font-head);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.section-progress-bar {
+  height: 3px;
+  background: var(--bg3);
+  border-radius: 100px;
+  margin-top: 4px;
+}
+
+.section-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 100px;
+}
+
+.habits-list {
+  padding: 0 16px 16px;
+}
+
+.habit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.habit-check {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.habit-check.done {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+
+.habit-info {
+  flex: 1;
+}
+
+.habit-name {
+  font-size: 0.9rem;
+}
+
+/* ===== TIME TABLE ===== */
+.timetable-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.timetable-grid {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.timetable-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.timetable-row:last-child {
+  border-bottom: none;
+}
+
+.timetable-time {
+  width: 80px;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  border-right: 1px solid var(--border);
+  background: var(--bg3);
+}
+
+.timetable-item {
+  flex: 1;
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.timetable-item:hover {
+  background: rgba(0, 212, 180, 0.1);
+}
+
+.timetable-subject {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.timetable-note {
+  font-size: 0.7rem;
+  color: var(--text2);
+  margin-top: 4px;
+}
+
+/* ===== NOTES WITH DRAWING ===== */
+.notes-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+}
+
+.note-editor-area {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.note-title {
+  width: 100%;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.note-content {
+  width: 100%;
+  min-height: 200px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--text);
+  font-family: var(--font-body);
+  resize: vertical;
+}
+
+.canvas-container {
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg3);
+  position: relative;
+}
+
+#drawCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: white;
+  border-radius: 8px;
+  cursor: crosshair;
+}
+
+/* ===== TOOLS SECTION ===== */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tool-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tool-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.tool-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.calculator-display {
+  background: var(--bg3);
+  padding: 20px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.calc-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.calc-btn {
+  padding: 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.calc-btn:hover {
+  background: var(--accent);
+  color: #000;
+}
+
+/* ===== GAME CONTAINER ===== */
+.game-container {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.game-ui {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.85);
+  z-index: 2001;
+}
+
+.game-score {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 18px;
+  color: #00f2ff;
+  font-family: 'Orbitron', monospace;
+  z-index: 2002;
+  pointer-events: none;
+}
+
+.game-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== SAFE GALLERY ===== */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.gallery-item {
+  aspect-ratio: 1;
+  background: var(--bg3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-item img, .gallery-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-delete {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ===== TASKS WITH ALARMS ===== */
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.task-check {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-check.done {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.alarm-badge {
+  background: var(--warn);
+  color: #000;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 100px;
+  margin-left: 8px;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* ===== LEVEL UP ANIMATION ===== */
+.levelup-anim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+.levelup-inner {
+  text-align: center;
+  animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 600px) {
+  .bottom-nav {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash" class="splash">
+  <div class="splash-logo">
+    <h1 class="splash-title">Replace Deeds</h1>
+    <p style="color:var(--text2);margin-top:8px">Build XP. Level Up.</p>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding" class="screen hidden">
+  <div class="onboard-container">
+    <div class="onboard-step active" data-step="0">
+      <div style="font-size:4rem;margin-bottom:16px">⭐</div>
+      <h2>Welcome to Replace Deeds</h2>
+      <p>Track habits, earn XP, and level up your life!</p>
+      <button class="btn-primary" onclick="nextOnboard()">Begin Journey</button>
+    </div>
+    <div class="onboard-step" data-step="1">
+      <div style="font-size:4rem;margin-bottom:16px">👤</div>
+      <h2>Create Profile</h2>
+      <div class="field-group"><label>Name</label><input type="text" id="pName" placeholder="Your name"></div>
+      <div class="field-group"><label>Username</label><input type="text" id="pUsername" placeholder="@username"></div>
+      <div class="field-group"><label>PIN (4 digits)</label><input type="password" id="pPin" maxlength="4" placeholder="••••"></div>
+      <button class="btn-primary" onclick="saveProfile()">Create Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="screen hidden">
+  <header class="topbar">
+    <div class="xp-badge" onclick="showXPInfo()">
+      <span class="xp-icon">⭐</span>
+      <span class="xp-num" id="xpNum">0</span>
+    </div>
+    <div class="level-badge" id="levelBadge">🌱 Seed Lv.1</div>
+    <div class="avatar-btn" id="avatarBtn" onclick="showTab('settings')">U</div>
+  </header>
+
+  <main class="main-content">
+    <!-- HABITS TAB -->
+    <div class="tab-panel active" id="tab-habits">
+      <div class="sections-container" id="sectionsContainer"></div>
+      <button class="btn-primary" style="margin-top:12px" onclick="showAddSection()">+ Add Section</button>
+    </div>
+
+    <!-- TIME TABLE TAB -->
+    <div class="tab-panel" id="tab-timetable">
+      <div class="timetable-header">
+        <h2>📅 Time Table</h2>
+        <button class="btn-secondary" onclick="showAddTimetable()">+ Add</button>
+      </div>
+      <div id="timetableContainer"></div>
+    </div>
+
+    <!-- NOTES TAB -->
+    <div class="tab-panel" id="tab-notes">
+      <div class="notes-toolbar">
+        <button class="btn-secondary" onclick="noteSetFont('bold')">B</button>
+        <button class="btn-secondary" onclick="noteSetFont('italic')">I</button>
+        <button class="btn-secondary" onclick="noteSetFont('size+')">A+</button>
+        <button class="btn-secondary" onclick="noteSetFont('size-')">A-</button>
+        <input type="color" id="noteColorPicker" value="#00d4b4" onchange="noteSetColor(this.value)">
+        <button class="btn-secondary" onclick="toggleDrawing()">✏️ Draw</button>
+        <button class="btn-secondary" onclick="clearCanvas()">🗑️ Clear</button>
+      </div>
+      <div class="note-editor-area">
+        <input type="text" id="noteTitle" class="note-title" placeholder="Note title...">
+        <textarea id="noteContent" class="note-content" placeholder="Write your note here..."></textarea>
+        <div class="canvas-container hidden" id="canvasContainer">
+          <canvas id="drawCanvas" width="500" height="300" style="width:100%;height:auto;background:white"></canvas>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn-primary" onclick="saveCurrentNote()">💾 Save Note</button>
+          <button class="btn-secondary" onclick="loadNotesList()">📋 My Notes</button>
+        </div>
+      </div>
+      <div id="notesList"></div>
+    </div>
+
+    <!-- TASKS TAB -->
+    <div class="tab-panel" id="tab-tasks">
+      <div class="tasks-header" style="display:flex;justify-content:space-between;margin-bottom:16px">
+        <h2>✅ Tasks</h2>
+        <button class="btn-secondary" onclick="showAddTask()">+ Add</button>
+      </div>
+      <div id="tasksList"></div>
+    </div>
+
+    <!-- TOOLS TAB -->
+    <div class="tab-panel" id="tab-tools">
+      <div class="tools-grid">
+        <div class="tool-card" onclick="showCalculator()">
+          <div class="tool-icon">🔢</div>
+          <div>Calculator</div>
+        </div>
+        <div class="tool-card" onclick="showSafeGallery()">
+          <div class="tool-icon">🖼️</div>
+          <div>Safe Gallery</div>
+        </div>
+        <div class="tool-card" onclick="openGame()">
+          <div class="tool-icon">🎮</div>
+          <div>Witty Star</div>
+        </div>
+      </div>
+      <div id="toolsContent"></div>
+    </div>
+
+    <!-- ANALYTICS (XP & LEVELS) TAB -->
+    <div class="tab-panel" id="tab-analytics">
+      <div class="xp-card">
+        <div style="font-size:2rem" id="rankIcon">🌱</div>
+        <h2 id="rankName">Seed</h2>
+        <div class="level-progress">
+          <div><span id="currentXP">0</span> / <span id="nextXP">100</span> XP</div>
+          <div class="progress-bar"><div class="progress-fill" id="xpProgress" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="analytics-grid" id="analyticsGrid"></div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div class="tab-panel" id="tab-settings">
+      <div class="settings-container">
+        <h2>⚙️ Settings</h2>
+        <div class="settings-section" style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
+          <h3>Profile</h3>
+          <div id="profileCard"></div>
+        </div>
+        <div class="settings-section" style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
+          <h3>Data</h3>
+          <button class="btn-danger" onclick="exportData()">📤 Export</button>
+          <button class="btn-danger" onclick="confirmReset()">🗑️ Reset</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="showTab('habits')" data-tab="habits"><span class="nav-icon">🏠</span><span class="nav-label">Habits</span></button>
+    <button class="nav-btn" onclick="showTab('timetable')" data-tab="timetable"><span class="nav-icon">📅</span><span class="nav-label">TimeTable</span></button>
+    <button class="nav-btn" onclick="showTab('notes')" data-tab="notes"><span class="nav-icon">📝</span><span class="nav-label">Notes</span></button>
+    <button class="nav-btn" onclick="showTab('tasks')" data-tab="tasks"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></button>
+    <button class="nav-btn" onclick="showTab('tools')" data-tab="tools"><span class="nav-icon">🛠️</span><span class="nav-label">Tools</span></button>
+    <button class="nav-btn" onclick="showTab('analytics')" data-tab="analytics"><span class="nav-icon">📊</span><span class="nav-label">XP</span></button>
+    <button class="nav-btn" onclick="showTab('settings')" data-tab="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+  </nav>
+</div>
+
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBox"><div id="modalContent"></div></div>
+</div>
+
+<script>
+// ===== STORAGE =====
+const STORAGE = {
+  _prefix: 'rd_xp_',
+  
+  set(key, val) {
+    localStorage.setItem(this._prefix + key, JSON.stringify(val));
+  },
+  
+  get(key, fallback = null) {
+    const raw = localStorage.getItem(this._prefix + key);
+    if (!raw) return fallback;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return fallback;
+    }
+  },
+  
+  del(key) {
+    localStorage.removeItem(this._prefix + key);
+  },
+  
+  clear() {
+    Object.keys(localStorage).forEach(k => {
+      if (k.startsWith(this._prefix)) localStorage.removeItem(k);
+    });
+  }
+};
+
+// ===== XP SYSTEM =====
+const XP_RANKS = [
+  { minXP: 0, name: "Seed", icon: "🌱", nextXP: 100 },
+  { minXP: 100, name: "Sprout", icon: "🌿", nextXP: 300 },
+  { minXP: 300, name: "Sapling", icon: "🪴", nextXP: 600 },
+  { minXP: 600, name: "Growing", icon: "🌳", nextXP: 1000 },
+  { minXP: 1000, name: "Bronze", icon: "🥉", nextXP: 1500 },
+  { minXP: 1500, name: "Silver", icon: "🥈", nextXP: 2200 },
+  { minXP: 2200, name: "Gold", icon: "🥇", nextXP: 3200 },
+  { minXP: 3200, name: "Platinum", icon: "💎", nextXP: 4500 },
+  { minXP: 4500, name: "Diamond", icon: "👑", nextXP: 6000 },
+  { minXP: 6000, name: "Legend", icon: "🔥", nextXP: Infinity }
+];
+
+function getRank(xp) {
+  for (let i = XP_RANKS.length - 1; i >= 0; i--) {
+    if (xp >= XP_RANKS[i].minXP) return XP_RANKS[i];
+  }
+  return XP_RANKS[0];
+}
+
+function addXP(amount, reason = "") {
+  let xp = STORAGE.get('xp', 0);
+  const oldRank = getRank(xp);
+  xp += amount;
+  STORAGE.set('xp', xp);
+  
+  const newRank = getRank(xp);
+  updateXPDisplay();
+  
+  if (oldRank.name !== newRank.name) {
+    showLevelUp(newRank);
+  }
+  
+  const history = STORAGE.get('xpHistory', []);
+  history.unshift({ amount, reason, date: new Date().toISOString(), xp: xp });
+  STORAGE.set('xpHistory', history.slice(0, 100));
+  
+  return xp;
+}
+
+function updateXPDisplay() {
+  const xp = STORAGE.get('xp', 0);
+  const rank = getRank(xp);
+  const nextRank = XP_RANKS[XP_RANKS.findIndex(r => r.name === rank.name) + 1] || rank;
+  const xpForCurrent = rank.minXP;
+  const xpNeeded = nextRank.nextXP - xpForCurrent;
+  const currentProgress = xp - xpForCurrent;
+  const percent = (currentProgress / xpNeeded) * 100;
+  
+  const xpNum = document.getElementById('xpNum');
+  const levelBadge = document.getElementById('levelBadge');
+  const rankIcon = document.getElementById('rankIcon');
+  const rankName = document.getElementById('rankName');
+  const currentXP = document.getElementById('currentXP');
+  const nextXP = document.getElementById('nextXP');
+  const xpProgress = document.getElementById('xpProgress');
+  
+  if (xpNum) xpNum.textContent = xp;
+  if (levelBadge) levelBadge.textContent = `${rank.icon} ${rank.name}`;
+  if (rankIcon) rankIcon.textContent = rank.icon;
+  if (rankName) rankName.textContent = rank.name;
+  if (currentXP) currentXP.textContent = xp;
+  if (nextXP) nextXP.textContent = nextRank.nextXP === Infinity ? "MAX" : nextRank.nextXP;
+  if (xpProgress) xpProgress.style.width = Math.min(100, percent) + '%';
+}
+
+function showLevelUp(rank) {
+  const anim = document.createElement('div');
+  anim.className = 'levelup-anim';
+  anim.innerHTML = `
+    <div class="levelup-inner">
+      <div style="font-size:5rem">${rank.icon}</div>
+      <div style="font-size:2rem;font-weight:900;color:var(--accent)">LEVEL UP!</div>
+      <div style="font-size:1.2rem;margin-top:8px">${rank.name} Rank Unlocked!</div>
+      <div style="margin-top:12px">🎉 Amazing! Keep going! 🎉</div>
+    </div>
+  `;
+  document.body.appendChild(anim);
+  setTimeout(() => anim.remove(), 2000);
+}
+
+// ===== GENERIC FUNCTIONS =====
+function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 6); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function escHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, function(m){if(m==='&')return '&amp;';if(m==='<')return '&lt;';if(m==='>')return '&gt;';return m;}); }
+
+// ===== HABITS SYSTEM =====
+function getSections() { return STORAGE.get('sections', []); }
+function setSections(s) { STORAGE.set('sections', s); }
+function getHabits() { return STORAGE.get('habits', []); }
+function setHabits(h) { STORAGE.set('habits', h); }
+function getCompletions() { return STORAGE.get('completions', {}); }
+function setCompletions(c) { STORAGE.set('completions', c); }
+
+function renderSections() {
+  const container = document.getElementById('sectionsContainer');
+  if (!container) return;
+  const sections = getSections();
+  const habits = getHabits();
+  const completions = getCompletions();
+  const todayStr = today();
+  const todayComp = completions[todayStr] || {};
+  
+  if (sections.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)">No sections yet. Tap + to add!</div>';
+    return;
+  }
+  
+  container.innerHTML = sections.map(section => {
+    const sectionHabits = habits.filter(h => h.sectionId === section.id);
+    const doneCount = sectionHabits.filter(h => todayComp[h.id]).length;
+    const pct = sectionHabits.length > 0 ? (doneCount / sectionHabits.length) * 100 : 0;
+    
+    return `
+      <div class="section-card">
+        <div class="section-header" onclick="toggleSection('${section.id}')">
+          <div class="section-title-row">
+            <span>${section.emoji || '📌'}</span>
+            <div>
+              <div class="section-name">${escHtml(section.name)}</div>
+              <div class="section-progress-bar"><div class="section-progress-fill" style="width:${pct}%"></div></div>
+            </div>
+          </div>
+          <div><span style="font-size:0.75rem">${doneCount}/${sectionHabits.length}</span></div>
+        </div>
+        <div class="habits-list">
+          ${sectionHabits.map(h => `
+            <div class="habit-row">
+              <div class="habit-check ${todayComp[h.id] ? 'done' : ''}" onclick="toggleHabit('${h.id}')">${todayComp[h.id] ? '✓' : ''}</div>
+              <div class="habit-info"><div class="habit-name">${escHtml(h.name)}</div>${h.desc ? `<div style="font-size:0.7rem;color:var(--text2)">${escHtml(h.desc)}</div>` : ''}</div>
+              <button class="btn-secondary" style="padding:4px 8px" onclick="deleteHabit('${h.id}')">✕</button>
+            </div>
+          `).join('')}
+          <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="showAddHabit('${section.id}')">+ Add Habit</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleSection(id) {
+  renderSections();
+}
+
+function toggleHabit(habitId) {
+  const completions = getCompletions();
+  const todayStr = today();
+  if (!completions[todayStr]) completions[todayStr] = {};
+  
+  const wasDone = completions[todayStr][habitId];
+  
+  if (!wasDone) {
+    completions[todayStr][habitId] = true;
+    addXP(10, "Habit completed");
+    showNotification("+10 XP! 🌟 Keep going!", "success");
+  } else {
+    completions[todayStr][habitId] = false;
+    addXP(-10, "Habit undone");
+  }
+  
+  setCompletions(completions);
+  renderSections();
+  updateAnalytics();
+}
+
+function showAddSection() {
+  showModal(`
+    <h3>Add Section</h3>
+    <input type="text" id="secName" placeholder="Section name" style="width:100%;margin:12px 0;padding:10px">
+    <input type="text" id="secEmoji" placeholder="Emoji" style="width:100%;margin-bottom:12px;padding:10px" value="📌">
+    <button class="btn-primary" onclick="addSection()">Add</button>
+  `);
+}
+
+function addSection() {
+  const name = document.getElementById('secName').value.trim();
+  const emoji = document.getElementById('secEmoji').value.trim() || '📌';
+  if (!name) return;
+  const sections = getSections();
+  sections.push({ id: genId(), name, emoji, collapsed: false });
+  setSections(sections);
+  closeModal();
+  renderSections();
+}
+
+function showAddHabit(sectionId) {
+  showModal(`
+    <h3>Add Habit</h3>
+    <input type="text" id="habitName" placeholder="Habit name" style="width:100%;margin:12px 0;padding:10px">
+    <input type="text" id="habitDesc" placeholder="Description (optional)" style="width:100%;margin-bottom:12px;padding:10px">
+    <button class="btn-primary" onclick="addHabit('${sectionId}')">Add</button>
+  `);
+}
+
+function addHabit(sectionId) {
+  const name = document.getElementById('habitName').value.trim();
+  if (!name) return;
+  const habits = getHabits();
+  habits.push({ id: genId(), name, desc: document.getElementById('habitDesc').value, sectionId, streak: 0 });
+  setHabits(habits);
+  closeModal();
+  renderSections();
+}
+
+function deleteHabit(id) {
+  let habits = getHabits();
+  habits = habits.filter(h => h.id !== id);
+  setHabits(habits);
+  renderSections();
+}
+
+// ===== TIME TABLE =====
+function getTimetable() { return STORAGE.get('timetable', []); }
+function setTimetable(t) { STORAGE.set('timetable', t); }
+
+function renderTimetable() {
+  const container = document.getElementById('timetableContainer');
+  if (!container) return;
+  const timetable = getTimetable();
+  const hours = ['8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'];
+  
+  container.innerHTML = `
+    <div class="timetable-grid">
+      ${hours.map(hour => {
+        const item = timetable.find(t => t.time === hour);
+        return `
+          <div class="timetable-row">
+            <div class="timetable-time">${hour}</div>
+            <div class="timetable-item" onclick="editTimetable('${hour}')">
+              ${item ? `<div class="timetable-subject">${escHtml(item.subject)}</div><div class="timetable-note">${escHtml(item.note || '')}</div>` : '<span style="color:var(--text2);font-size:0.8rem">+ Add</span>'}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function showAddTimetable() {
+  showModal(`
+    <h3>Add Timetable Entry</h3>
+    <select id="ttTime" style="width:100%;margin:12px 0;padding:10px">
+      <option>8:00</option><option>9:00</option><option>10:00</option><option>11:00</option><option>12:00</option>
+      <option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option>
+      <option>18:00</option><option>19:00</option><option>20:00</option>
+    </select>
+    <input type="text" id="ttSubject" placeholder="Subject/Activity" style="width:100%;margin:12px 0;padding:10px">
+    <input type="text" id="ttNote" placeholder="Notes (optional)" style="width:100%;margin-bottom:12px;padding:10px">
+    <button class="btn-primary" onclick="addTimetable()">Save</button>
+  `);
+}
+
+function editTimetable(time) {
+  const timetable = getTimetable();
+  const item = timetable.find(t => t.time === time);
+  showModal(`
+    <h3>Edit Timetable</h3>
+    <input type="text" id="ttSubject" placeholder="Subject" value="${escHtml(item?.subject || '')}" style="width:100%;margin:12px 0;padding:10px">
+    <input type="text" id="ttNote" placeholder="Notes" value="${escHtml(item?.note || '')}" style="width:100%;margin-bottom:12px;padding:10px">
+    <button class="btn-primary" onclick="saveTimetable('${time}')">Save</button>
+    <button class="btn-danger" onclick="deleteTimetable('${time}')" style="margin-top:8px">Delete</button>
+  `);
+}
+
+function addTimetable() {
+  const time = document.getElementById('ttTime').value;
+  const subject = document.getElementById('ttSubject').value.trim();
+  const note = document.getElementById('ttNote').value;
+  if (!subject) return;
+  const timetable = getTimetable();
+  const existing = timetable.findIndex(t => t.time === time);
+  if (existing !== -1) timetable[existing] = { time, subject, note };
+  else timetable.push({ time, subject, note });
+  setTimetable(timetable);
+  closeModal();
+  renderTimetable();
+}
+
+function saveTimetable(time) {
+  const subject = document.getElementById('ttSubject').value.trim();
+  const note = document.getElementById('ttNote').value;
+  if (!subject) return;
+  const timetable = getTimetable();
+  const existing = timetable.findIndex(t => t.time === time);
+  if (existing !== -1) timetable[existing] = { time, subject, note };
+  else timetable.push({ time, subject, note });
+  setTimetable(timetable);
+  closeModal();
+  renderTimetable();
+}
+
+function deleteTimetable(time) {
+  let timetable = getTimetable();
+  timetable = timetable.filter(t => t.time !== time);
+  setTimetable(timetable);
+  closeModal();
+  renderTimetable();
+}
+
+// ===== NOTES WITH DRAWING =====
+let drawing = false;
+let ctx = null;
+let canvas = null;
+
+function toggleDrawing() {
+  const container = document.getElementById('canvasContainer');
+  if (container) container.classList.toggle('hidden');
+  setTimeout(initCanvas, 100);
+}
+
+function initCanvas() {
+  canvas = document.getElementById('drawCanvas');
+  if (!canvas) return;
+  canvas.width = 500;
+  canvas.height = 300;
+  ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 2;
+  
+  const startDraw = (e) => {
+    drawing = true;
+    const pos = getCanvasPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  };
+  
+  const draw = (e) => {
+    if (!drawing) return;
+    const pos = getCanvasPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+  };
+  
+  const stopDraw = () => { drawing = false; };
+  
+  canvas.removeEventListener('mousedown', startDraw);
+  canvas.removeEventListener('mousemove', draw);
+  canvas.removeEventListener('mouseup', stopDraw);
+  
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDraw);
+  canvas.addEventListener('touchstart', startDraw);
+  canvas.addEventListener('touchmove', draw);
+  canvas.addEventListener('touchend', stopDraw);
+}
+
+function getCanvasPos(e) {
+  if (!canvas) return { x: 0, y: 0 };
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  let clientX, clientY;
+  if (e.touches) {
+    clientX = e.touches[0].clientX;
+    clientY = e.touches[0].clientY;
+  } else {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  }
+  return {
+    x: (clientX - rect.left) * scaleX,
+    y: (clientY - rect.top) * scaleY
+  };
+}
+
+function clearCanvas() {
+  if (ctx && canvas) {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function noteSetFont(style) {
+  const textarea = document.getElementById('noteContent');
+  if (!textarea) return;
+  if (style === 'bold') textarea.style.fontWeight = textarea.style.fontWeight === 'bold' ? 'normal' : 'bold';
+  if (style === 'italic') textarea.style.fontStyle = textarea.style.fontStyle === 'italic' ? 'normal' : 'italic';
+  if (style === 'size+') {
+    let size = parseInt(textarea.style.fontSize) || 14;
+    textarea.style.fontSize = (size + 2) + 'px';
+  }
+  if (style === 'size-') {
+    let size = parseInt(textarea.style.fontSize) || 14;
+    textarea.style.fontSize = Math.max(10, size - 2) + 'px';
+  }
+}
+
+function noteSetColor(color) {
+  const textarea = document.getElementById('noteContent');
+  if (textarea) textarea.style.color = color;
+}
+
+function getNotes() { return STORAGE.get('notes', []); }
+function setNotes(n) { STORAGE.set('notes', n); }
+
+function saveCurrentNote() {
+  const title = document.getElementById('noteTitle')?.value.trim() || '';
+  const content = document.getElementById('noteContent')?.value || '';
+  if (!title && !content) return;
+  const notes = getNotes();
+  let canvasData = null;
+  if (canvas) canvasData = canvas.toDataURL();
+  notes.unshift({ id: genId(), title: title || "Untitled", content, canvasData, date: new Date().toISOString() });
+  setNotes(notes.slice(0, 50));
+  if (document.getElementById('noteTitle')) document.getElementById('noteTitle').value = '';
+  if (document.getElementById('noteContent')) document.getElementById('noteContent').value = '';
+  if (canvas) clearCanvas();
+  showNotification("Note saved! 📝", "success");
+  loadNotesList();
+}
+
+function loadNotesList() {
+  const notes = getNotes();
+  const container = document.getElementById('notesList');
+  if (!container) return;
+  if (notes.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No notes yet</div>';
+    return;
+  }
+  container.innerHTML = notes.map(n => `
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between">
+        <strong>${escHtml(n.title)}</strong>
+        <button class="btn-secondary" style="padding:4px 8px" onclick="deleteNote('${n.id}')">Delete</button>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text2);margin-top:4px">${new Date(n.date).toLocaleString()}</div>
+      <div style="margin-top:8px">${escHtml(n.content.substring(0, 100))}${n.content.length > 100 ? '...' : ''}</div>
+      ${n.canvasData ? `<div style="margin-top:8px"><img src="${n.canvasData}" style="max-width:100%;height:auto;border-radius:8px"></div>` : ''}
+    </div>
+  `).join('');
+}
+
+function deleteNote(id) {
+  let notes = getNotes();
+  notes = notes.filter(n => n.id !== id);
+  setNotes(notes);
+  loadNotesList();
+}
+
+// ===== TASKS WITH ALARMS =====
+function getTasks() { return STORAGE.get('tasks', []); }
+function setTasks(t) { STORAGE.set('tasks', t); }
+function getTaskCompletions() { return STORAGE.get('taskCompletions', {}); }
+function setTaskCompletions(t) { STORAGE.set('taskCompletions', t); }
+
+function renderTasks() {
+  const tasks = getTasks();
+  const completions = getTaskCompletions();
+  const container = document.getElementById('tasksList');
+  if (!container) return;
+  
+  if (tasks.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:60px">No tasks yet. Tap + to add!</div>';
+    return;
+  }
+  
+  container.innerHTML = tasks.map(task => `
+    <div class="task-item">
+      <div class="task-check ${completions[task.id] ? 'done' : ''}" onclick="toggleTask('${task.id}')">${completions[task.id] ? '✓' : ''}</div>
+      <div class="task-info">
+        <div><strong>${escHtml(task.name)}</strong> ${task.alarm ? `<span class="alarm-badge">⏰ ${task.alarmTime}</span>` : ''}</div>
+        ${task.note ? `<div style="font-size:0.8rem;color:var(--text2)">${escHtml(task.note)}</div>` : ''}
+      </div>
+      <button class="btn-secondary" style="padding:4px 8px" onclick="editTask('${task.id}')">✏️</button>
+      <button class="btn-danger" style="padding:4px 8px" onclick="deleteTaskItem('${task.id}')">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function showAddTask() {
+  showModal(`
+    <h3>Add Task</h3>
+    <input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px">
+    <textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea>
+    <input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px">
+    <label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label>
+    <button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>
+  `);
+}
+
+function addTask() {
+  const name = document.getElementById('taskName').value.trim();
+  if (!name) return;
+  const tasks = getTasks();
+  const alarmTime = document.getElementById('taskAlarm').value;
+  const repeat = document.getElementById('alarmRepeat').checked;
+  const newTask = {
+    id: genId(),
+    name,
+    note: document.getElementById('taskNote').value,
+    alarm: alarmTime ? true : false,
+    alarmTime,
+    repeatDaily: repeat
+  };
+  tasks.push(newTask);
+  setTasks(tasks);
+  
+  if (alarmTime) {
+    scheduleAlarm(newTask);
+  }
+  
+  closeModal();
+  renderTasks();
+}
+
+function editTask(id) {
+  const tasks = getTasks();
+  const task = tasks.find(t => t.id === id);
+  if (!task) return;
+  showModal(`
+    <h3>Edit Task</h3>
+    <input type="text" id="taskName" value="${escHtml(task.name)}" style="width:100%;margin:12px 0;padding:10px">
+    <textarea id="taskNote" style="width:100%;margin:12px 0;padding:10px">${escHtml(task.note || '')}</textarea>
+    <input type="time" id="taskAlarm" value="${task.alarmTime || ''}" style="width:100%;margin:12px 0;padding:10px">
+    <label><input type="checkbox" id="alarmRepeat" ${task.repeatDaily ? 'checked' : ''}> Repeat Daily</label>
+    <button class="btn-primary" onclick="updateTask('${id}')" style="margin-top:12px">Update</button>
+  `);
+}
+
+function updateTask(id) {
+  const name = document.getElementById('taskName').value.trim();
+  if (!name) return;
+  let tasks = getTasks();
+  const index = tasks.findIndex(t => t.id === id);
+  if (index !== -1) {
+    tasks[index] = {
+      ...tasks[index],
+      name,
+      note: document.getElementById('taskNote').value,
+      alarm: !!document.getElementById('taskAlarm').value,
+      alarmTime: document.getElementById('taskAlarm').value,
+      repeatDaily: document.getElementById('alarmRepeat').checked
+    };
+    setTasks(tasks);
+    if (tasks[index].alarm) scheduleAlarm(tasks[index]);
+  }
+  closeModal();
+  renderTasks();
+}
+
+function deleteTaskItem(id) {
+  let tasks = getTasks();
+  tasks = tasks.filter(t => t.id !== id);
+  setTasks(tasks);
+  renderTasks();
+}
+
+function toggleTask(id) {
+  const completions = getTaskCompletions();
+  completions[id] = !completions[id];
+  setTaskCompletions(completions);
+  
+  if (completions[id]) {
+    addXP(15, "Task completed");
+    showNotification("+15 XP! ✅ Task done!", "success");
+  } else {
+    addXP(-15, "Task undone");
+  }
+  
+  renderTasks();
+  updateAnalytics();
+}
+
+function scheduleAlarm(task) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
+  
+  const [hours, minutes] = task.alarmTime.split(':');
+  const now = new Date();
+  let alarmTime = new Date();
+  alarmTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+  
+  if (alarmTime <= now) {
+    alarmTime.setDate(alarmTime.getDate() + 1);
+  }
+  
+  const delay = alarmTime - now;
+  setTimeout(() => {
+    if (Notification.permission === "granted") {
+      new Notification("⏰ Task Reminder", {
+        body: `Time to complete: ${task.name}`,
+        icon: "/icon-192.svg"
+      });
+    }
+    if (task.repeatDaily) scheduleAlarm(task);
+  }, delay);
+}
+
+// ===== CALCULATOR =====
+let calcExpression = "";
+
+function showCalculator() {
+  showModal(`
+    <h3>🧮 Scientific Calculator</h3>
+    <div class="calculator-display" id="calcDisplay">0</div>
+    <div class="calc-buttons">
+      <button class="calc-btn" onclick="calcInput('7')">7</button>
+      <button class="calc-btn" onclick="calcInput('8')">8</button>
+      <button class="calc-btn" onclick="calcInput('9')">9</button>
+      <button class="calc-btn" onclick="calcInput('/')">/</button>
+      <button class="calc-btn" onclick="calcInput('4')">4</button>
+      <button class="calc-btn" onclick="calcInput('5')">5</button>
+      <button class="calc-btn" onclick="calcInput('6')">6</button>
+      <button class="calc-btn" onclick="calcInput('*')">*</button>
+      <button class="calc-btn" onclick="calcInput('1')">1</button>
+      <button class="calc-btn" onclick="calcInput('2')">2</button>
+      <button class="calc-btn" onclick="calcInput('3')">3</button>
+      <button class="calc-btn" onclick="calcInput('-')">-</button>
+      <button class="calc-btn" onclick="calcInput('0')">0</button>
+      <button class="calc-btn" onclick="calcInput('.')">.</button>
+      <button class="calc-btn" onclick="calcInput('+')">+</button>
+      <button class="calc-btn" onclick="calcResult()">=</button>
+      <button class="calc-btn" onclick="calcClear()">C</button>
+      <button class="calc-btn" onclick="calcInput('**')">^</button>
+      <button class="calc-btn" onclick="calcInput('Math.sqrt(')">√</button>
+    </div>
+  `);
+}
+
+function calcInput(val) {
+  calcExpression += val;
+  const display = document.getElementById('calcDisplay');
+  if (display) display.textContent = calcExpression;
+}
+
+function calcResult() {
+  try {
+    let expr = calcExpression.replace(/\^/g, '**');
+    const result = eval(expr);
+    const display = document.getElementById('calcDisplay');
+    if (display) display.textContent = result;
+    calcExpression = result.toString();
+  } catch {
+    const display = document.getElementById('calcDisplay');
+    if (display) display.textContent = "Error";
+    calcExpression = "";
+  }
+}
+
+function calcClear() {
+  calcExpression = "";
+  const display = document.getElementById('calcDisplay');
+  if (display) display.textContent = "0";
+}
+
+// ===== SAFE GALLERY =====
+let galleryLock = STORAGE.get('galleryLock', null);
+let galleryItems = STORAGE.get('galleryItems', []);
+
+function showSafeGallery() {
+  if (!galleryLock) {
+    showModal(`
+      <h3>🔒 First Time Setup</h3>
+      <p>Set a PIN to lock your gallery</p>
+      <input type="password" id="newLockPin" placeholder="Enter 4-digit PIN" maxlength="4" style="width:100%;margin:12px 0;padding:10px">
+      <button class="btn-primary" onclick="setGalleryLock()">Set Lock</button>
+    `);
+  } else {
+    showModal(`
+      <h3>🔒 Enter PIN</h3>
+      <input type="password" id="lockPin" placeholder="PIN" maxlength="4" style="width:100%;margin:12px 0;padding:10px">
+      <button class="btn-primary" onclick="unlockGallery()">Unlock</button>
+    `);
+  }
+}
+
+function setGalleryLock() {
+  const pin = document.getElementById('newLockPin')?.value;
+  if (pin && pin.length === 4) {
+    STORAGE.set('galleryLock', pin);
+    galleryLock = pin;
+    closeModal();
+    showGalleryContent();
+  } else {
+    alert("PIN must be 4 digits");
+  }
+}
+
+function unlockGallery() {
+  const pin = document.getElementById('lockPin')?.value;
+  if (pin === galleryLock) {
+    closeModal();
+    showGalleryContent();
+  } else {
+    alert("Wrong PIN!");
+  }
+}
+
+function showGalleryContent() {
+  showModal(`
+    <h3>🖼️ Safe Gallery</h3>
+    <input type="file" id="galleryUpload" accept="image/*,video/*" style="margin:12px 0">
+    <button class="btn-primary" onclick="uploadToGallery()">Upload</button>
+    <div id="galleryGrid" style="margin-top:16px"></div>
+  `);
+  renderGalleryGrid();
+}
+
+function uploadToGallery() {
+  const file = document.getElementById('galleryUpload')?.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    galleryItems.push({
+      id: genId(),
+      type: file.type.startsWith('image') ? 'image' : 'video',
+      data: e.target.result,
+      date: new Date().toISOString()
+    });
+    STORAGE.set('galleryItems', galleryItems);
+    renderGalleryGrid();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderGalleryGrid() {
+  const container = document.getElementById('galleryGrid');
+  if (!container) return;
+  if (galleryItems.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No items yet</div>';
+    return;
+  }
+  container.innerHTML = `
+    <div class="gallery-grid">
+      ${galleryItems.map(item => `
+        <div class="gallery-item">
+          ${item.type === 'image' ? `<img src="${item.data}" alt="gallery">` : `<video src="${item.data}" controls></video>`}
+          <div class="gallery-delete" onclick="deleteGalleryItem('${item.id}')">✕</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function deleteGalleryItem(id) {
+  galleryItems = galleryItems.filter(i => i.id !== id);
+  STORAGE.set('galleryItems', galleryItems);
+  renderGalleryGrid();
+}
+
+// ===== WITTY STAR GAME =====
+let gameActiveInstance = false;
+let gameAnimationId = null;
+let gameCtx = null;
+let gameCanvas = null;
+let gamePlayer = null;
+let gameStars = [];
+let gameEnemies = [];
+let gameScore = 0;
+let gameMouse = { x: 0, y: 0 };
+
+function openGame() {
+  // Create game container
+  const gameContainer = document.createElement('div');
+  gameContainer.className = 'game-container';
+  gameContainer.id = 'gameContainer';
+  
+  gameContainer.innerHTML = `
+    <canvas id="gameCanvas" class="game-canvas"></canvas>
+    <div id="gameUI" class="game-ui">
+      <h1 style="font-family:'Orbitron'; color:#00f2ff; margin-bottom:5px;">WITTY STAR</h1>
+      <p id="gameMsg" style="margin-bottom:25px; opacity:0.7;">Avoid Red. Catch Stars.</p>
+      <button class="btn-primary" style="width:auto; padding:12px 30px;" onclick="startGameInstance()">START</button>
+    </div>
+    <div id="gameScoreDisplay" class="game-score">Stars: 0</div>
+    <button class="game-close" onclick="closeGame()">✕</button>
+  `;
+  
+  document.body.appendChild(gameContainer);
+  
+  gameCanvas = document.getElementById('gameCanvas');
+  gameCtx = gameCanvas.getContext('2d', { alpha: false });
+  
+  function resizeGame() {
+    if (gameCanvas) {
+      gameCanvas.width = window.innerWidth;
+      gameCanvas.height = window.innerHeight;
+      gameMouse.x = gameCanvas.width / 2;
+      gameMouse.y = gameCanvas.height / 2;
+    }
+  }
+  
+  resizeGame();
+  window.addEventListener('resize', resizeGame);
+  
+  // Input handlers
+  const handleGameInput = (e) => {
+    const t = e.touches ? e.touches[0] : e;
+    gameMouse.x = t.clientX;
+    gameMouse.y = t.clientY;
+    if (gameActiveInstance && e.cancelable) e.preventDefault();
+  };
+  
+  window.addEventListener('mousemove', handleGameInput);
+  window.addEventListener('touchstart', handleGameInput);
+  window.addEventListener('touchmove', handleGameInput, { passive: false });
+  
+  // Store cleanup function
+  window._gameCleanup = () => {
+    window.removeEventListener('resize', resizeGame);
+    window.removeEventListener('mousemove', handleGameInput);
+    window.removeEventListener('touchstart', handleGameInput);
+    window.removeEventListener('touchmove', handleGameInput);
+    if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+  };
+  
+  // Start game loop
+  function gameLoop() {
+    if (!gameCanvas || !gameCtx) return;
+    
+    gameCtx.fillStyle = "#000";
+    gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+    
+    if (gameActiveInstance && gamePlayer) {
+      gamePlayer.update();
+      gamePlayer.draw();
+      
+      gameStars.forEach(s => {
+        s.draw();
+        if (Math.hypot(gamePlayer.x - s.x, gamePlayer.y - s.y) < 25) {
+          gameScore++;
+          const scoreDisplay = document.getElementById('gameScoreDisplay');
+          if (scoreDisplay) scoreDisplay.innerText = "Stars: " + gameScore;
+          s.reset();
+          // Add XP for playing game (every 5 stars)
+          if (gameScore % 5 === 0) {
+            addXP(5, "Played Witty Star");
+            showNotification("+5 XP from Witty Star! 🎮", "success");
+          }
+        }
+      });
+      
+      if (Math.random() < 0.03) {
+        gameEnemies.push(new GameEnemy());
+      }
+      
+      for (let i = gameEnemies.length - 1; i >= 0; i--) {
+        let e = gameEnemies[i];
+        e.update();
+        e.draw();
+        if (Math.hypot(gamePlayer.x - e.x, gamePlayer.y - e.y) < 16) {
+          gameOverInstance();
+        }
+        if (e.x < -100 || e.x > gameCanvas.width + 100 || e.y < -100 || e.y > gameCanvas.height + 100) {
+          gameEnemies.splice(i, 1);
+        }
+      }
+    }
+    
+    gameAnimationId = requestAnimationFrame(gameLoop);
+  }
+  
+  class GamePlayer {
+    constructor() {
+      this.x = gameCanvas.width / 2;
+      this.y = gameCanvas.height / 2;
+      this.history = [];
+    }
+    update() {
+      this.x += (gameMouse.x - this.x) * 0.12;
+      this.y += (gameMouse.y - this.y) * 0.12;
+      this.history.push({x: this.x, y: this.y});
+      if(this.history.length > 8) this.history.shift();
+    }
+    draw() {
+      gameCtx.beginPath();
+      gameCtx.strokeStyle = "#00f2ff";
+      gameCtx.lineWidth = 3;
+      for(let i=0; i<this.history.length; i++) {
+        gameCtx.lineTo(this.history[i].x, this.history[i].y);
+      }
+      gameCtx.stroke();
+      gameCtx.beginPath();
+      gameCtx.arc(this.x, this.y, 8, 0, Math.PI*2);
+      gameCtx.fillStyle = "#fff";
+      gameCtx.fill();
+    }
+  }
+  
+  class GameStar {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = 20 + Math.random() * (gameCanvas.width - 40);
+      this.y = 20 + Math.random() * (gameCanvas.height - 40);
+    }
+    draw() {
+      gameCtx.beginPath();
+      gameCtx.arc(this.x, this.y, 5, 0, Math.PI*2);
+      gameCtx.fillStyle = "#ffe0b0";
+      gameCtx.fill();
+    }
+  }
+  
+  class GameEnemy {
+    constructor() {
+      const side = Math.random() > 0.5;
+      this.x = side ? -20 : gameCanvas.width + 20;
+      this.y = Math.random() * gameCanvas.height;
+      this.speed = 2.5 + (gameScore * 0.05);
+      this.angle = Math.atan2(gameMouse.y - this.y, gameMouse.x - this.x);
+    }
+    update() {
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed;
+    }
+    draw() {
+      gameCtx.beginPath();
+      gameCtx.arc(this.x, this.y, 9, 0, Math.PI*2);
+      gameCtx.fillStyle = "#ff3333";
+      gameCtx.fill();
+    }
+  }
+  
+  window.startGameInstance = function() {
+    gameScore = 0;
+    gameStars = [];
+    gameEnemies = [];
+    gameActiveInstance = true;
+    const gameUI = document.getElementById('gameUI');
+    if (gameUI) gameUI.style.display = 'none';
+    const scoreDisplay = document.getElementById('gameScoreDisplay');
+    if (scoreDisplay) scoreDisplay.innerText = "Stars: 0";
+    gamePlayer = new GamePlayer();
+    for(let i=0; i<6; i++) gameStars.push(new GameStar());
+  };
+  
+  function gameOverInstance() {
+    gameActiveInstance = false;
+    const gameUI = document.getElementById('gameUI');
+    if (gameUI) {
+      gameUI.style.display = 'flex';
+      const msgEl = document.getElementById('gameMsg');
+      if (msgEl) msgEl.innerText = "SCORE: " + gameScore;
+    }
+    // Add XP based on score
+    if (gameScore > 0) {
+      const xpEarned = Math.floor(gameScore / 2);
+      if (xpEarned > 0) {
+        addXP(xpEarned, "Witty Star game score");
+        showNotification(`+${xpEarned} XP from Witty Star! ⭐`, "success");
+      }
+    }
+  }
+  
+  window.closeGame = function() {
+    if (window._gameCleanup) window._gameCleanup();
+    const container = document.getElementById('gameContainer');
+    if (container) container.remove();
+    gameActiveInstance = false;
+    if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+  };
+  
+  gameLoop();
+}
+
+// ===== ANALYTICS =====
+function updateAnalytics() {
+  const habits = getHabits();
+  const completions = getCompletions();
+  const tasks = getTasks();
+  const taskCompletions = getTaskCompletions();
+  const xpHistory = STORAGE.get('xpHistory', []);
+  
+  const todayStr = today();
+  const todayHabitsDone = habits.filter(h => completions[todayStr] && completions[todayStr][h.id]).length;
+  const todayTasksDone = tasks.filter(t => taskCompletions[t.id]).length;
+  
+  const grid = document.getElementById('analyticsGrid');
+  if (grid) {
+    grid.innerHTML = `
+      <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:12px">
+        <div style="font-size:0.75rem;color:var(--text2)">Today's Habits</div>
+        <div style="font-size:1.5rem;font-weight:700">${todayHabitsDone}/${habits.length}</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:12px">
+        <div style="font-size:0.75rem;color:var(--text2)">Today's Tasks</div>
+        <div style="font-size:1.5rem;font-weight:700">${todayTasksDone}/${tasks.length}</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:12px;padding:16px">
+        <div style="font-size:0.75rem;color:var(--text2)">Recent XP</div>
+        ${xpHistory.slice(0, 5).map(h => `<div style="font-size:0.8rem;margin-top:4px">${h.reason}: +${h.amount} XP</div>`).join('')}
+      </div>
+    `;
+  }
+}
+
+// ===== SETTINGS & PROFILE =====
+function getProfile() { return STORAGE.get('profile', null); }
+function setProfile(p) { STORAGE.set('profile', p); }
+
+function saveProfile() {
+  const name = document.getElementById('pName').value.trim();
+  const username = document.getElementById('pUsername').value.trim();
+  const pin = document.getElementById('pPin').value;
+  if (!name || !username || pin.length !== 4) {
+    alert("Please fill all fields correctly");
+    return;
+  }
+  setProfile({ name, username, pin, createdAt: new Date().toISOString() });
+  const avatarBtn = document.getElementById('avatarBtn');
+  if (avatarBtn) avatarBtn.textContent = name.charAt(0).toUpperCase();
+  const onboarding = document.getElementById('onboarding');
+  const app = document.getElementById('app');
+  if (onboarding) onboarding.classList.add('hidden');
+  if (app) app.classList.remove('hidden');
+  initAppAfterOnboard();
+}
+
+function initAppAfterOnboard() {
+  renderSections();
+  renderTimetable();
+  renderTasks();
+  loadNotesList();
+  updateXPDisplay();
+  updateAnalytics();
+  
+  const profile = getProfile();
+  const profileCard = document.getElementById('profileCard');
+  if (profile && profileCard) {
+    profileCard.innerHTML = `
+      <div><strong>Name:</strong> ${escHtml(profile.name)}</div>
+      <div><strong>Username:</strong> @${escHtml(profile.username)}</div>
+      <div><strong>Member since:</strong> ${new Date(profile.createdAt).toLocaleDateString()}</div>
+    `;
+  }
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const targetTab = document.getElementById(`tab-${tab}`);
+  if (targetTab) targetTab.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.querySelector(`.nav-btn[data-tab="${tab}"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+  
+  if (tab === 'timetable') renderTimetable();
+  if (tab === 'notes') loadNotesList();
+  if (tab === 'tasks') renderTasks();
+  if (tab === 'analytics') updateAnalytics();
+}
+
+function showNotification(msg, type = "info") {
+  const notif = document.createElement('div');
+  notif.style.cssText = `
+    position:fixed;top:80px;left:50%;transform:translateX(-50%);
+    background:${type === 'success' ? 'var(--success)' : 'var(--accent)'};
+    color:#000;padding:12px 24px;border-radius:100px;
+    font-weight:600;z-index:5000;animation:fadeUp 0.3s ease;
+    box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  `;
+  notif.textContent = msg;
+  document.body.appendChild(notif);
+  setTimeout(() => {
+    notif.style.opacity = '0';
+    setTimeout(() => notif.remove(), 500);
+  }, 3000);
+}
+
+function showXPInfo() {
+  const xp = STORAGE.get('xp', 0);
+  const rank = getRank(xp);
+  showModal(`
+    <h3>⭐ Your Progress</h3>
+    <div style="text-align:center;font-size:3rem">${rank.icon}</div>
+    <div style="text-align:center;font-size:1.5rem;font-weight:700">${rank.name}</div>
+    <div style="text-align:center;margin-top:8px">${xp} Total XP</div>
+    <div style="margin-top:16px">
+      <div>Next: ${XP_RANKS[XP_RANKS.findIndex(r => r.name === rank.name) + 1]?.name || "MAX"}</div>
+      <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${(xp - rank.minXP) / (XP_RANKS[XP_RANKS.findIndex(r => r.name === rank.name) + 1]?.nextXP - rank.minXP) * 100}%"></div></div>
+    </div>
+  `);
+}
+
+function exportData() {
+  const data = {
+    xp: STORAGE.get('xp', 0),
+    sections: getSections(),
+    habits: getHabits(),
+    completions: getCompletions(),
+    tasks: getTasks(),
+    taskCompletions: getTaskCompletions(),
+    timetable: getTimetable(),
+    notes: getNotes(),
+    profile: getProfile()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `replace-deeds-backup-${today()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function confirmReset() {
+  if (confirm("⚠️ Are you sure? This will delete ALL your data including XP, habits, tasks, notes, and gallery!\nThis cannot be undone!")) {
+    STORAGE.clear();
+    location.reload();
+  }
+}
+
+// ===== MODAL =====
+function showModal(content) {
+  const modalContent = document.getElementById('modalContent');
+  if (modalContent) modalContent.innerHTML = content;
+  const overlay = document.getElementById('modalOverlay');
+  if (overlay) overlay.classList.remove('hidden');
+}
+
+function closeModal() {
+  const overlay = document.getElementById('modalOverlay');
+  if (overlay) overlay.classList.add('hidden');
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    if (splash) {
+      splash.classList.add('fade-out');
+      setTimeout(() => {
+        splash.style.display = 'none';
+        const profile = getProfile();
+        const onboarding = document.getElementById('onboarding');
+        const app = document.getElementById('app');
+        if (!profile) {
+          if (onboarding) onboarding.classList.remove('hidden');
+        } else {
+          if (app) app.classList.remove('hidden');
+          initAppAfterOnboard();
+        }
+      }, 800);
+    }
+  }, 1500);
+  
+  if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+    Notification.requestPermission();
+  }
+});
+
+// Global functions for onclick
+window.nextOnboard = function() {
+  const steps = document.querySelectorAll('.onboard-step');
+  let current = -1;
+  steps.forEach((s, i) => { if (s.classList.contains('active')) current = i; });
+  if (current + 1 < steps.length) {
+    steps[current].classList.remove('active');
+    steps[current + 1].classList.add('active');
+  }
+};
+
+window.calcInput = calcInput;
+window.calcResult = calcResult;
+window.calcClear = calcClear;
+</script>
+</body>
+</html>
