@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#0d1117">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>Replace Deeds - XP Edition</title>
+<title>Replace Deeds - Ultimate Edition</title>
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 <style>
@@ -30,6 +29,60 @@
   --font-game: 'Orbitron', monospace;
 }
 
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg2: #f0f0f0;
+  --bg3: #e0e0e0;
+  --text: #1a1a1a;
+  --text2: #666666;
+  --border: rgba(0,0,0,0.1);
+}
+
+[data-theme="happy"] {
+  --bg: #fff9e6;
+  --bg2: #fff0b5;
+  --bg3: #ffe68a;
+  --accent: #ff6b35;
+  --accent2: #ff9f1c;
+  --text: #4a2c00;
+  --text2: #8b6914;
+  --border: rgba(255,107,53,0.2);
+}
+
+[data-theme="sad"] {
+  --bg: #1a1a2e;
+  --bg2: #16213e;
+  --bg3: #0f3460;
+  --accent: #6c63ff;
+  --accent2: #4a47a3;
+  --text: #c4c4f0;
+  --text2: #8888aa;
+}
+
+[data-theme="ocean"] {
+  --bg: #0a1628;
+  --bg2: #0d1f3c;
+  --bg3: #122447;
+  --accent: #38bdf8;
+  --accent2: #0ea5e9;
+}
+
+[data-theme="forest"] {
+  --bg: #0a1a0a;
+  --bg2: #0f2311;
+  --bg3: #162e19;
+  --accent: #4ade80;
+  --accent2: #22c55e;
+}
+
+[data-theme="sunset"] {
+  --bg: #1a0a0a;
+  --bg2: #2a1010;
+  --bg3: #3a1515;
+  --accent: #fb923c;
+  --accent2: #f97316;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -42,9 +95,10 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  transition: all 0.3s ease;
 }
 
-/* ===== SPLASH SCREEN ===== */
+/* ===== SPLASH ===== */
 .splash {
   position: fixed;
   inset: 0;
@@ -86,7 +140,6 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* ===== HIDDEN UTILITY ===== */
 .hidden {
   display: none !important;
 }
@@ -265,10 +318,12 @@ input:focus, textarea:focus {
   z-index: 100;
   max-width: 600px;
   margin: 0 auto;
+  overflow-x: auto;
 }
 
 .nav-btn {
   flex: 1;
+  min-width: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -290,7 +345,7 @@ input:focus, textarea:focus {
 }
 
 .nav-label {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   margin-top: 2px;
 }
 
@@ -427,6 +482,8 @@ input:focus, textarea:focus {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .timetable-grid {
@@ -446,7 +503,7 @@ input:focus, textarea:focus {
 }
 
 .timetable-time {
-  width: 80px;
+  width: 100px;
   padding: 12px;
   font-family: var(--font-mono);
   font-size: 0.8rem;
@@ -476,7 +533,7 @@ input:focus, textarea:focus {
   margin-top: 4px;
 }
 
-/* ===== NOTES WITH DRAWING ===== */
+/* ===== NOTES ===== */
 .notes-toolbar {
   display: flex;
   gap: 8px;
@@ -533,7 +590,7 @@ input:focus, textarea:focus {
 /* ===== TOOLS SECTION ===== */
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-bottom: 20px;
 }
@@ -542,7 +599,7 @@ input:focus, textarea:focus {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 20px 12px;
+  padding: 16px 12px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
@@ -554,10 +611,11 @@ input:focus, textarea:focus {
 }
 
 .tool-icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 8px;
 }
 
+/* ===== CALCULATOR ===== */
 .calculator-display {
   background: var(--bg3);
   padding: 20px;
@@ -566,6 +624,7 @@ input:focus, textarea:focus {
   font-size: 1.5rem;
   border-radius: 10px;
   margin-bottom: 12px;
+  overflow-x: auto;
 }
 
 .calc-buttons {
@@ -590,21 +649,36 @@ input:focus, textarea:focus {
   color: #000;
 }
 
-/* ===== GAME CONTAINER ===== */
+/* ===== CONVERTER ===== */
+.converter-group {
+  margin-bottom: 16px;
+}
+
+.converter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.converter-row select, .converter-row input {
+  flex: 1;
+}
+
+/* ===== GAME WITH JOYSTICK ===== */
 .game-container {
   position: fixed;
   inset: 0;
   background: #000;
   z-index: 2000;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
 
 .game-canvas {
+  flex: 1;
   display: block;
   width: 100%;
-  height: 100%;
   touch-action: none;
 }
 
@@ -648,6 +722,36 @@ input:focus, textarea:focus {
   justify-content: center;
 }
 
+.joystick-container {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  width: 120px;
+  height: 120px;
+  z-index: 2002;
+}
+
+.joystick-base {
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  position: relative;
+  touch-action: none;
+}
+
+.joystick-thumb {
+  width: 50px;
+  height: 50px;
+  background: rgba(0,242,255,0.8);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
 /* ===== SAFE GALLERY ===== */
 .gallery-grid {
   display: grid;
@@ -689,6 +793,22 @@ input:focus, textarea:focus {
   cursor: pointer;
 }
 
+.fullscreen-view {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.fullscreen-view img, .fullscreen-view video {
+  max-width: 90%;
+  max-height: 80%;
+}
+
 /* ===== TASKS WITH ALARMS ===== */
 .task-item {
   display: flex;
@@ -724,6 +844,44 @@ input:focus, textarea:focus {
   padding: 2px 6px;
   border-radius: 100px;
   margin-left: 8px;
+}
+
+/* ===== ACTIVITY HISTORY ===== */
+.history-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-time {
+  font-size: 0.7rem;
+  color: var(--text2);
+  font-family: var(--font-mono);
+}
+
+.history-action {
+  font-size: 0.85rem;
+}
+
+/* ===== THEME BUTTONS ===== */
+.theme-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.theme-btn {
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.8rem;
 }
 
 /* ===== MODAL ===== */
@@ -786,6 +944,15 @@ input:focus, textarea:focus {
     transform: translateX(-50%);
   }
 }
+
+@media (max-width: 500px) {
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .theme-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 </style>
 </head>
 <body>
@@ -794,7 +961,7 @@ input:focus, textarea:focus {
 <div id="splash" class="splash">
   <div class="splash-logo">
     <h1 class="splash-title">Replace Deeds</h1>
-    <p style="color:var(--text2);margin-top:8px">Build XP. Level Up.</p>
+    <p style="color:var(--text2);margin-top:8px">Track. Level Up. Transform.</p>
   </div>
 </div>
 
@@ -862,7 +1029,7 @@ input:focus, textarea:focus {
         <div class="canvas-container hidden" id="canvasContainer">
           <canvas id="drawCanvas" width="500" height="300" style="width:100%;height:auto;background:white"></canvas>
         </div>
-        <div style="display:flex;gap:8px;margin-top:12px">
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
           <button class="btn-primary" onclick="saveCurrentNote()">💾 Save Note</button>
           <button class="btn-secondary" onclick="loadNotesList()">📋 My Notes</button>
         </div>
@@ -872,9 +1039,9 @@ input:focus, textarea:focus {
 
     <!-- TASKS TAB -->
     <div class="tab-panel" id="tab-tasks">
-      <div class="tasks-header" style="display:flex;justify-content:space-between;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
         <h2>✅ Tasks</h2>
-        <button class="btn-secondary" onclick="showAddTask()">+ Add</button>
+        <button class="btn-secondary" onclick="showAddTask()">+ Add Task</button>
       </div>
       <div id="tasksList"></div>
     </div>
@@ -885,6 +1052,10 @@ input:focus, textarea:focus {
         <div class="tool-card" onclick="showCalculator()">
           <div class="tool-icon">🔢</div>
           <div>Calculator</div>
+        </div>
+        <div class="tool-card" onclick="showConverter()">
+          <div class="tool-icon">🔄</div>
+          <div>Converter</div>
         </div>
         <div class="tool-card" onclick="showSafeGallery()">
           <div class="tool-icon">🖼️</div>
@@ -898,7 +1069,7 @@ input:focus, textarea:focus {
       <div id="toolsContent"></div>
     </div>
 
-    <!-- ANALYTICS (XP & LEVELS) TAB -->
+    <!-- ANALYTICS TAB -->
     <div class="tab-panel" id="tab-analytics">
       <div class="xp-card">
         <div style="font-size:2rem" id="rankIcon">🌱</div>
@@ -909,20 +1080,38 @@ input:focus, textarea:focus {
         </div>
       </div>
       <div class="analytics-grid" id="analyticsGrid"></div>
+      
+      <h3 style="margin: 20px 0 10px">📜 Activity History</h3>
+      <div id="historyList"></div>
     </div>
 
     <!-- SETTINGS TAB -->
     <div class="tab-panel" id="tab-settings">
       <div class="settings-container">
         <h2>⚙️ Settings</h2>
+        
         <div class="settings-section" style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
-          <h3>Profile</h3>
+          <h3>🎨 Themes</h3>
+          <div class="theme-buttons">
+            <button class="btn-secondary" onclick="setTheme('dark')">🌙 Dark</button>
+            <button class="btn-secondary" onclick="setTheme('light')">☀️ Light</button>
+            <button class="btn-secondary" onclick="setTheme('happy')">😊 Happy</button>
+            <button class="btn-secondary" onclick="setTheme('sad')">😢 Sad</button>
+            <button class="btn-secondary" onclick="setTheme('ocean')">🌊 Ocean</button>
+            <button class="btn-secondary" onclick="setTheme('forest')">🌿 Forest</button>
+            <button class="btn-secondary" onclick="setTheme('sunset')">🌅 Sunset</button>
+          </div>
+        </div>
+        
+        <div class="settings-section" style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
+          <h3>👤 Profile</h3>
           <div id="profileCard"></div>
         </div>
+        
         <div class="settings-section" style="background:var(--bg2);padding:16px;border-radius:12px;margin-bottom:12px">
-          <h3>Data</h3>
-          <button class="btn-danger" onclick="exportData()">📤 Export</button>
-          <button class="btn-danger" onclick="confirmReset()">🗑️ Reset</button>
+          <h3>💾 Data</h3>
+          <button class="btn-danger" onclick="exportData()">📤 Export Data</button>
+          <button class="btn-danger" onclick="confirmReset()">🗑️ Reset App</button>
         </div>
       </div>
     </div>
@@ -930,11 +1119,11 @@ input:focus, textarea:focus {
 
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="showTab('habits')" data-tab="habits"><span class="nav-icon">🏠</span><span class="nav-label">Habits</span></button>
-    <button class="nav-btn" onclick="showTab('timetable')" data-tab="timetable"><span class="nav-icon">📅</span><span class="nav-label">TimeTable</span></button>
+    <button class="nav-btn" onclick="showTab('timetable')" data-tab="timetable"><span class="nav-icon">📅</span><span class="nav-label">Time</span></button>
     <button class="nav-btn" onclick="showTab('notes')" data-tab="notes"><span class="nav-icon">📝</span><span class="nav-label">Notes</span></button>
     <button class="nav-btn" onclick="showTab('tasks')" data-tab="tasks"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></button>
     <button class="nav-btn" onclick="showTab('tools')" data-tab="tools"><span class="nav-icon">🛠️</span><span class="nav-label">Tools</span></button>
-    <button class="nav-btn" onclick="showTab('analytics')" data-tab="analytics"><span class="nav-icon">📊</span><span class="nav-label">XP</span></button>
+    <button class="nav-btn" onclick="showTab('analytics')" data-tab="analytics"><span class="nav-icon">📊</span><span class="nav-label">Stats</span></button>
     <button class="nav-btn" onclick="showTab('settings')" data-tab="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
   </nav>
 </div>
@@ -947,7 +1136,7 @@ input:focus, textarea:focus {
 <script>
 // ===== STORAGE =====
 const STORAGE = {
-  _prefix: 'rd_xp_',
+  _prefix: 'rd_ultimate_',
   
   set(key, val) {
     localStorage.setItem(this._prefix + key, JSON.stringify(val));
@@ -973,6 +1162,40 @@ const STORAGE = {
     });
   }
 };
+
+// ===== ACTIVITY HISTORY =====
+function addHistory(action, details = "") {
+  const history = STORAGE.get('history', []);
+  history.unshift({
+    id: Date.now(),
+    action: action,
+    details: details,
+    timestamp: new Date().toISOString(),
+    date: new Date().toLocaleString()
+  });
+  STORAGE.set('history', history.slice(0, 200));
+  renderHistory();
+}
+
+function renderHistory() {
+  const history = STORAGE.get('history', []);
+  const container = document.getElementById('historyList');
+  if (!container) return;
+  
+  if (history.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No activity yet</div>';
+    return;
+  }
+  
+  container.innerHTML = history.slice(0, 30).map(h => `
+    <div class="history-item">
+      <div>
+        <div class="history-action">${escHtml(h.action)} ${h.details ? `<span style="font-size:0.75rem;color:var(--text2)">${escHtml(h.details)}</span>` : ''}</div>
+        <div class="history-time">${h.date}</div>
+      </div>
+    </div>
+  `).join('');
+}
 
 // ===== XP SYSTEM =====
 const XP_RANKS = [
@@ -1004,13 +1227,12 @@ function addXP(amount, reason = "") {
   const newRank = getRank(xp);
   updateXPDisplay();
   
+  addHistory(`+${amount} XP`, reason);
+  
   if (oldRank.name !== newRank.name) {
     showLevelUp(newRank);
+    addHistory(`LEVEL UP!`, `Reached ${newRank.name} rank!`);
   }
-  
-  const history = STORAGE.get('xpHistory', []);
-  history.unshift({ amount, reason, date: new Date().toISOString(), xp: xp });
-  STORAGE.set('xpHistory', history.slice(0, 100));
   
   return xp;
 }
@@ -1090,7 +1312,7 @@ function renderSections() {
     
     return `
       <div class="section-card">
-        <div class="section-header" onclick="toggleSection('${section.id}')">
+        <div class="section-header">
           <div class="section-title-row">
             <span>${section.emoji || '📌'}</span>
             <div>
@@ -1104,8 +1326,13 @@ function renderSections() {
           ${sectionHabits.map(h => `
             <div class="habit-row">
               <div class="habit-check ${todayComp[h.id] ? 'done' : ''}" onclick="toggleHabit('${h.id}')">${todayComp[h.id] ? '✓' : ''}</div>
-              <div class="habit-info"><div class="habit-name">${escHtml(h.name)}</div>${h.desc ? `<div style="font-size:0.7rem;color:var(--text2)">${escHtml(h.desc)}</div>` : ''}</div>
-              <button class="btn-secondary" style="padding:4px 8px" onclick="deleteHabit('${h.id}')">✕</button>
+              <div class="habit-info">
+                <div class="habit-name">${escHtml(h.name)}</div>
+                ${h.desc ? `<div style="font-size:0.7rem;color:var(--text2)">${escHtml(h.desc)}</div>` : ''}
+              </div>
+              <button class="btn-secondary" style="padding:4px 8px" onclick="showHabitHistory('${h.id}')">📅</button>
+              <button class="btn-secondary" style="padding:4px 8px" onclick="editHabit('${h.id}')">✏️</button>
+              <button class="btn-danger" style="padding:4px 8px" onclick="deleteHabit('${h.id}')">✕</button>
             </div>
           `).join('')}
           <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="showAddHabit('${section.id}')">+ Add Habit</button>
@@ -1115,8 +1342,65 @@ function renderSections() {
   }).join('');
 }
 
-function toggleSection(id) {
-  renderSections();
+function showHabitHistory(habitId) {
+  const habits = getHabits();
+  const habit = habits.find(h => h.id === habitId);
+  const completions = getCompletions();
+  
+  // Get last 30 days
+  const days = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const ds = d.toISOString().split('T')[0];
+    const done = completions[ds] && completions[ds][habitId];
+    days.push({ date: ds, done: done || false, dayName: d.toLocaleDateString('en', { weekday: 'short' }) });
+  }
+  
+  showModal(`
+    <h3>📊 ${escHtml(habit?.name)} - History</h3>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:16px">
+      ${days.map(d => `
+        <div style="text-align:center">
+          <div style="font-size:0.6rem;color:var(--text2)">${d.dayName}</div>
+          <div style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:${d.done ? 'var(--success)' : 'var(--bg3)'};border-radius:8px;margin:2px auto">
+            ${d.done ? '✅' : '❌'}
+          </div>
+          <div style="font-size:0.6rem">${d.date.slice(5)}</div>
+        </div>
+      `).join('')}
+    </div>
+  `);
+}
+
+function editHabit(habitId) {
+  const habits = getHabits();
+  const habit = habits.find(h => h.id === habitId);
+  if (!habit) return;
+  
+  showModal(`
+    <h3>✏️ Edit Habit</h3>
+    <input type="text" id="editHabitName" value="${escHtml(habit.name)}" placeholder="Habit name" style="width:100%;margin:12px 0;padding:10px">
+    <input type="text" id="editHabitDesc" value="${escHtml(habit.desc || '')}" placeholder="Description" style="width:100%;margin-bottom:12px;padding:10px">
+    <button class="btn-primary" onclick="updateHabit('${habitId}')">Save Changes</button>
+  `);
+}
+
+function updateHabit(habitId) {
+  const newName = document.getElementById('editHabitName')?.value.trim();
+  const newDesc = document.getElementById('editHabitDesc')?.value;
+  if (!newName) return;
+  
+  let habits = getHabits();
+  const index = habits.findIndex(h => h.id === habitId);
+  if (index !== -1) {
+    habits[index].name = newName;
+    habits[index].desc = newDesc;
+    setHabits(habits);
+    addHistory(`Edited habit`, newName);
+    closeModal();
+    renderSections();
+  }
 }
 
 function toggleHabit(habitId) {
@@ -1130,6 +1414,7 @@ function toggleHabit(habitId) {
     completions[todayStr][habitId] = true;
     addXP(10, "Habit completed");
     showNotification("+10 XP! 🌟 Keep going!", "success");
+    addHistory(`Completed habit`, `+10 XP`);
   } else {
     completions[todayStr][habitId] = false;
     addXP(-10, "Habit undone");
@@ -1156,6 +1441,7 @@ function addSection() {
   const sections = getSections();
   sections.push({ id: genId(), name, emoji, collapsed: false });
   setSections(sections);
+  addHistory(`Added section`, name);
   closeModal();
   renderSections();
 }
@@ -1173,20 +1459,23 @@ function addHabit(sectionId) {
   const name = document.getElementById('habitName').value.trim();
   if (!name) return;
   const habits = getHabits();
-  habits.push({ id: genId(), name, desc: document.getElementById('habitDesc').value, sectionId, streak: 0 });
+  habits.push({ id: genId(), name, desc: document.getElementById('habitDesc').value, sectionId, streak: 0, createdAt: new Date().toISOString() });
   setHabits(habits);
+  addHistory(`Added habit`, name);
   closeModal();
   renderSections();
 }
 
 function deleteHabit(id) {
   let habits = getHabits();
+  const habit = habits.find(h => h.id === id);
   habits = habits.filter(h => h.id !== id);
   setHabits(habits);
+  addHistory(`Deleted habit`, habit?.name);
   renderSections();
 }
 
-// ===== TIME TABLE =====
+// ===== TIME TABLE with custom time =====
 function getTimetable() { return STORAGE.get('timetable', []); }
 function setTimetable(t) { STORAGE.set('timetable', t); }
 
@@ -1194,21 +1483,26 @@ function renderTimetable() {
   const container = document.getElementById('timetableContainer');
   if (!container) return;
   const timetable = getTimetable();
-  const hours = ['8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'];
+  
+  // Sort by time
+  timetable.sort((a, b) => a.time.localeCompare(b.time));
+  
+  if (timetable.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)">No entries. Tap + to add your schedule!</div>';
+    return;
+  }
   
   container.innerHTML = `
     <div class="timetable-grid">
-      ${hours.map(hour => {
-        const item = timetable.find(t => t.time === hour);
-        return `
-          <div class="timetable-row">
-            <div class="timetable-time">${hour}</div>
-            <div class="timetable-item" onclick="editTimetable('${hour}')">
-              ${item ? `<div class="timetable-subject">${escHtml(item.subject)}</div><div class="timetable-note">${escHtml(item.note || '')}</div>` : '<span style="color:var(--text2);font-size:0.8rem">+ Add</span>'}
-            </div>
+      ${timetable.map(item => `
+        <div class="timetable-row">
+          <div class="timetable-time">${escHtml(item.time)}</div>
+          <div class="timetable-item" onclick="editTimetable('${item.id}')">
+            <div class="timetable-subject">${escHtml(item.subject)}</div>
+            ${item.note ? `<div class="timetable-note">${escHtml(item.note)}</div>` : ''}
           </div>
-        `;
-      }).join('')}
+        </div>
+      `).join('')}
     </div>
   `;
 }
@@ -1216,26 +1510,23 @@ function renderTimetable() {
 function showAddTimetable() {
   showModal(`
     <h3>Add Timetable Entry</h3>
-    <select id="ttTime" style="width:100%;margin:12px 0;padding:10px">
-      <option>8:00</option><option>9:00</option><option>10:00</option><option>11:00</option><option>12:00</option>
-      <option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option>
-      <option>18:00</option><option>19:00</option><option>20:00</option>
-    </select>
-    <input type="text" id="ttSubject" placeholder="Subject/Activity" style="width:100%;margin:12px 0;padding:10px">
-    <input type="text" id="ttNote" placeholder="Notes (optional)" style="width:100%;margin-bottom:12px;padding:10px">
+    <div class="field-group">
+      <label>Time (HH:MM)</label>
+      <input type="time" id="ttTime" style="width:100%;margin:12px 0;padding:10px">
+    </div>
+    <div class="field-group">
+      <label>Subject/Activity</label>
+      <input type="text" id="ttSubject" placeholder="What to do?" style="width:100%;margin:12px 0;padding:10px">
+    </div>
+    <div class="field-group">
+      <label>Notes (optional)</label>
+      <input type="text" id="ttNote" placeholder="Details..." style="width:100%;margin-bottom:12px;padding:10px">
+    </div>
+    <div class="field-group">
+      <label>Alarm (optional)</label>
+      <input type="time" id="ttAlarm" style="width:100%;margin-bottom:12px;padding:10px">
+    </div>
     <button class="btn-primary" onclick="addTimetable()">Save</button>
-  `);
-}
-
-function editTimetable(time) {
-  const timetable = getTimetable();
-  const item = timetable.find(t => t.time === time);
-  showModal(`
-    <h3>Edit Timetable</h3>
-    <input type="text" id="ttSubject" placeholder="Subject" value="${escHtml(item?.subject || '')}" style="width:100%;margin:12px 0;padding:10px">
-    <input type="text" id="ttNote" placeholder="Notes" value="${escHtml(item?.note || '')}" style="width:100%;margin-bottom:12px;padding:10px">
-    <button class="btn-primary" onclick="saveTimetable('${time}')">Save</button>
-    <button class="btn-danger" onclick="deleteTimetable('${time}')" style="margin-top:8px">Delete</button>
   `);
 }
 
@@ -1243,41 +1534,119 @@ function addTimetable() {
   const time = document.getElementById('ttTime').value;
   const subject = document.getElementById('ttSubject').value.trim();
   const note = document.getElementById('ttNote').value;
-  if (!subject) return;
+  const alarmTime = document.getElementById('ttAlarm').value;
+  
+  if (!time || !subject) {
+    alert("Please fill time and subject");
+    return;
+  }
+  
   const timetable = getTimetable();
-  const existing = timetable.findIndex(t => t.time === time);
-  if (existing !== -1) timetable[existing] = { time, subject, note };
-  else timetable.push({ time, subject, note });
+  const newItem = { id: genId(), time, subject, note, alarmTime, createdAt: new Date().toISOString() };
+  timetable.push(newItem);
   setTimetable(timetable);
+  
+  if (alarmTime) {
+    scheduleTimetableAlarm(newItem);
+  }
+  
+  addHistory(`Added timetable entry`, `${time} - ${subject}`);
   closeModal();
   renderTimetable();
 }
 
-function saveTimetable(time) {
+function editTimetable(id) {
+  const timetable = getTimetable();
+  const item = timetable.find(t => t.id === id);
+  if (!item) return;
+  
+  showModal(`
+    <h3>Edit Timetable</h3>
+    <div class="field-group">
+      <label>Time (HH:MM)</label>
+      <input type="time" id="ttTime" value="${item.time}" style="width:100%;margin:12px 0;padding:10px">
+    </div>
+    <div class="field-group">
+      <label>Subject/Activity</label>
+      <input type="text" id="ttSubject" value="${escHtml(item.subject)}" style="width:100%;margin:12px 0;padding:10px">
+    </div>
+    <div class="field-group">
+      <label>Notes</label>
+      <input type="text" id="ttNote" value="${escHtml(item.note || '')}" style="width:100%;margin-bottom:12px;padding:10px">
+    </div>
+    <div class="field-group">
+      <label>Alarm</label>
+      <input type="time" id="ttAlarm" value="${item.alarmTime || ''}" style="width:100%;margin-bottom:12px;padding:10px">
+    </div>
+    <button class="btn-primary" onclick="updateTimetable('${id}')">Save Changes</button>
+    <button class="btn-danger" onclick="deleteTimetableItem('${id}')" style="margin-top:8px">Delete</button>
+  `);
+}
+
+function updateTimetable(id) {
+  const time = document.getElementById('ttTime').value;
   const subject = document.getElementById('ttSubject').value.trim();
   const note = document.getElementById('ttNote').value;
-  if (!subject) return;
-  const timetable = getTimetable();
-  const existing = timetable.findIndex(t => t.time === time);
-  if (existing !== -1) timetable[existing] = { time, subject, note };
-  else timetable.push({ time, subject, note });
-  setTimetable(timetable);
+  const alarmTime = document.getElementById('ttAlarm').value;
+  
+  if (!time || !subject) return;
+  
+  let timetable = getTimetable();
+  const index = timetable.findIndex(t => t.id === id);
+  if (index !== -1) {
+    timetable[index] = { ...timetable[index], time, subject, note, alarmTime };
+    setTimetable(timetable);
+    if (alarmTime) scheduleTimetableAlarm(timetable[index]);
+    addHistory(`Updated timetable`, `${time} - ${subject}`);
+  }
   closeModal();
   renderTimetable();
 }
 
-function deleteTimetable(time) {
+function deleteTimetableItem(id) {
   let timetable = getTimetable();
-  timetable = timetable.filter(t => t.time !== time);
+  const item = timetable.find(t => t.id === id);
+  timetable = timetable.filter(t => t.id !== id);
   setTimetable(timetable);
+  addHistory(`Deleted timetable entry`, item?.subject);
   closeModal();
   renderTimetable();
+}
+
+function scheduleTimetableAlarm(item) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission !== "granted") Notification.requestPermission();
+  
+  const [hours, minutes] = item.alarmTime.split(':');
+  const now = new Date();
+  let alarmTime = new Date();
+  alarmTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+  
+  if (alarmTime <= now) {
+    alarmTime.setDate(alarmTime.getDate() + 1);
+  }
+  
+  const delay = alarmTime - now;
+  setTimeout(() => {
+    if (Notification.permission === "granted") {
+      new Notification("📅 Timetable Reminder", {
+        body: `${item.time} - ${item.subject}`,
+        icon: "/icon-192.svg"
+      });
+      // Play sound if available
+      const audio = new Audio('https://actions.google.com/sounds/olfaction/notification/notification_default.ogg');
+      audio.play().catch(e => console.log('Audio play failed'));
+    }
+    // Reschedule for next day
+    scheduleTimetableAlarm(item);
+  }, delay);
 }
 
 // ===== NOTES WITH DRAWING =====
 let drawing = false;
 let ctx = null;
 let canvas = null;
+let currentDrawingData = null;
 
 function toggleDrawing() {
   const container = document.getElementById('canvasContainer');
@@ -1315,6 +1684,9 @@ function initCanvas() {
   canvas.removeEventListener('mousedown', startDraw);
   canvas.removeEventListener('mousemove', draw);
   canvas.removeEventListener('mouseup', stopDraw);
+  canvas.removeEventListener('touchstart', startDraw);
+  canvas.removeEventListener('touchmove', draw);
+  canvas.removeEventListener('touchend', stopDraw);
   
   canvas.addEventListener('mousedown', startDraw);
   canvas.addEventListener('mousemove', draw);
@@ -1322,6 +1694,13 @@ function initCanvas() {
   canvas.addEventListener('touchstart', startDraw);
   canvas.addEventListener('touchmove', draw);
   canvas.addEventListener('touchend', stopDraw);
+  
+  // Restore previous drawing if exists
+  if (currentDrawingData) {
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0);
+    img.src = currentDrawingData;
+  }
 }
 
 function getCanvasPos(e) {
@@ -1338,8 +1717,8 @@ function getCanvasPos(e) {
     clientY = e.clientY;
   }
   return {
-    x: (clientX - rect.left) * scaleX,
-    y: (clientY - rect.top) * scaleY
+    x: Math.min(Math.max(0, (clientX - rect.left) * scaleX), canvas.width),
+    y: Math.min(Math.max(0, (clientY - rect.top) * scaleY), canvas.height)
   };
 }
 
@@ -1347,6 +1726,7 @@ function clearCanvas() {
   if (ctx && canvas) {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    currentDrawingData = null;
   }
 }
 
@@ -1376,15 +1756,30 @@ function setNotes(n) { STORAGE.set('notes', n); }
 function saveCurrentNote() {
   const title = document.getElementById('noteTitle')?.value.trim() || '';
   const content = document.getElementById('noteContent')?.value || '';
-  if (!title && !content) return;
+  if (!title && !content && !currentDrawingData) return;
+  
   const notes = getNotes();
   let canvasData = null;
-  if (canvas) canvasData = canvas.toDataURL();
-  notes.unshift({ id: genId(), title: title || "Untitled", content, canvasData, date: new Date().toISOString() });
+  if (canvas && ctx) {
+    canvasData = canvas.toDataURL();
+  }
+  
+  notes.unshift({ 
+    id: genId(), 
+    title: title || "Untitled", 
+    content, 
+    canvasData, 
+    date: new Date().toISOString(),
+    hasDrawing: !!canvasData
+  });
   setNotes(notes.slice(0, 50));
+  
   if (document.getElementById('noteTitle')) document.getElementById('noteTitle').value = '';
   if (document.getElementById('noteContent')) document.getElementById('noteContent').value = '';
   if (canvas) clearCanvas();
+  currentDrawingData = null;
+  
+  addHistory(`Saved note`, title || "Untitled");
   showNotification("Note saved! 📝", "success");
   loadNotesList();
 }
@@ -1393,31 +1788,71 @@ function loadNotesList() {
   const notes = getNotes();
   const container = document.getElementById('notesList');
   if (!container) return;
+  
   if (notes.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No notes yet</div>';
+    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No notes yet. Create your first note!</div>';
     return;
   }
+  
   container.innerHTML = notes.map(n => `
     <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
         <strong>${escHtml(n.title)}</strong>
-        <button class="btn-secondary" style="padding:4px 8px" onclick="deleteNote('${n.id}')">Delete</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary" style="padding:4px 8px" onclick="editNote('${n.id}')">✏️ Edit</button>
+          <button class="btn-danger" style="padding:4px 8px" onclick="deleteNote('${n.id}')">Delete</button>
+        </div>
       </div>
-      <div style="font-size:0.8rem;color:var(--text2);margin-top:4px">${new Date(n.date).toLocaleString()}</div>
-      <div style="margin-top:8px">${escHtml(n.content.substring(0, 100))}${n.content.length > 100 ? '...' : ''}</div>
-      ${n.canvasData ? `<div style="margin-top:8px"><img src="${n.canvasData}" style="max-width:100%;height:auto;border-radius:8px"></div>` : ''}
+      <div style="font-size:0.7rem;color:var(--text2);margin-top:4px">${new Date(n.date).toLocaleString()}</div>
+      <div style="margin-top:8px;font-size:0.85rem">${escHtml(n.content.substring(0, 100))}${n.content.length > 100 ? '...' : ''}</div>
+      ${n.canvasData ? `<div style="margin-top:8px"><img src="${n.canvasData}" style="max-width:100%;height:auto;border-radius:8px;max-height:150px;object-fit:cover"></div>` : ''}
     </div>
   `).join('');
 }
 
-function deleteNote(id) {
+function editNote(id) {
+  const notes = getNotes();
+  const note = notes.find(n => n.id === id);
+  if (!note) return;
+  
+  // Load note data into editor
+  const titleInput = document.getElementById('noteTitle');
+  const contentArea = document.getElementById('noteContent');
+  if (titleInput) titleInput.value = note.title;
+  if (contentArea) contentArea.value = note.content;
+  
+  if (note.canvasData && canvas) {
+    currentDrawingData = note.canvasData;
+    const container = document.getElementById('canvasContainer');
+    if (container) container.classList.remove('hidden');
+    setTimeout(() => {
+      const img = new Image();
+      img.onload = () => {
+        if (ctx) {
+          ctx.fillStyle = 'white';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+      };
+      img.src = note.canvasData;
+    }, 200);
+  }
+  
+  // Delete old note
+  deleteNote(id, false);
+  addHistory(`Editing note`, note.title);
+}
+
+function deleteNote(id, showNotif = true) {
   let notes = getNotes();
+  const note = notes.find(n => n.id === id);
   notes = notes.filter(n => n.id !== id);
   setNotes(notes);
+  if (showNotif) addHistory(`Deleted note`, note?.title);
   loadNotesList();
 }
 
-// ===== TASKS WITH ALARMS =====
+// ===== TASKS WITH REAL ALARMS =====
 function getTasks() { return STORAGE.get('tasks', []); }
 function setTasks(t) { STORAGE.set('tasks', t); }
 function getTaskCompletions() { return STORAGE.get('taskCompletions', {}); }
@@ -1440,8 +1875,9 @@ function renderTasks() {
       <div class="task-info">
         <div><strong>${escHtml(task.name)}</strong> ${task.alarm ? `<span class="alarm-badge">⏰ ${task.alarmTime}</span>` : ''}</div>
         ${task.note ? `<div style="font-size:0.8rem;color:var(--text2)">${escHtml(task.note)}</div>` : ''}
+        <div style="font-size:0.7rem;color:var(--text2);margin-top:4px">Added: ${new Date(task.createdAt).toLocaleDateString()}</div>
       </div>
-      <button class="btn-secondary" style="padding:4px 8px" onclick="editTask('${task.id}')">✏️</button>
+      <button class="btn-secondary" style="padding:4px 8px" onclick="editTaskItem('${task.id}')">✏️</button>
       <button class="btn-danger" style="padding:4px 8px" onclick="deleteTaskItem('${task.id}')">🗑️</button>
     </div>
   `).join('');
@@ -1452,7 +1888,14 @@ function showAddTask() {
     <h3>Add Task</h3>
     <input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px">
     <textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea>
-    <input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px">
+    <div class="field-group">
+      <label>Alarm Time</label>
+      <input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px">
+    </div>
+    <div class="field-group">
+      <label>Ringtone URL (optional)</label>
+      <input type="text" id="taskRingtone" placeholder="https://example.com/sound.mp3" style="width:100%;margin:12px 0;padding:10px">
+    </div>
     <label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label>
     <button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>
   `);
@@ -1464,40 +1907,47 @@ function addTask() {
   const tasks = getTasks();
   const alarmTime = document.getElementById('taskAlarm').value;
   const repeat = document.getElementById('alarmRepeat').checked;
+  const ringtone = document.getElementById('taskRingtone').value;
+  
   const newTask = {
     id: genId(),
     name,
     note: document.getElementById('taskNote').value,
     alarm: alarmTime ? true : false,
     alarmTime,
-    repeatDaily: repeat
+    repeatDaily: repeat,
+    ringtone: ringtone || null,
+    createdAt: new Date().toISOString()
   };
   tasks.push(newTask);
   setTasks(tasks);
+  addHistory(`Added task`, name);
   
   if (alarmTime) {
-    scheduleAlarm(newTask);
+    scheduleTaskAlarm(newTask);
   }
   
   closeModal();
   renderTasks();
 }
 
-function editTask(id) {
+function editTaskItem(id) {
   const tasks = getTasks();
   const task = tasks.find(t => t.id === id);
   if (!task) return;
+  
   showModal(`
     <h3>Edit Task</h3>
     <input type="text" id="taskName" value="${escHtml(task.name)}" style="width:100%;margin:12px 0;padding:10px">
     <textarea id="taskNote" style="width:100%;margin:12px 0;padding:10px">${escHtml(task.note || '')}</textarea>
     <input type="time" id="taskAlarm" value="${task.alarmTime || ''}" style="width:100%;margin:12px 0;padding:10px">
+    <input type="text" id="taskRingtone" value="${escHtml(task.ringtone || '')}" placeholder="Ringtone URL" style="width:100%;margin:12px 0;padding:10px">
     <label><input type="checkbox" id="alarmRepeat" ${task.repeatDaily ? 'checked' : ''}> Repeat Daily</label>
-    <button class="btn-primary" onclick="updateTask('${id}')" style="margin-top:12px">Update</button>
+    <button class="btn-primary" onclick="updateTaskItem('${id}')" style="margin-top:12px">Update</button>
   `);
 }
 
-function updateTask(id) {
+function updateTaskItem(id) {
   const name = document.getElementById('taskName').value.trim();
   if (!name) return;
   let tasks = getTasks();
@@ -1509,10 +1959,12 @@ function updateTask(id) {
       note: document.getElementById('taskNote').value,
       alarm: !!document.getElementById('taskAlarm').value,
       alarmTime: document.getElementById('taskAlarm').value,
-      repeatDaily: document.getElementById('alarmRepeat').checked
+      repeatDaily: document.getElementById('alarmRepeat').checked,
+      ringtone: document.getElementById('taskRingtone').value || null
     };
     setTasks(tasks);
-    if (tasks[index].alarm) scheduleAlarm(tasks[index]);
+    addHistory(`Updated task`, name);
+    if (tasks[index].alarm) scheduleTaskAlarm(tasks[index]);
   }
   closeModal();
   renderTasks();
@@ -1520,8 +1972,10 @@ function updateTask(id) {
 
 function deleteTaskItem(id) {
   let tasks = getTasks();
+  const task = tasks.find(t => t.id === id);
   tasks = tasks.filter(t => t.id !== id);
   setTasks(tasks);
+  addHistory(`Deleted task`, task?.name);
   renderTasks();
 }
 
@@ -1532,6 +1986,7 @@ function toggleTask(id) {
   
   if (completions[id]) {
     addXP(15, "Task completed");
+    addHistory(`Completed task`, `+15 XP`);
     showNotification("+15 XP! ✅ Task done!", "success");
   } else {
     addXP(-15, "Task undone");
@@ -1541,11 +1996,9 @@ function toggleTask(id) {
   updateAnalytics();
 }
 
-function scheduleAlarm(task) {
+function scheduleTaskAlarm(task) {
   if (!("Notification" in window)) return;
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-  }
+  if (Notification.permission !== "granted") Notification.requestPermission();
   
   const [hours, minutes] = task.alarmTime.split(':');
   const now = new Date();
@@ -1560,15 +2013,25 @@ function scheduleAlarm(task) {
   setTimeout(() => {
     if (Notification.permission === "granted") {
       new Notification("⏰ Task Reminder", {
-        body: `Time to complete: ${task.name}`,
+        body: `${task.name} - Time to complete!`,
         icon: "/icon-192.svg"
       });
     }
-    if (task.repeatDaily) scheduleAlarm(task);
+    // Play ringtone if provided
+    if (task.ringtone) {
+      const audio = new Audio(task.ringtone);
+      audio.play().catch(e => console.log('Ringtone error:', e));
+    } else {
+      // Default beep
+      const audio = new Audio('https://actions.google.com/sounds/olfaction/notification/notification_default.ogg');
+      audio.play().catch(e => console.log('Audio play failed'));
+    }
+    
+    if (task.repeatDaily) scheduleTaskAlarm(task);
   }, delay);
 }
 
-// ===== CALCULATOR =====
+// ===== SCIENTIFIC CALCULATOR =====
 let calcExpression = "";
 
 function showCalculator() {
@@ -1595,6 +2058,14 @@ function showCalculator() {
       <button class="calc-btn" onclick="calcClear()">C</button>
       <button class="calc-btn" onclick="calcInput('**')">^</button>
       <button class="calc-btn" onclick="calcInput('Math.sqrt(')">√</button>
+      <button class="calc-btn" onclick="calcInput('Math.sin(')">sin</button>
+      <button class="calc-btn" onclick="calcInput('Math.cos(')">cos</button>
+      <button class="calc-btn" onclick="calcInput('Math.tan(')">tan</button>
+      <button class="calc-btn" onclick="calcInput('Math.log(')">log</button>
+      <button class="calc-btn" onclick="calcInput('Math.PI')">π</button>
+      <button class="calc-btn" onclick="calcInput('Math.E')">e</button>
+      <button class="calc-btn" onclick="calcInput('(')">(</button>
+      <button class="calc-btn" onclick="calcInput(')')">)</button>
     </div>
   `);
 }
@@ -1612,6 +2083,7 @@ function calcResult() {
     const display = document.getElementById('calcDisplay');
     if (display) display.textContent = result;
     calcExpression = result.toString();
+    addHistory(`Calculator`, `${expr} = ${result}`);
   } catch {
     const display = document.getElementById('calcDisplay');
     if (display) display.textContent = "Error";
@@ -1624,6 +2096,181 @@ function calcClear() {
   const display = document.getElementById('calcDisplay');
   if (display) display.textContent = "0";
 }
+
+// ===== UNIVERSAL CONVERTER =====
+function showConverter() {
+  showModal(`
+    <h3>🔄 Universal Converter</h3>
+    <div class="converter-group">
+      <select id="convType" onchange="updateConverterUI()" style="width:100%;padding:10px;margin-bottom:16px">
+        <option value="length">📏 Length</option>
+        <option value="weight">⚖️ Weight</option>
+        <option value="temperature">🌡️ Temperature</option>
+        <option value="time">⏰ Time</option>
+        <option value="currency">💰 Currency</option>
+        <option value="age">🎂 Age Calculator</option>
+        <option value="budget">💵 Budget</option>
+      </select>
+      <div id="converterUI"></div>
+    </div>
+  `);
+  updateConverterUI();
+}
+
+function updateConverterUI() {
+  const type = document.getElementById('convType')?.value || 'length';
+  const container = document.getElementById('converterUI');
+  if (!container) return;
+  
+  if (type === 'length') {
+    container.innerHTML = `
+      <div class="converter-row">
+        <input type="number" id="lengthValue" placeholder="Value" oninput="convertLength()">
+        <select id="lengthFrom" onchange="convertLength()">
+          <option value="m">Meters</option><option value="km">Kilometers</option>
+          <option value="cm">Centimeters</option><option value="mm">Millimeters</option>
+          <option value="ft">Feet</option><option value="in">Inches</option>
+        </select>
+        <span>→</span>
+        <select id="lengthTo" onchange="convertLength()">
+          <option value="m">Meters</option><option value="km">Kilometers</option>
+          <option value="cm">Centimeters</option><option value="mm">Millimeters</option>
+          <option value="ft">Feet</option><option value="in">Inches</option>
+        </select>
+      </div>
+      <div id="lengthResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center;font-weight:bold"></div>
+    `;
+  } else if (type === 'weight') {
+    container.innerHTML = `
+      <div class="converter-row">
+        <input type="number" id="weightValue" placeholder="Value" oninput="convertWeight()">
+        <select id="weightFrom" onchange="convertWeight()">
+          <option value="kg">Kilograms</option><option value="g">Grams</option>
+          <option value="lb">Pounds</option><option value="oz">Ounces</option>
+        </select>
+        <span>→</span>
+        <select id="weightTo" onchange="convertWeight()">
+          <option value="kg">Kilograms</option><option value="g">Grams</option>
+          <option value="lb">Pounds</option><option value="oz">Ounces</option>
+        </select>
+      </div>
+      <div id="weightResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center;font-weight:bold"></div>
+    `;
+  } else if (type === 'temperature') {
+    container.innerHTML = `
+      <div class="converter-row">
+        <input type="number" id="tempValue" placeholder="Value" oninput="convertTemp()">
+        <select id="tempFrom" onchange="convertTemp()">
+          <option value="c">Celsius</option><option value="f">Fahrenheit</option>
+          <option value="k">Kelvin</option>
+        </select>
+        <span>→</span>
+        <select id="tempTo" onchange="convertTemp()">
+          <option value="c">Celsius</option><option value="f">Fahrenheit</option>
+          <option value="k">Kelvin</option>
+        </select>
+      </div>
+      <div id="tempResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center;font-weight:bold"></div>
+    `;
+  } else if (type === 'age') {
+    container.innerHTML = `
+      <div class="converter-row">
+        <label>Date of Birth</label>
+        <input type="date" id="dobDate" onchange="calculateAge()">
+      </div>
+      <div id="ageResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center"></div>
+    `;
+  } else if (type === 'budget') {
+    container.innerHTML = `
+      <div class="converter-row">
+        <input type="number" id="budgetIncome" placeholder="Monthly Income" oninput="calculateBudget()">
+        <input type="number" id="budgetExpense" placeholder="Monthly Expenses" oninput="calculateBudget()">
+      </div>
+      <div id="budgetResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center"></div>
+    `;
+  } else if (type === 'currency') {
+    container.innerHTML = `
+      <div class="converter-row">
+        <input type="number" id="currencyValue" placeholder="Amount" oninput="convertCurrency()">
+        <input type="text" id="currencyRate" placeholder="Exchange Rate" oninput="convertCurrency()">
+      </div>
+      <div id="currencyResult" style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center;font-weight:bold"></div>
+      <div style="font-size:0.7rem;color:var(--text2);margin-top:8px">Enter rate (e.g., 1 USD = 280 PKR → rate 280)</div>
+    `;
+  }
+}
+
+window.convertLength = function() {
+  const value = parseFloat(document.getElementById('lengthValue')?.value) || 0;
+  const from = document.getElementById('lengthFrom')?.value;
+  const to = document.getElementById('lengthTo')?.value;
+  const meters = { m:1, km:1000, cm:0.01, mm:0.001, ft:0.3048, in:0.0254 };
+  const result = value * meters[from] / meters[to];
+  const resultDiv = document.getElementById('lengthResult');
+  if (resultDiv) resultDiv.innerHTML = `${value} ${from} = ${result.toFixed(4)} ${to}`;
+};
+
+window.convertWeight = function() {
+  const value = parseFloat(document.getElementById('weightValue')?.value) || 0;
+  const from = document.getElementById('weightFrom')?.value;
+  const to = document.getElementById('weightTo')?.value;
+  const kgs = { kg:1, g:0.001, lb:0.453592, oz:0.0283495 };
+  const result = value * kgs[from] / kgs[to];
+  const resultDiv = document.getElementById('weightResult');
+  if (resultDiv) resultDiv.innerHTML = `${value} ${from} = ${result.toFixed(4)} ${to}`;
+};
+
+window.convertTemp = function() {
+  let value = parseFloat(document.getElementById('tempValue')?.value) || 0;
+  const from = document.getElementById('tempFrom')?.value;
+  const to = document.getElementById('tempTo')?.value;
+  let celsius;
+  if (from === 'c') celsius = value;
+  else if (from === 'f') celsius = (value - 32) * 5/9;
+  else celsius = value - 273.15;
+  let result;
+  if (to === 'c') result = celsius;
+  else if (to === 'f') result = celsius * 9/5 + 32;
+  else result = celsius + 273.15;
+  const resultDiv = document.getElementById('tempResult');
+  if (resultDiv) resultDiv.innerHTML = `${value}°${from.toUpperCase()} = ${result.toFixed(2)}°${to.toUpperCase()}`;
+};
+
+window.calculateAge = function() {
+  const dob = document.getElementById('dobDate')?.value;
+  if (!dob) return;
+  const birth = new Date(dob);
+  const today = new Date();
+  let years = today.getFullYear() - birth.getFullYear();
+  let months = today.getMonth() - birth.getMonth();
+  let days = today.getDate() - birth.getDate();
+  if (days < 0) { months--; days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
+  if (months < 0) { years--; months += 12; }
+  const resultDiv = document.getElementById('ageResult');
+  if (resultDiv) resultDiv.innerHTML = `🎂 ${years} years, ${months} months, ${days} days old`;
+};
+
+window.calculateBudget = function() {
+  const income = parseFloat(document.getElementById('budgetIncome')?.value) || 0;
+  const expense = parseFloat(document.getElementById('budgetExpense')?.value) || 0;
+  const remaining = income - expense;
+  const resultDiv = document.getElementById('budgetResult');
+  if (resultDiv) {
+    if (remaining >= 0) {
+      resultDiv.innerHTML = `💰 Remaining: ${remaining.toFixed(2)} (${(remaining/income*100).toFixed(1)}% savings) 🎉`;
+    } else {
+      resultDiv.innerHTML = `⚠️ Deficit: ${Math.abs(remaining).toFixed(2)} (Reduce expenses!)`;
+    }
+  }
+};
+
+window.convertCurrency = function() {
+  const value = parseFloat(document.getElementById('currencyValue')?.value) || 0;
+  const rate = parseFloat(document.getElementById('currencyRate')?.value) || 1;
+  const result = value * rate;
+  const resultDiv = document.getElementById('currencyResult');
+  if (resultDiv) resultDiv.innerHTML = `${value} × ${rate} = ${result.toFixed(2)}`;
+};
 
 // ===== SAFE GALLERY =====
 let galleryLock = STORAGE.get('galleryLock', null);
@@ -1690,6 +2337,7 @@ function uploadToGallery() {
       date: new Date().toISOString()
     });
     STORAGE.set('galleryItems', galleryItems);
+    addHistory(`Uploaded to gallery`, file.name);
     renderGalleryGrid();
   };
   reader.readAsDataURL(file);
@@ -1699,28 +2347,44 @@ function renderGalleryGrid() {
   const container = document.getElementById('galleryGrid');
   if (!container) return;
   if (galleryItems.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No items yet</div>';
+    container.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px">No items yet. Upload images/videos!</div>';
     return;
   }
   container.innerHTML = `
     <div class="gallery-grid">
       ${galleryItems.map(item => `
-        <div class="gallery-item">
-          ${item.type === 'image' ? `<img src="${item.data}" alt="gallery">` : `<video src="${item.data}" controls></video>`}
-          <div class="gallery-delete" onclick="deleteGalleryItem('${item.id}')">✕</div>
+        <div class="gallery-item" onclick="viewFullscreen('${item.id}')">
+          ${item.type === 'image' ? `<img src="${item.data}" alt="gallery">` : `<video src="${item.data}"></video>`}
+          <div class="gallery-delete" onclick="event.stopPropagation();deleteGalleryItem('${item.id}')">✕</div>
         </div>
       `).join('')}
     </div>
   `;
 }
 
+function viewFullscreen(id) {
+  const item = galleryItems.find(i => i.id === id);
+  if (!item) return;
+  
+  const fullscreenDiv = document.createElement('div');
+  fullscreenDiv.className = 'fullscreen-view';
+  fullscreenDiv.onclick = () => fullscreenDiv.remove();
+  if (item.type === 'image') {
+    fullscreenDiv.innerHTML = `<img src="${item.data}" style="max-width:90%;max-height:80%"><button class="btn-secondary" style="margin-top:20px" onclick="this.parentElement.remove()">Close</button>`;
+  } else {
+    fullscreenDiv.innerHTML = `<video src="${item.data}" controls autoplay style="max-width:90%;max-height:80%"></video><button class="btn-secondary" style="margin-top:20px" onclick="this.parentElement.remove()">Close</button>`;
+  }
+  document.body.appendChild(fullscreenDiv);
+}
+
 function deleteGalleryItem(id) {
   galleryItems = galleryItems.filter(i => i.id !== id);
   STORAGE.set('galleryItems', galleryItems);
   renderGalleryGrid();
+  addHistory(`Deleted from gallery`, `1 item`);
 }
 
-// ===== WITTY STAR GAME =====
+// ===== WITTY STAR GAME WITH JOYSTICK =====
 let gameActiveInstance = false;
 let gameAnimationId = null;
 let gameCtx = null;
@@ -1730,9 +2394,11 @@ let gameStars = [];
 let gameEnemies = [];
 let gameScore = 0;
 let gameMouse = { x: 0, y: 0 };
+let joystickActive = false;
+let joystickCenter = { x: 0, y: 0 };
+let joystickVector = { x: 0, y: 0 };
 
 function openGame() {
-  // Create game container
   const gameContainer = document.createElement('div');
   gameContainer.className = 'game-container';
   gameContainer.id = 'gameContainer';
@@ -1741,11 +2407,16 @@ function openGame() {
     <canvas id="gameCanvas" class="game-canvas"></canvas>
     <div id="gameUI" class="game-ui">
       <h1 style="font-family:'Orbitron'; color:#00f2ff; margin-bottom:5px;">WITTY STAR</h1>
-      <p id="gameMsg" style="margin-bottom:25px; opacity:0.7;">Avoid Red. Catch Stars.</p>
+      <p id="gameMsg" style="margin-bottom:25px; opacity:0.7;">Use Joystick | Avoid Red | Catch Stars</p>
       <button class="btn-primary" style="width:auto; padding:12px 30px;" onclick="startGameInstance()">START</button>
     </div>
     <div id="gameScoreDisplay" class="game-score">Stars: 0</div>
     <button class="game-close" onclick="closeGame()">✕</button>
+    <div class="joystick-container" id="joystickContainer">
+      <div class="joystick-base" id="joystickBase">
+        <div class="joystick-thumb" id="joystickThumb"></div>
+      </div>
+    </div>
   `;
   
   document.body.appendChild(gameContainer);
@@ -1765,28 +2436,78 @@ function openGame() {
   resizeGame();
   window.addEventListener('resize', resizeGame);
   
-  // Input handlers
-  const handleGameInput = (e) => {
-    const t = e.touches ? e.touches[0] : e;
-    gameMouse.x = t.clientX;
-    gameMouse.y = t.clientY;
-    if (gameActiveInstance && e.cancelable) e.preventDefault();
-  };
+  // Joystick logic
+  const joystickBase = document.getElementById('joystickBase');
+  const joystickThumb = document.getElementById('joystickThumb');
+  const joystickContainer = document.getElementById('joystickContainer');
   
-  window.addEventListener('mousemove', handleGameInput);
-  window.addEventListener('touchstart', handleGameInput);
-  window.addEventListener('touchmove', handleGameInput, { passive: false });
+  let joystickRadius = 50;
+  let baseRect = { x: 0, y: 0 };
   
-  // Store cleanup function
-  window._gameCleanup = () => {
-    window.removeEventListener('resize', resizeGame);
-    window.removeEventListener('mousemove', handleGameInput);
-    window.removeEventListener('touchstart', handleGameInput);
-    window.removeEventListener('touchmove', handleGameInput);
-    if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
-  };
+  function updateJoystickPos(e) {
+    const touch = e.touches ? e.touches[0] : e;
+    const rect = joystickBase.getBoundingClientRect();
+    baseRect = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+    
+    let dx = touch.clientX - baseRect.x;
+    let dy = touch.clientY - baseRect.y;
+    let distance = Math.hypot(dx, dy);
+    
+    if (distance > joystickRadius) {
+      dx = dx / distance * joystickRadius;
+      dy = dy / distance * joystickRadius;
+    }
+    
+    joystickThumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+    
+    // Normalize vector
+    let normX = dx / joystickRadius;
+    let normY = dy / joystickRadius;
+    joystickVector = { x: normX, y: normY };
+    
+    // Update game mouse based on joystick
+    if (gameActiveInstance && gameCanvas) {
+      gameMouse.x = Math.min(Math.max(gameMouse.x + joystickVector.x * 8, 20), gameCanvas.width - 20);
+      gameMouse.y = Math.min(Math.max(gameMouse.y + joystickVector.y * 8, 20), gameCanvas.height - 20);
+    }
+  }
   
-  // Start game loop
+  function resetJoystick() {
+    joystickThumb.style.transform = 'translate(-50%, -50%)';
+    joystickVector = { x: 0, y: 0 };
+  }
+  
+  joystickBase.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    joystickActive = true;
+    updateJoystickPos(e);
+  });
+  
+  joystickBase.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (joystickActive) updateJoystickPos(e);
+  });
+  
+  joystickBase.addEventListener('touchend', () => {
+    joystickActive = false;
+    resetJoystick();
+  });
+  
+  // Mouse support for joystick (for testing)
+  joystickBase.addEventListener('mousedown', (e) => {
+    joystickActive = true;
+    updateJoystickPos(e);
+  });
+  
+  window.addEventListener('mousemove', (e) => {
+    if (joystickActive) updateJoystickPos(e);
+  });
+  
+  window.addEventListener('mouseup', () => {
+    joystickActive = false;
+    resetJoystick();
+  });
+  
   function gameLoop() {
     if (!gameCanvas || !gameCtx) return;
     
@@ -1804,15 +2525,14 @@ function openGame() {
           const scoreDisplay = document.getElementById('gameScoreDisplay');
           if (scoreDisplay) scoreDisplay.innerText = "Stars: " + gameScore;
           s.reset();
-          // Add XP for playing game (every 5 stars)
           if (gameScore % 5 === 0) {
             addXP(5, "Played Witty Star");
-            showNotification("+5 XP from Witty Star! 🎮", "success");
+            addHistory(`Game milestone`, `${gameScore} stars in Witty Star`);
           }
         }
       });
       
-      if (Math.random() < 0.03) {
+      if (Math.random() < 0.02 + (gameScore / 500)) {
         gameEnemies.push(new GameEnemy());
       }
       
@@ -1839,8 +2559,12 @@ function openGame() {
       this.history = [];
     }
     update() {
-      this.x += (gameMouse.x - this.x) * 0.12;
-      this.y += (gameMouse.y - this.y) * 0.12;
+      // Smooth follow joystick position
+      this.x += (gameMouse.x - this.x) * 0.1;
+      this.y += (gameMouse.y - this.y) * 0.1;
+      // Keep in bounds
+      this.x = Math.min(Math.max(this.x, 15), gameCanvas.width - 15);
+      this.y = Math.min(Math.max(this.y, 15), gameCanvas.height - 15);
       this.history.push({x: this.x, y: this.y});
       if(this.history.length > 8) this.history.shift();
     }
@@ -1856,6 +2580,10 @@ function openGame() {
       gameCtx.arc(this.x, this.y, 8, 0, Math.PI*2);
       gameCtx.fillStyle = "#fff";
       gameCtx.fill();
+      gameCtx.beginPath();
+      gameCtx.arc(this.x, this.y, 10, 0, Math.PI*2);
+      gameCtx.strokeStyle = "#00f2ff";
+      gameCtx.stroke();
     }
   }
   
@@ -1867,19 +2595,27 @@ function openGame() {
     }
     draw() {
       gameCtx.beginPath();
-      gameCtx.arc(this.x, this.y, 5, 0, Math.PI*2);
-      gameCtx.fillStyle = "#ffe0b0";
+      gameCtx.arc(this.x, this.y, 6, 0, Math.PI*2);
+      gameCtx.fillStyle = "#FFD700";
+      gameCtx.fill();
+      gameCtx.beginPath();
+      gameCtx.arc(this.x, this.y, 3, 0, Math.PI*2);
+      gameCtx.fillStyle = "#FFF8DC";
       gameCtx.fill();
     }
   }
   
   class GameEnemy {
     constructor() {
-      const side = Math.random() > 0.5;
-      this.x = side ? -20 : gameCanvas.width + 20;
-      this.y = Math.random() * gameCanvas.height;
-      this.speed = 2.5 + (gameScore * 0.05);
-      this.angle = Math.atan2(gameMouse.y - this.y, gameMouse.x - this.x);
+      const side = Math.floor(Math.random() * 4);
+      if (side === 0) { this.x = -20; this.y = Math.random() * gameCanvas.height; }
+      else if (side === 1) { this.x = gameCanvas.width + 20; this.y = Math.random() * gameCanvas.height; }
+      else if (side === 2) { this.x = Math.random() * gameCanvas.width; this.y = -20; }
+      else { this.x = Math.random() * gameCanvas.width; this.y = gameCanvas.height + 20; }
+      this.speed = 2 + (gameScore * 0.03);
+      const dx = gamePlayer ? gamePlayer.x - this.x : gameCanvas.width/2 - this.x;
+      const dy = gamePlayer ? gamePlayer.y - this.y : gameCanvas.height/2 - this.y;
+      this.angle = Math.atan2(dy, dx);
     }
     update() {
       this.x += Math.cos(this.angle) * this.speed;
@@ -1887,8 +2623,12 @@ function openGame() {
     }
     draw() {
       gameCtx.beginPath();
-      gameCtx.arc(this.x, this.y, 9, 0, Math.PI*2);
+      gameCtx.arc(this.x, this.y, 10, 0, Math.PI*2);
       gameCtx.fillStyle = "#ff3333";
+      gameCtx.fill();
+      gameCtx.beginPath();
+      gameCtx.arc(this.x, this.y, 5, 0, Math.PI*2);
+      gameCtx.fillStyle = "#ff8888";
       gameCtx.fill();
     }
   }
@@ -1903,7 +2643,8 @@ function openGame() {
     const scoreDisplay = document.getElementById('gameScoreDisplay');
     if (scoreDisplay) scoreDisplay.innerText = "Stars: 0";
     gamePlayer = new GamePlayer();
-    for(let i=0; i<6; i++) gameStars.push(new GameStar());
+    for(let i=0; i<8; i++) gameStars.push(new GameStar());
+    addHistory(`Started game`, `Witty Star`);
   };
   
   function gameOverInstance() {
@@ -1912,27 +2653,37 @@ function openGame() {
     if (gameUI) {
       gameUI.style.display = 'flex';
       const msgEl = document.getElementById('gameMsg');
-      if (msgEl) msgEl.innerText = "SCORE: " + gameScore;
+      if (msgEl) msgEl.innerText = "GAME OVER! SCORE: " + gameScore;
     }
-    // Add XP based on score
-    if (gameScore > 0) {
-      const xpEarned = Math.floor(gameScore / 2);
-      if (xpEarned > 0) {
-        addXP(xpEarned, "Witty Star game score");
-        showNotification(`+${xpEarned} XP from Witty Star! ⭐`, "success");
-      }
+    const xpEarned = Math.floor(gameScore / 2);
+    if (xpEarned > 0) {
+      addXP(xpEarned, "Witty Star game score");
+      addHistory(`Game over`, `Score: ${gameScore}, +${xpEarned} XP`);
+      showNotification(`+${xpEarned} XP from Witty Star! ⭐`, "success");
     }
   }
   
   window.closeGame = function() {
-    if (window._gameCleanup) window._gameCleanup();
+    if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
     const container = document.getElementById('gameContainer');
     if (container) container.remove();
     gameActiveInstance = false;
-    if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
   };
   
   gameLoop();
+}
+
+// ===== THEMES =====
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  STORAGE.set('theme', theme);
+  addHistory(`Theme changed`, theme);
+  showNotification(`Theme: ${theme} 🎨`, "success");
+}
+
+function applySavedTheme() {
+  const savedTheme = STORAGE.get('theme', 'dark');
+  document.documentElement.setAttribute('data-theme', savedTheme);
 }
 
 // ===== ANALYTICS =====
@@ -1952,15 +2703,17 @@ function updateAnalytics() {
     grid.innerHTML = `
       <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:12px">
         <div style="font-size:0.75rem;color:var(--text2)">Today's Habits</div>
-        <div style="font-size:1.5rem;font-weight:700">${todayHabitsDone}/${habits.length}</div>
+        <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">${todayHabitsDone}/${habits.length}</div>
+        <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${habits.length ? (todayHabitsDone/habits.length)*100 : 0}%"></div></div>
       </div>
       <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:12px">
         <div style="font-size:0.75rem;color:var(--text2)">Today's Tasks</div>
-        <div style="font-size:1.5rem;font-weight:700">${todayTasksDone}/${tasks.length}</div>
+        <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">${todayTasksDone}/${tasks.length}</div>
+        <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:${tasks.length ? (todayTasksDone/tasks.length)*100 : 0}%"></div></div>
       </div>
       <div style="background:var(--bg2);border-radius:12px;padding:16px">
-        <div style="font-size:0.75rem;color:var(--text2)">Recent XP</div>
-        ${xpHistory.slice(0, 5).map(h => `<div style="font-size:0.8rem;margin-top:4px">${h.reason}: +${h.amount} XP</div>`).join('')}
+        <div style="font-size:0.75rem;color:var(--text2)">Total XP Earned</div>
+        <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">${STORAGE.get('xp', 0)}</div>
       </div>
     `;
   }
@@ -1985,6 +2738,7 @@ function saveProfile() {
   const app = document.getElementById('app');
   if (onboarding) onboarding.classList.add('hidden');
   if (app) app.classList.remove('hidden');
+  addHistory(`Profile created`, name);
   initAppAfterOnboard();
 }
 
@@ -1995,6 +2749,8 @@ function initAppAfterOnboard() {
   loadNotesList();
   updateXPDisplay();
   updateAnalytics();
+  renderHistory();
+  applySavedTheme();
   
   const profile = getProfile();
   const profileCard = document.getElementById('profileCard');
@@ -2003,6 +2759,7 @@ function initAppAfterOnboard() {
       <div><strong>Name:</strong> ${escHtml(profile.name)}</div>
       <div><strong>Username:</strong> @${escHtml(profile.username)}</div>
       <div><strong>Member since:</strong> ${new Date(profile.createdAt).toLocaleDateString()}</div>
+      <div><strong>Total XP:</strong> ${STORAGE.get('xp', 0)}</div>
     `;
   }
 }
@@ -2018,7 +2775,10 @@ function showTab(tab) {
   if (tab === 'timetable') renderTimetable();
   if (tab === 'notes') loadNotesList();
   if (tab === 'tasks') renderTasks();
-  if (tab === 'analytics') updateAnalytics();
+  if (tab === 'analytics') {
+    updateAnalytics();
+    renderHistory();
+  }
 }
 
 function showNotification(msg, type = "info") {
@@ -2063,7 +2823,8 @@ function exportData() {
     taskCompletions: getTaskCompletions(),
     timetable: getTimetable(),
     notes: getNotes(),
-    profile: getProfile()
+    profile: getProfile(),
+    history: STORAGE.get('history', [])
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -2072,11 +2833,14 @@ function exportData() {
   a.download = `replace-deeds-backup-${today()}.json`;
   a.click();
   URL.revokeObjectURL(url);
+  addHistory(`Exported data`, `Backup created`);
+  showNotification("Data exported! 📁", "success");
 }
 
 function confirmReset() {
-  if (confirm("⚠️ Are you sure? This will delete ALL your data including XP, habits, tasks, notes, and gallery!\nThis cannot be undone!")) {
+  if (confirm("⚠️ Are you sure? This will delete ALL your data including XP, habits, tasks, notes, gallery, and history!\nThis cannot be undone!")) {
     STORAGE.clear();
+    addHistory(`App reset`, `All data cleared`);
     location.reload();
   }
 }
@@ -2120,7 +2884,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Global functions for onclick
+// Global functions
 window.nextOnboard = function() {
   const steps = document.querySelectorAll('.onboard-step');
   let current = -1;
@@ -2134,6 +2898,13 @@ window.nextOnboard = function() {
 window.calcInput = calcInput;
 window.calcResult = calcResult;
 window.calcClear = calcClear;
+window.updateConverterUI = updateConverterUI;
+window.convertLength = convertLength;
+window.convertWeight = convertWeight;
+window.convertTemp = convertTemp;
+window.calculateAge = calculateAge;
+window.calculateBudget = calculateBudget;
+window.convertCurrency = convertCurrency;
 </script>
 </body>
 </html>
