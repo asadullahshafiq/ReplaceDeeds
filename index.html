@@ -399,7 +399,7 @@ input:focus, textarea:focus {
 .timetable-subject { font-weight: 600; font-size: 0.85rem; }
 .timetable-note { font-size: 0.7rem; color: var(--text2); margin-top: 4px; }
 
-/* Notes with Drawing - Fixed Scroll */
+/* Notes with Drawing */
 .notes-toolbar {
   display: flex;
   gap: 8px;
@@ -442,9 +442,7 @@ input:focus, textarea:focus {
   flex-direction: column;
   padding: 20px;
 }
-.drawing-container.active {
-  display: flex;
-}
+.drawing-container.active { display: flex; }
 .drawing-canvas {
   flex: 1;
   background: white;
@@ -468,10 +466,7 @@ input:focus, textarea:focus {
   cursor: pointer;
   color: var(--text);
 }
-.shape-tool.active {
-  background: var(--accent);
-  color: #000;
-}
+.shape-tool.active { background: var(--accent); color: #000; }
 
 /* Tools Grid */
 .tools-grid {
@@ -529,7 +524,7 @@ input:focus, textarea:focus {
 }
 .converter-row select, .converter-row input { flex: 1; }
 
-/* Game Container - Anti-Stress Design */
+/* Game Container */
 .game-container {
   position: fixed;
   inset: 0;
@@ -614,120 +609,6 @@ input:focus, textarea:focus {
   cursor: pointer;
   box-shadow: 0 0 20px #00f2ff;
   transition: transform 0.02s linear;
-}
-
-/* Chess Game */
-.chess-container {
-  position: fixed;
-  inset: 0;
-  background: #1a1a2e;
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-}
-.chess-board {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  aspect-ratio: 1;
-  background: #2c2c3e;
-  border-radius: 12px;
-  overflow: hidden;
-  margin: 10px;
-}
-.chess-square {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.chess-square.light { background: #f0d9b5; }
-.chess-square.dark { background: #b58863; }
-.chess-square.selected { background: #7b61ff; box-shadow: inset 0 0 0 3px gold; }
-.chess-square.valid { background: #4ade80; }
-.chess-close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255,255,255,0.2);
-  border: none;
-  color: white;
-  font-size: 24px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 2002;
-}
-
-/* Prayers Section */
-.prayers-container {
-  background: var(--bg2);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 20px;
-}
-.prayer-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px;
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.prayer-name {
-  font-weight: 700;
-  min-width: 80px;
-}
-.prayer-time {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--accent);
-}
-.prayer-tick {
-  display: flex;
-  gap: 8px;
-}
-.tick-btn {
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  font-size: 0.7rem;
-  transition: all 0.2s;
-}
-.tick-btn.active {
-  background: var(--success);
-  color: #000;
-}
-.prayer-streak-tree {
-  background: var(--bg2);
-  border-radius: var(--radius);
-  padding: 16px;
-  text-align: center;
-  margin-top: 16px;
-}
-.tree-stage {
-  font-size: 3rem;
-  margin-bottom: 8px;
-}
-.apple-count {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  color: var(--accent);
-}
-.freeze-token {
-  background: linear-gradient(135deg, #00d4b4, #00a896);
-  color: #000;
-  padding: 8px 16px;
-  border-radius: 100px;
-  display: inline-block;
-  margin-top: 10px;
-  cursor: pointer;
 }
 
 /* Gallery */
@@ -893,8 +774,61 @@ input:focus, textarea:focus {
   opacity: 0;
   transition: opacity 0.3s;
 }
-.draft-indicator.show {
-  opacity: 1;
+.draft-indicator.show { opacity: 1; }
+
+/* Prayer Tree */
+.prayer-tree-container {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.tree-animation {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+.tree-stage-text {
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  margin: 8px 0;
+}
+.apple-count {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+.freeze-token {
+  background: linear-gradient(135deg, #00d4b4, #00a896);
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 100px;
+  display: inline-block;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+.stat-card {
+  background: var(--bg3);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+.alarm-off-btn {
+  background: var(--danger);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 0.7rem;
 }
 
 @media (min-width: 600px) {
@@ -908,7 +842,7 @@ input:focus, textarea:focus {
 <div id="splash" class="splash">
   <div class="splash-logo">
     <h1 class="splash-title">Replace Deeds</h1>
-    <p style="color:var(--text2);margin-top:8px">Track. Pray. Level Up.</p>
+    <p style="color:var(--text2);margin-top:8px">Track. Pray. Grow.</p>
   </div>
 </div>
 
@@ -950,7 +884,7 @@ input:focus, textarea:focus {
     </div>
 
     <div class="tab-panel" id="tab-prayers">
-      <div class="prayers-container" id="prayersContainer"></div>
+      <div id="prayersContainer"></div>
     </div>
 
     <div class="tab-panel" id="tab-timetable">
@@ -974,7 +908,7 @@ input:focus, textarea:focus {
         <input type="text" id="noteTitle" class="note-title" placeholder="Note title...">
         <textarea id="noteContent" class="note-content" placeholder="Write your note here..."></textarea>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn-primary" onclick="saveNoteWithDrawing()">💾 Save Note</button>
+          <button class="btn-primary" onclick="saveCurrentNote()">💾 Save Note</button>
           <button class="btn-secondary" onclick="loadNotesList()">📋 My Notes</button>
         </div>
       </div>
@@ -995,7 +929,6 @@ input:focus, textarea:focus {
         <div class="tool-card" onclick="showConverter()"><div class="tool-icon">🔄</div><div>Converter</div></div>
         <div class="tool-card" onclick="showSafeGallery()"><div class="tool-icon">🖼️</div><div>Safe Gallery</div></div>
         <div class="tool-card" onclick="openGame()"><div class="tool-icon">🎮</div><div>Witty Star</div></div>
-        <div class="tool-card" onclick="openChess()"><div class="tool-icon">♟️</div><div>Witty Chess</div></div>
       </div>
       <div id="toolsContent"></div>
     </div>
@@ -1054,7 +987,7 @@ input:focus, textarea:focus {
   </nav>
 </div>
 
-<!-- Drawing Modal (Fullscreen) -->
+<!-- Drawing Modal -->
 <div id="drawingModal" class="drawing-container">
   <canvas id="drawCanvas" class="drawing-canvas" width="600" height="500"></canvas>
   <div class="drawing-tools">
@@ -1075,36 +1008,28 @@ input:focus, textarea:focus {
   <div class="modal"><div id="modalContent"></div></div>
 </div>
 
-<!-- Draft Indicator -->
 <div id="draftIndicator" class="draft-indicator">💾 Draft saved</div>
 
 <script>
 // ===== STORAGE =====
 const STORAGE = {
-  _prefix: 'rd_ult_',
+  _prefix: 'rd_final_',
   set(k, v) { localStorage.setItem(this._prefix + k, JSON.stringify(v)); },
   get(k, f = null) { try { return JSON.parse(localStorage.getItem(this._prefix + k)) || f; } catch { return f; } },
   del(k) { localStorage.removeItem(this._prefix + k); },
   clear() { Object.keys(localStorage).filter(k => k.startsWith(this._prefix)).forEach(k => localStorage.removeItem(k)); }
 };
 
-// ===== DRAFT SYSTEM (WhatsApp Style) =====
-let draftTimeout = null;
-let currentDraftId = null;
-
+// ===== DRAFT SYSTEM =====
 function saveDraft() {
   const title = document.getElementById('noteTitle')?.value || '';
   const content = document.getElementById('noteContent')?.value || '';
   if (title || content) {
     STORAGE.set('noteDraft', { title, content, timestamp: Date.now() });
-    showDraftIndicator();
+    const indicator = document.getElementById('draftIndicator');
+    indicator.classList.add('show');
+    setTimeout(() => indicator.classList.remove('show'), 2000);
   }
-}
-
-function showDraftIndicator() {
-  const indicator = document.getElementById('draftIndicator');
-  indicator.classList.add('show');
-  setTimeout(() => indicator.classList.remove('show'), 2000);
 }
 
 function loadDraft() {
@@ -1117,13 +1042,10 @@ function loadDraft() {
   }
 }
 
-// Auto-save every 2 seconds
 setInterval(() => { saveDraft(); }, 2000);
-
-// Save before page close
 window.addEventListener('beforeunload', () => { saveDraft(); });
 
-// ===== OFFLINE NOTIFICATION & ALARM =====
+// ===== ALARM & NOTIFICATION =====
 let alarmTimeouts = {};
 
 function playBeep() {
@@ -1148,16 +1070,18 @@ function vibrateDevice() {
   }
 }
 
-function sendNotification(title, body) {
+function sendNotification(title, body, alarmId) {
   if (!("Notification" in window)) return;
   if (Notification.permission === "granted") {
-    new Notification(title, { body: body, icon: "/icon-192.svg", silent: false });
+    const notification = new Notification(title, { body: body, icon: "/icon-192.svg", silent: false, requireInteraction: true });
+    notification.onclick = () => { window.focus(); if(alarmId) cancelAlarm(alarmId); };
     playBeep();
     vibrateDevice();
   } else if (Notification.permission !== "denied") {
     Notification.requestPermission().then(perm => {
       if (perm === "granted") {
-        new Notification(title, { body: body, icon: "/icon-192.svg" });
+        const notification = new Notification(title, { body: body, icon: "/icon-192.svg", requireInteraction: true });
+        notification.onclick = () => { window.focus(); if(alarmId) cancelAlarm(alarmId); };
         playBeep();
         vibrateDevice();
       }
@@ -1165,23 +1089,47 @@ function sendNotification(title, body) {
   }
 }
 
-function scheduleAlarm(id, time, title, repeatDaily) {
-  if (alarmTimeouts[id]) clearTimeout(alarmTimeouts[id]);
-  let [h, m] = time.split(':');
-  let now = new Date();
-  let alarm = new Date();
-  alarm.setHours(parseInt(h), parseInt(m), 0, 0);
-  if (alarm <= now) alarm.setDate(alarm.getDate() + 1);
-  let delay = alarm - now;
-  if (delay > 0) {
-    alarmTimeouts[id] = setTimeout(() => {
-      sendNotification("⏰ Reminder", title);
-      if (repeatDaily) scheduleAlarm(id, time, title, repeatDaily);
-    }, delay);
+function cancelAlarm(alarmId) {
+  if (alarmTimeouts[alarmId]) {
+    clearTimeout(alarmTimeouts[alarmId]);
+    delete alarmTimeouts[alarmId];
+    addHistory(`Alarm cancelled`, alarmId);
+    showNotification("Alarm turned off", "success");
   }
 }
 
-// ===== ACTIVITY HISTORY =====
+function scheduleAlarm(id, time, title, repeatDaily, reminderMinutes = 30) {
+  if (alarmTimeouts[id]) clearTimeout(alarmTimeouts[id]);
+  let [h, m] = time.split(':');
+  let now = new Date();
+  let alarmTime = new Date();
+  alarmTime.setHours(parseInt(h), parseInt(m), 0, 0);
+  
+  let reminderTime = new Date(alarmTime);
+  reminderTime.setMinutes(reminderTime.getMinutes() - reminderMinutes);
+  
+  if (reminderTime <= now) reminderTime.setDate(reminderTime.getDate() + 1);
+  if (alarmTime <= now) alarmTime.setDate(alarmTime.getDate() + 1);
+  
+  let reminderDelay = reminderTime - now;
+  let alarmDelay = alarmTime - now;
+  
+  if (reminderDelay > 0) {
+    alarmTimeouts[`${id}_reminder`] = setTimeout(() => {
+      sendNotification(`⏰ Reminder: ${title}`, `${reminderMinutes} minutes remaining`, id);
+      if (repeatDaily) scheduleAlarm(id, time, title, repeatDaily, reminderMinutes);
+    }, reminderDelay);
+  }
+  
+  if (alarmDelay > 0) {
+    alarmTimeouts[id] = setTimeout(() => {
+      sendNotification(`🔔 ${title} Time!`, `It's time for ${title}`, id);
+      if (repeatDaily) scheduleAlarm(id, time, title, repeatDaily, reminderMinutes);
+    }, alarmDelay);
+  }
+}
+
+// ===== HISTORY =====
 function addHistory(action, details = "") {
   const history = STORAGE.get('history', []);
   history.unshift({ id: Date.now(), action, details, date: new Date().toLocaleString() });
@@ -1340,15 +1288,30 @@ function deleteHabit(id) {
   setHabits(habits); addHistory(`Deleted habit`, h?.name); renderSections();
 }
 
-// ===== PRAYERS SYSTEM =====
+// ===== PRAYERS =====
 const PRAYERS = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 const DEFAULT_TIMES = { Fajr: '05:00', Dhuhr: '12:30', Asr: '15:45', Maghrib: '18:15', Isha: '19:45' };
 
 function getPrayerSettings() { return STORAGE.get('prayerSettings', { times: DEFAULT_TIMES, streak: 0, longestStreak: 0, freezeTokens: 0, treeStage: 0, lastPrayedDate: null, missedPrayerFreezeUsed: false }); }
 function setPrayerSettings(s) { STORAGE.set('prayerSettings', s); }
-
 function getPrayerCompletions() { return STORAGE.get('prayerCompletions', {}); }
 function setPrayerCompletions(c) { STORAGE.set('prayerCompletions', c); }
+
+function getTreeIcon(stage) {
+  if (stage === 0) return '🌱';
+  if (stage < 10) return '🌿';
+  if (stage < 20) return '🌱🌿';
+  if (stage < 30) return '🌿🌳';
+  if (stage < 40) return '🌳';
+  return '🌲';
+}
+
+function getAppleColor(stage) {
+  if (stage >= 120) return '🍎✨';
+  if (stage >= 80) return '🍎💙';
+  if (stage >= 40) return '🍎❤️';
+  return '';
+}
 
 function renderPrayers() {
   const container = document.getElementById('prayersContainer');
@@ -1359,13 +1322,21 @@ function renderPrayers() {
   const todayComp = comps[todayStr] || {};
   
   const treeStage = settings.treeStage || 0;
-  const stageLevel = Math.floor(treeStage / 40);
-  let appleColor = '🍎';
-  if (treeStage >= 120) appleColor = '🍎✨'; // golden
-  else if (treeStage >= 80) appleColor = '🍎💙'; // blue
-  else if (treeStage >= 40) appleColor = '🍎❤️'; // red
+  const treeIcon = getTreeIcon(treeStage);
+  const appleColor = getAppleColor(treeStage);
+  const appleCount = Math.floor(treeStage / 10);
   
   container.innerHTML = `
+    <div class="prayer-tree-container">
+      <div class="tree-animation" id="treeAnimation">${treeIcon}${appleColor ? ' ' + appleColor.repeat(Math.min(5, appleCount)) : ''}</div>
+      <div class="tree-stage-text">${treeStage} Days Streak</div>
+      <div class="apple-count">${appleColor ? appleColor + ' ' + appleCount + ' apples' : '🌱 Growing...'}</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div>🔥 Current</div><div style="font-size:1.5rem">${settings.streak}</div></div>
+        <div class="stat-card"><div>🏆 Longest</div><div style="font-size:1.5rem">${settings.longestStreak || 0}</div></div>
+      </div>
+      ${settings.freezeTokens > 0 ? `<div class="freeze-token" onclick="useFreezeToken()">❄️ Freeze Token (${settings.freezeTokens})</div>` : ''}
+    </div>
     <h3>🕌 Daily Prayers</h3>
     ${PRAYERS.map(p => `
       <div class="prayer-item">
@@ -1378,12 +1349,6 @@ function renderPrayers() {
         </div>
       </div>
     `).join('')}
-    <div class="prayer-streak-tree">
-      <div class="tree-stage">${appleColor.repeat(Math.min(10, Math.ceil(treeStage/10)))}</div>
-      <div><strong>${treeStage} Days Streak</strong> | Longest: ${settings.longestStreak || 0}</div>
-      <div class="apple-count">🍎 ${treeStage} apples</div>
-      ${settings.freezeTokens > 0 ? `<div class="freeze-token" onclick="useFreezeToken()">❄️ Freeze Token (${settings.freezeTokens})</div>` : ''}
-    </div>
   `;
 }
 
@@ -1392,8 +1357,7 @@ function updatePrayerTime(prayer, time) {
   settings.times[prayer] = time;
   setPrayerSettings(settings);
   addHistory(`Updated prayer time`, `${prayer}: ${time}`);
-  // Schedule alarm for this prayer
-  scheduleAlarm(`prayer_${prayer}`, time, `🕌 ${prayer} Prayer Time`, true);
+  scheduleAlarm(`prayer_${prayer}`, time, `${prayer} Prayer`, true, 30);
 }
 
 function togglePrayer(prayer, type) {
@@ -1408,11 +1372,16 @@ function togglePrayer(prayer, type) {
   }
   setPrayerCompletions(comps);
   
-  // Update streak
   updatePrayerStreak();
   renderPrayers();
   addHistory(`Prayer recorded`, `${prayer} - ${type}`);
   addXP(5, `Prayer: ${prayer}`);
+  
+  const treeAnim = document.getElementById('treeAnimation');
+  if (treeAnim) {
+    treeAnim.style.transform = 'scale(1.2)';
+    setTimeout(() => { if(treeAnim) treeAnim.style.transform = 'scale(1)'; }, 300);
+  }
 }
 
 function updatePrayerStreak() {
@@ -1433,7 +1402,6 @@ function updatePrayerStreak() {
     } else if (lastDate === yesterdayStr) {
       settings.streak++;
     } else if (lastDate !== todayStr) {
-      // Check if missed
       let missed = true;
       if (settings.missedPrayerFreezeUsed) {
         settings.missedPrayerFreezeUsed = false;
@@ -1449,21 +1417,22 @@ function updatePrayerStreak() {
     settings.treeStage = (settings.treeStage || 0) + 1;
     if (settings.streak > (settings.longestStreak || 0)) settings.longestStreak = settings.streak;
     
-    // Give freeze token every 40 days
     if (settings.treeStage % 40 === 0 && settings.treeStage > 0) {
       settings.freezeTokens = (settings.freezeTokens || 0) + 1;
       addHistory(`Freeze token earned!`, `40-day streak!`);
+      showNotification(`🎉 Freeze Token Earned! 🎉`, "success");
     }
   } else if (lastDate === yesterdayStr && !allPrayersDone) {
-    // Missed a prayer - check freeze token
     if (settings.freezeTokens > 0) {
       settings.freezeTokens--;
       settings.missedPrayerFreezeUsed = true;
       addHistory(`Freeze token used`, `Saved streak`);
+      showNotification(`❄️ Freeze token used! Streak saved!`, "success");
     } else {
       settings.streak = 0;
       settings.treeStage = 0;
       addHistory(`Prayer streak broken`, `Missed a prayer`);
+      showNotification(`💔 Prayer streak broken! Start fresh tomorrow!`, "danger");
     }
   }
   
@@ -1504,7 +1473,7 @@ function addTimetable() {
   let alarmTime = document.getElementById('ttAlarm')?.value;
   let newItem = { id: genId(), time, subject: subj, note: document.getElementById('ttNote')?.value, alarmTime };
   tt.push(newItem); setTimetable(tt); addHistory(`Added timetable`, `${time} - ${subj}`); closeModal(); renderTimetable();
-  if(alarmTime) scheduleAlarm(`tt_${newItem.id}`, alarmTime, `📅 ${subj}`, true);
+  if(alarmTime) scheduleAlarm(`tt_${newItem.id}`, alarmTime, `📅 ${subj}`, true, 30);
 }
 function editTimetable(id) {
   let tt = getTimetable();
@@ -1520,7 +1489,7 @@ function updateTimetable(id) {
   if(idx !== -1) { 
     tt[idx] = { ...tt[idx], time, subject: subj, note: document.getElementById('ttNote')?.value, alarmTime: document.getElementById('ttAlarm')?.value }; 
     setTimetable(tt); addHistory(`Updated timetable`, `${time} - ${subj}`); closeModal(); renderTimetable();
-    if(tt[idx].alarmTime) scheduleAlarm(`tt_${id}`, tt[idx].alarmTime, `📅 ${subj}`, true);
+    if(tt[idx].alarmTime) scheduleAlarm(`tt_${id}`, tt[idx].alarmTime, `📅 ${subj}`, true, 30);
   }
 }
 function deleteTimetableItem(id) {
@@ -1528,10 +1497,10 @@ function deleteTimetableItem(id) {
   let item = tt.find(t => t.id === id);
   tt = tt.filter(t => t.id !== id);
   setTimetable(tt); addHistory(`Deleted timetable`, item?.subject); closeModal(); renderTimetable();
-  if(alarmTimeouts[`tt_${id}`]) clearTimeout(alarmTimeouts[`tt_${id}`]);
+  if(alarmTimeouts[`tt_${id}`]) cancelAlarm(`tt_${id}`);
 }
 
-// ===== NOTES WITH DRAWING (Fullscreen Fix) =====
+// ===== NOTES WITH DRAWING =====
 let drawCtx = null, drawCanvas = null, drawingActive = false, currentTool = 'pen', drawColor = '#000000', drawSize = 3;
 let lastX = 0, lastY = 0;
 let currentDrawingData = null;
@@ -1560,15 +1529,14 @@ function openDrawingModal() {
 
 function closeDrawingModal() {
   document.getElementById('drawingModal').classList.remove('active');
-  currentDrawingData = null;
 }
 
 function saveDrawingAndClose() {
   if (drawCanvas) {
     currentDrawingData = drawCanvas.toDataURL();
+    showNotification("Drawing saved! 🎨", "success");
   }
   closeDrawingModal();
-  showNotification("Drawing saved! 🎨", "success");
 }
 
 function setDrawTool(tool) {
@@ -1599,35 +1567,35 @@ function setupDrawingEvents() {
       drawCtx.stroke();
       drawCtx.beginPath();
       drawCtx.moveTo(pos.x, pos.y);
-    } else if (currentTool === 'square') {
+    } else {
       let width = pos.x - lastX;
       let height = pos.y - lastY;
-      drawCtx.fillStyle = 'white';
-      drawCtx.fillRect(lastX, lastY, width, height);
-      drawCtx.strokeRect(lastX, lastY, width, height);
-    } else if (currentTool === 'circle') {
-      let radius = Math.hypot(pos.x - lastX, pos.y - lastY);
-      drawCtx.beginPath();
-      drawCtx.arc(lastX, lastY, radius, 0, Math.PI * 2);
-      drawCtx.stroke();
-    } else if (currentTool === 'line') {
-      drawCtx.beginPath();
-      drawCtx.moveTo(lastX, lastY);
-      drawCtx.lineTo(pos.x, pos.y);
-      drawCtx.stroke();
-    } else if (currentTool === 'arrow') {
-      drawCtx.beginPath();
-      drawCtx.moveTo(lastX, lastY);
-      drawCtx.lineTo(pos.x, pos.y);
-      drawCtx.stroke();
-      let angle = Math.atan2(pos.y - lastY, pos.x - lastX);
-      let arrowX = pos.x - 10 * Math.cos(angle);
-      let arrowY = pos.y - 10 * Math.sin(angle);
-      drawCtx.beginPath();
-      drawCtx.moveTo(arrowX, arrowY);
-      drawCtx.lineTo(arrowX - 8 * Math.sin(angle), arrowY + 8 * Math.cos(angle));
-      drawCtx.lineTo(arrowX + 8 * Math.sin(angle), arrowY - 8 * Math.cos(angle));
-      drawCtx.fill();
+      if (currentTool === 'square') {
+        drawCtx.strokeRect(lastX, lastY, width, height);
+      } else if (currentTool === 'circle') {
+        let radius = Math.hypot(width, height);
+        drawCtx.beginPath();
+        drawCtx.arc(lastX, lastY, radius, 0, Math.PI * 2);
+        drawCtx.stroke();
+      } else if (currentTool === 'line') {
+        drawCtx.beginPath();
+        drawCtx.moveTo(lastX, lastY);
+        drawCtx.lineTo(pos.x, pos.y);
+        drawCtx.stroke();
+      } else if (currentTool === 'arrow') {
+        drawCtx.beginPath();
+        drawCtx.moveTo(lastX, lastY);
+        drawCtx.lineTo(pos.x, pos.y);
+        drawCtx.stroke();
+        let angle = Math.atan2(pos.y - lastY, pos.x - lastX);
+        let arrowX = pos.x - 12 * Math.cos(angle);
+        let arrowY = pos.y - 12 * Math.sin(angle);
+        drawCtx.beginPath();
+        drawCtx.moveTo(arrowX, arrowY);
+        drawCtx.lineTo(arrowX - 8 * Math.sin(angle), arrowY + 8 * Math.cos(angle));
+        drawCtx.lineTo(arrowX + 8 * Math.sin(angle), arrowY - 8 * Math.cos(angle));
+        drawCtx.fill();
+      }
     }
     lastX = pos.x; lastY = pos.y;
   };
@@ -1663,7 +1631,7 @@ function noteSetFont(s) {
 function noteSetColor(c) { document.getElementById('noteContent').style.color = c; }
 function getNotes() { return STORAGE.get('notes', []); }
 function setNotes(n) { STORAGE.set('notes', n); }
-function saveNoteWithDrawing() {
+function saveCurrentNote() {
   let title = document.getElementById('noteTitle')?.value.trim() || '';
   let content = document.getElementById('noteContent')?.value || '';
   if(!title && !content && !currentDrawingData) return;
@@ -1715,7 +1683,7 @@ function renderTasks() {
   let cont = document.getElementById('tasksList');
   if(!cont) return;
   if(!tasks.length) { cont.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)">No tasks. Tap + to add!</div>'; return; }
-  cont.innerHTML = tasks.map(t => `<div class="task-item"><div class="task-check ${comps[t.id]?'done':''}" onclick="toggleTask('${t.id}')">${comps[t.id]?'✓':''}</div><div class="task-info"><div><strong>${esc(t.name)}</strong> ${t.alarm?`<span class="alarm-badge">⏰ ${t.alarmTime}</span>`:''}</div>${t.note?`<div style="font-size:0.8rem;color:var(--text2)">${esc(t.note)}</div>`:''}</div><button class="btn-secondary" style="padding:4px 8px" onclick="editTaskItem('${t.id}')">✏️</button><button class="btn-danger" style="padding:4px 8px" onclick="deleteTaskItem('${t.id}')">🗑️</button></div>`).join('');
+  cont.innerHTML = tasks.map(t => `<div class="task-item"><div class="task-check ${comps[t.id]?'done':''}" onclick="toggleTask('${t.id}')">${comps[t.id]?'✓':''}</div><div class="task-info"><div><strong>${esc(t.name)}</strong> ${t.alarm?`<span class="alarm-badge">⏰ ${t.alarmTime}</span><button class="alarm-off-btn" onclick="cancelAlarm('task_${t.id}')">Turn Off</button>`:''}</div>${t.note?`<div style="font-size:0.8rem;color:var(--text2)">${esc(t.note)}</div>`:''}</div><button class="btn-secondary" style="padding:4px 8px" onclick="editTaskItem('${t.id}')">✏️</button><button class="btn-danger" style="padding:4px 8px" onclick="deleteTaskItem('${t.id}')">🗑️</button></div>`).join('');
 }
 function showAddTask() {
   showModal(`<h3>Add Task</h3><input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea><div class="field-group"><label>Alarm Time</label><input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px"></div><label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label><button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>`);
@@ -1728,7 +1696,7 @@ function addTask() {
   let repeat = document.getElementById('alarmRepeat')?.checked;
   let newTask = { id: genId(), name, note: document.getElementById('taskNote')?.value, alarm: !!alarm, alarmTime: alarm, repeatDaily: repeat, createdAt: new Date().toISOString() };
   tasks.push(newTask); setTasks(tasks); addHistory(`Added task`, name); closeModal(); renderTasks();
-  if(alarm) scheduleAlarm(`task_${newTask.id}`, alarm, `✅ ${name}`, repeat);
+  if(alarm) scheduleAlarm(`task_${newTask.id}`, alarm, `✅ ${name}`, repeat, 30);
 }
 function editTaskItem(id) {
   let tasks = getTasks();
@@ -1743,7 +1711,7 @@ function updateTaskItem(id) {
   if(idx !== -1) {
     tasks[idx] = { ...tasks[idx], name, note: document.getElementById('taskNote')?.value, alarm: !!document.getElementById('taskAlarm')?.value, alarmTime: document.getElementById('taskAlarm')?.value, repeatDaily: document.getElementById('alarmRepeat')?.checked };
     setTasks(tasks); addHistory(`Updated task`, name); closeModal(); renderTasks();
-    if(tasks[idx].alarm) scheduleAlarm(`task_${id}`, tasks[idx].alarmTime, `✅ ${name}`, tasks[idx].repeatDaily);
+    if(tasks[idx].alarm) scheduleAlarm(`task_${id}`, tasks[idx].alarmTime, `✅ ${name}`, tasks[idx].repeatDaily, 30);
   }
 }
 function deleteTaskItem(id) {
@@ -1751,7 +1719,7 @@ function deleteTaskItem(id) {
   let t = tasks.find(tt => tt.id === id);
   tasks = tasks.filter(tt => tt.id !== id);
   setTasks(tasks); addHistory(`Deleted task`, t?.name); renderTasks();
-  if(alarmTimeouts[`task_${id}`]) clearTimeout(alarmTimeouts[`task_${id}`]);
+  cancelAlarm(`task_${id}`);
 }
 function toggleTask(id) {
   let comps = getTaskComps();
@@ -1866,7 +1834,7 @@ function viewFull(id) {
 }
 function deleteGallery(id) { galleryItems = galleryItems.filter(i => i.id !== id); STORAGE.set('galleryItems', galleryItems); addHistory(`Deleted from gallery`, `1 item`); renderGallery(); }
 
-// ===== WITTY STAR GAME (Anti-Stress UI) =====
+// ===== WITTY STAR GAME =====
 let gameActive = false, gameAnim = null, gameCtx=null, gameCanvas=null, gamePlayer=null, gameStars=[], gameEnemies=[], gameScore=0;
 let gameTargetX = 0, gameTargetY = 0;
 let joyVecX = 0, joyVecY = 0, joyActiveFlag = false;
@@ -1982,95 +1950,6 @@ function openGame() {
   gameLoop();
 }
 
-// ===== WITTY CHESS GAME =====
-let chessBoard = null, chessSelected = null, chessTurn = 'white', chessGameActive = false;
-
-function openChess() {
-  let cont = document.createElement('div'); cont.className = 'chess-container'; cont.id='chessCont';
-  cont.innerHTML = `<div class="chess-board" id="chessBoard"></div><button class="chess-close" onclick="closeChess()">✕</button>`;
-  document.body.appendChild(cont);
-  initChessBoard();
-  chessGameActive = true;
-}
-
-function initChessBoard() {
-  chessBoard = [
-    ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
-    ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '', ''],
-    ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
-    ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖']
-  ];
-  chessTurn = 'white';
-  chessSelected = null;
-  renderChessBoard();
-}
-
-function renderChessBoard() {
-  let boardDiv = document.getElementById('chessBoard');
-  if (!boardDiv) return;
-  boardDiv.innerHTML = '';
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      let piece = chessBoard[i][j];
-      let isLight = (i + j) % 2 === 0;
-      let square = document.createElement('div');
-      square.className = `chess-square ${isLight ? 'light' : 'dark'}`;
-      if (chessSelected && chessSelected.row === i && chessSelected.col === j) square.classList.add('selected');
-      square.textContent = piece;
-      square.style.fontSize = '2rem';
-      square.onclick = (function(row, col) { return function() { onChessSquareClick(row, col); }; })(i, j);
-      boardDiv.appendChild(square);
-    }
-  }
-}
-
-function onChessSquareClick(row, col) {
-  if (!chessGameActive) return;
-  if (chessSelected === null) {
-    let piece = chessBoard[row][col];
-    if (piece && ((chessTurn === 'white' && '♙♖♘♗♕♔'.includes(piece)) || (chessTurn === 'black' && '♟♜♞♝♛♚'.includes(piece)))) {
-      chessSelected = { row, col };
-      renderChessBoard();
-    }
-  } else {
-    let fromRow = chessSelected.row, fromCol = chessSelected.col;
-    let piece = chessBoard[fromRow][fromCol];
-    let isValid = isValidMove(piece, fromRow, fromCol, row, col);
-    if (isValid) {
-      chessBoard[row][col] = piece;
-      chessBoard[fromRow][fromCol] = '';
-      chessTurn = chessTurn === 'white' ? 'black' : 'white';
-      chessSelected = null;
-      renderChessBoard();
-      addHistory(`Chess move`, `${piece} moved`);
-    } else {
-      chessSelected = null;
-      renderChessBoard();
-    }
-  }
-}
-
-function isValidMove(piece, fromRow, fromCol, toRow, toCol) {
-  let deltaRow = toRow - fromRow;
-  let deltaCol = toCol - fromCol;
-  let targetPiece = chessBoard[toRow][toCol];
-  if (targetPiece && ((chessTurn === 'white' && '♙♖♘♗♕♔'.includes(targetPiece)) || (chessTurn === 'black' && '♟♜♞♝♛♚'.includes(targetPiece)))) return false;
-  if (piece === '♙') return deltaRow === -1 && Math.abs(deltaCol) === 1 && targetPiece;
-  if (piece === '♟') return deltaRow === 1 && Math.abs(deltaCol) === 1 && targetPiece;
-  if (piece === '♖' || piece === '♜') return (fromRow === toRow || fromCol === toCol);
-  if (piece === '♘' || piece === '♞') return (Math.abs(deltaRow) === 2 && Math.abs(deltaCol) === 1) || (Math.abs(deltaRow) === 1 && Math.abs(deltaCol) === 2);
-  if (piece === '♗' || piece === '♝') return Math.abs(deltaRow) === Math.abs(deltaCol);
-  if (piece === '♕' || piece === '♛') return (fromRow === toRow || fromCol === toCol) || Math.abs(deltaRow) === Math.abs(deltaCol);
-  if (piece === '♔' || piece === '♚') return Math.abs(deltaRow) <= 1 && Math.abs(deltaCol) <= 1;
-  return true;
-}
-
-function closeChess() { document.getElementById('chessCont')?.remove(); chessGameActive = false; }
-
 // ===== THEMES =====
 function setTheme(t) { document.documentElement.setAttribute('data-theme', t); STORAGE.set('theme', t); addHistory(`Theme changed`, t); showNotification(`Theme: ${t} 🎨`, "success"); }
 function applySavedTheme() { let t = STORAGE.get('theme', 'dark'); document.documentElement.setAttribute('data-theme', t); }
@@ -2152,7 +2031,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 window.calcInput = calcInput; window.updateConvUI = updateConvUI; window.convLen = convLen; window.convWt = convWt; window.convTemp = convTemp; window.calcAge = calcAge; window.calcBudget = calcBudget;
 window.setDrawTool = setDrawTool; window.setDrawColor = setDrawColor; window.setDrawSize = setDrawSize; window.clearFullCanvas = clearFullCanvas; window.saveDrawingAndClose = saveDrawingAndClose; window.closeDrawingModal = closeDrawingModal;
-window.updatePrayerTime = updatePrayerTime; window.togglePrayer = togglePrayer; window.useFreezeToken = useFreezeToken;
+window.updatePrayerTime = updatePrayerTime; window.togglePrayer = togglePrayer; window.useFreezeToken = useFreezeToken; window.cancelAlarm = cancelAlarm;
 </script>
 </body>
 </html>
