@@ -255,7 +255,7 @@ input:focus, textarea:focus {
 }
 .nav-btn {
   flex: 1;
-  min-width: 55px;
+  min-width: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -268,8 +268,8 @@ input:focus, textarea:focus {
   transition: all 0.2s;
 }
 .nav-btn.active { color: var(--accent); }
-.nav-icon { font-size: 1.3rem; }
-.nav-label { font-size: 0.55rem; margin-top: 2px; }
+.nav-icon { font-size: 1.2rem; }
+.nav-label { font-size: 0.5rem; margin-top: 2px; }
 
 /* Main Content */
 .main-content {
@@ -399,7 +399,7 @@ input:focus, textarea:focus {
 .timetable-subject { font-weight: 600; font-size: 0.85rem; }
 .timetable-note { font-size: 0.7rem; color: var(--text2); margin-top: 4px; }
 
-/* Notes Toolbar */
+/* Notes with Drawing - Fixed Scroll */
 .notes-toolbar {
   display: flex;
   gap: 8px;
@@ -430,19 +430,47 @@ input:focus, textarea:focus {
   padding: 12px;
   resize: vertical;
 }
-.canvas-container {
-  margin-top: 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg3);
+.drawing-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 3000;
+  display: none;
+  flex-direction: column;
+  padding: 20px;
 }
-#drawCanvas {
-  display: block;
-  width: 100%;
-  height: auto;
+.drawing-container.active {
+  display: flex;
+}
+.drawing-canvas {
+  flex: 1;
   background: white;
+  border-radius: 12px;
+  touch-action: none;
+}
+.drawing-tools {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg2);
+  border-radius: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.shape-tool {
+  padding: 8px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  cursor: crosshair;
+  cursor: pointer;
+  color: var(--text);
+}
+.shape-tool.active {
+  background: var(--accent);
+  color: #000;
 }
 
 /* Tools Grid */
@@ -501,11 +529,11 @@ input:focus, textarea:focus {
 }
 .converter-row select, .converter-row input { flex: 1; }
 
-/* Game Container */
+/* Game Container - Anti-Stress Design */
 .game-container {
   position: fixed;
   inset: 0;
-  background: #000;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
   z-index: 2000;
   display: flex;
   flex-direction: column;
@@ -515,6 +543,10 @@ input:focus, textarea:focus {
   display: block;
   width: 100%;
   touch-action: none;
+  border-radius: 20px;
+  margin: 10px;
+  background: #0f0f23;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 .game-ui {
   position: absolute;
@@ -523,17 +555,20 @@ input:focus, textarea:focus {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(10px);
   z-index: 2001;
+  border-radius: 20px;
 }
 .game-score {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  font-size: 18px;
+  top: 20px;
+  left: 20px;
+  font-size: 20px;
   color: #00f2ff;
   font-family: 'Orbitron', monospace;
   z-index: 2002;
+  text-shadow: 0 0 10px #00f2ff;
 }
 .game-close {
   position: absolute;
@@ -549,7 +584,6 @@ input:focus, textarea:focus {
   cursor: pointer;
   z-index: 2002;
 }
-/* Joystick - Bottom Center - Fixed Lag */
 .joystick-container {
   position: absolute;
   bottom: 100px;
@@ -562,25 +596,138 @@ input:focus, textarea:focus {
 .joystick-base {
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.2);
   border-radius: 50%;
   position: relative;
   border: 2px solid rgba(0,242,255,0.6);
-  touch-action: none;
+  backdrop-filter: blur(5px);
 }
 .joystick-thumb {
   width: 45px;
   height: 45px;
-  background: rgba(0,242,255,0.95);
+  background: rgba(0,242,255,0.9);
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
-  box-shadow: 0 0 15px #00f2ff;
+  box-shadow: 0 0 20px #00f2ff;
   transition: transform 0.02s linear;
-  touch-action: none;
+}
+
+/* Chess Game */
+.chess-container {
+  position: fixed;
+  inset: 0;
+  background: #1a1a2e;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+.chess-board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  aspect-ratio: 1;
+  background: #2c2c3e;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 10px;
+}
+.chess-square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.chess-square.light { background: #f0d9b5; }
+.chess-square.dark { background: #b58863; }
+.chess-square.selected { background: #7b61ff; box-shadow: inset 0 0 0 3px gold; }
+.chess-square.valid { background: #4ade80; }
+.chess-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2002;
+}
+
+/* Prayers Section */
+.prayers-container {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.prayer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.prayer-name {
+  font-weight: 700;
+  min-width: 80px;
+}
+.prayer-time {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+.prayer-tick {
+  display: flex;
+  gap: 8px;
+}
+.tick-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+}
+.tick-btn.active {
+  background: var(--success);
+  color: #000;
+}
+.prayer-streak-tree {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  margin-top: 16px;
+}
+.tree-stage {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+.apple-count {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+.freeze-token {
+  background: linear-gradient(135deg, #00d4b4, #00a896);
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 100px;
+  display: inline-block;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
 /* Gallery */
@@ -732,6 +879,24 @@ input:focus, textarea:focus {
   50% { transform: scale(1.3); }
 }
 
+/* Draft Indicator */
+.draft-indicator {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  background: var(--accent);
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.draft-indicator.show {
+  opacity: 1;
+}
+
 @media (min-width: 600px) {
   .bottom-nav { left: 50%; transform: translateX(-50%); }
 }
@@ -743,7 +908,7 @@ input:focus, textarea:focus {
 <div id="splash" class="splash">
   <div class="splash-logo">
     <h1 class="splash-title">Replace Deeds</h1>
-    <p style="color:var(--text2);margin-top:8px">Track. Level Up. Transform.</p>
+    <p style="color:var(--text2);margin-top:8px">Track. Pray. Level Up.</p>
   </div>
 </div>
 
@@ -753,7 +918,7 @@ input:focus, textarea:focus {
     <div class="onboard-step active" data-step="0">
       <div style="font-size:4rem;margin-bottom:16px">⭐</div>
       <h2>Welcome to Replace Deeds</h2>
-      <p>Track habits, earn XP, and level up your life!</p>
+      <p>Track habits, prayers, earn XP, and grow your spiritual tree!</p>
       <button class="btn-primary" onclick="nextOnboard()">Begin Journey</button>
     </div>
     <div class="onboard-step" data-step="1">
@@ -784,6 +949,10 @@ input:focus, textarea:focus {
       <button class="btn-primary" style="margin-top:12px" onclick="showAddSection()">+ Add Section</button>
     </div>
 
+    <div class="tab-panel" id="tab-prayers">
+      <div class="prayers-container" id="prayersContainer"></div>
+    </div>
+
     <div class="tab-panel" id="tab-timetable">
       <div class="timetable-header">
         <h2>📅 Time Table</h2>
@@ -799,18 +968,13 @@ input:focus, textarea:focus {
         <button class="btn-secondary" onclick="noteSetFont('size+')">A+</button>
         <button class="btn-secondary" onclick="noteSetFont('size-')">A-</button>
         <input type="color" id="noteColorPicker" value="#00d4b4" onchange="noteSetColor(this.value)">
-        <button class="btn-secondary" onclick="toggleDrawing()">✏️ Draw</button>
-        <button class="btn-secondary" onclick="clearCanvas()">🗑️ Clear Draw</button>
+        <button class="btn-primary" onclick="openDrawingModal()">✏️ Open Drawing</button>
       </div>
       <div class="note-editor-area">
         <input type="text" id="noteTitle" class="note-title" placeholder="Note title...">
         <textarea id="noteContent" class="note-content" placeholder="Write your note here..."></textarea>
-        <div class="canvas-container hidden" id="canvasContainer">
-          <canvas id="drawCanvas" width="500" height="300" style="width:100%;height:auto;background:white"></canvas>
-        </div>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn-primary" onclick="saveNoteWithDrawing()">💾 Save Note + Drawing</button>
-          <button class="btn-secondary" onclick="saveNoteOnly()">📝 Save Note Only</button>
+          <button class="btn-primary" onclick="saveNoteWithDrawing()">💾 Save Note</button>
           <button class="btn-secondary" onclick="loadNotesList()">📋 My Notes</button>
         </div>
       </div>
@@ -831,6 +995,7 @@ input:focus, textarea:focus {
         <div class="tool-card" onclick="showConverter()"><div class="tool-icon">🔄</div><div>Converter</div></div>
         <div class="tool-card" onclick="showSafeGallery()"><div class="tool-icon">🖼️</div><div>Safe Gallery</div></div>
         <div class="tool-card" onclick="openGame()"><div class="tool-icon">🎮</div><div>Witty Star</div></div>
+        <div class="tool-card" onclick="openChess()"><div class="tool-icon">♟️</div><div>Witty Chess</div></div>
       </div>
       <div id="toolsContent"></div>
     </div>
@@ -879,6 +1044,7 @@ input:focus, textarea:focus {
 
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="showTab('habits')" data-tab="habits"><span class="nav-icon">🏠</span><span class="nav-label">Habits</span></button>
+    <button class="nav-btn" onclick="showTab('prayers')" data-tab="prayers"><span class="nav-icon">🕌</span><span class="nav-label">Prayers</span></button>
     <button class="nav-btn" onclick="showTab('timetable')" data-tab="timetable"><span class="nav-icon">📅</span><span class="nav-label">Time</span></button>
     <button class="nav-btn" onclick="showTab('notes')" data-tab="notes"><span class="nav-icon">📝</span><span class="nav-label">Notes</span></button>
     <button class="nav-btn" onclick="showTab('tasks')" data-tab="tasks"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></button>
@@ -888,9 +1054,29 @@ input:focus, textarea:focus {
   </nav>
 </div>
 
+<!-- Drawing Modal (Fullscreen) -->
+<div id="drawingModal" class="drawing-container">
+  <canvas id="drawCanvas" class="drawing-canvas" width="600" height="500"></canvas>
+  <div class="drawing-tools">
+    <button class="shape-tool" onclick="setDrawTool('pen')">✏️ Pen</button>
+    <button class="shape-tool" onclick="setDrawTool('square')">⬛ Square</button>
+    <button class="shape-tool" onclick="setDrawTool('circle')">● Circle</button>
+    <button class="shape-tool" onclick="setDrawTool('line')">━ Line</button>
+    <button class="shape-tool" onclick="setDrawTool('arrow')">➡ Arrow</button>
+    <input type="color" id="drawColor" value="#000000" onchange="setDrawColor(this.value)">
+    <input type="range" id="drawSize" min="1" max="20" value="3" onchange="setDrawSize(this.value)">
+    <button class="shape-tool" onclick="clearFullCanvas()">🗑️ Clear</button>
+    <button class="btn-primary" onclick="saveDrawingAndClose()">✅ Save & Close</button>
+    <button class="btn-danger" onclick="closeDrawingModal()">✕ Cancel</button>
+  </div>
+</div>
+
 <div id="modalOverlay" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
   <div class="modal"><div id="modalContent"></div></div>
 </div>
+
+<!-- Draft Indicator -->
+<div id="draftIndicator" class="draft-indicator">💾 Draft saved</div>
 
 <script>
 // ===== STORAGE =====
@@ -902,22 +1088,58 @@ const STORAGE = {
   clear() { Object.keys(localStorage).filter(k => k.startsWith(this._prefix)).forEach(k => localStorage.removeItem(k)); }
 };
 
-// ===== OFFLINE ALARM / NOTIFICATION =====
+// ===== DRAFT SYSTEM (WhatsApp Style) =====
+let draftTimeout = null;
+let currentDraftId = null;
+
+function saveDraft() {
+  const title = document.getElementById('noteTitle')?.value || '';
+  const content = document.getElementById('noteContent')?.value || '';
+  if (title || content) {
+    STORAGE.set('noteDraft', { title, content, timestamp: Date.now() });
+    showDraftIndicator();
+  }
+}
+
+function showDraftIndicator() {
+  const indicator = document.getElementById('draftIndicator');
+  indicator.classList.add('show');
+  setTimeout(() => indicator.classList.remove('show'), 2000);
+}
+
+function loadDraft() {
+  const draft = STORAGE.get('noteDraft', null);
+  if (draft && (draft.title || draft.content)) {
+    if (confirm("You have unsaved draft. Load it?")) {
+      document.getElementById('noteTitle').value = draft.title;
+      document.getElementById('noteContent').value = draft.content;
+    }
+  }
+}
+
+// Auto-save every 2 seconds
+setInterval(() => { saveDraft(); }, 2000);
+
+// Save before page close
+window.addEventListener('beforeunload', () => { saveDraft(); });
+
+// ===== OFFLINE NOTIFICATION & ALARM =====
+let alarmTimeouts = {};
+
 function playBeep() {
   try {
-    // Create audio context for beep (works offline)
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     const ctx = new AudioContext();
-    const oscillator = ctx.createOscillator();
+    const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    oscillator.connect(gain);
+    osc.connect(gain);
     gain.connect(ctx.destination);
-    oscillator.frequency.value = 880;
+    osc.frequency.value = 880;
     gain.gain.value = 0.3;
-    oscillator.start();
+    osc.start();
     gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
-    oscillator.stop(ctx.currentTime + 0.5);
-  } catch(e) { console.log("Beep error", e); }
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) { console.log("Beep error"); }
 }
 
 function vibrateDevice() {
@@ -943,10 +1165,26 @@ function sendNotification(title, body) {
   }
 }
 
+function scheduleAlarm(id, time, title, repeatDaily) {
+  if (alarmTimeouts[id]) clearTimeout(alarmTimeouts[id]);
+  let [h, m] = time.split(':');
+  let now = new Date();
+  let alarm = new Date();
+  alarm.setHours(parseInt(h), parseInt(m), 0, 0);
+  if (alarm <= now) alarm.setDate(alarm.getDate() + 1);
+  let delay = alarm - now;
+  if (delay > 0) {
+    alarmTimeouts[id] = setTimeout(() => {
+      sendNotification("⏰ Reminder", title);
+      if (repeatDaily) scheduleAlarm(id, time, title, repeatDaily);
+    }, delay);
+  }
+}
+
 // ===== ACTIVITY HISTORY =====
 function addHistory(action, details = "") {
   const history = STORAGE.get('history', []);
-  history.unshift({ id: Date.now(), action, details, date: new Date().toLocaleString(), timestamp: new Date().toISOString() });
+  history.unshift({ id: Date.now(), action, details, date: new Date().toLocaleString() });
   STORAGE.set('history', history.slice(0, 200));
   renderHistory();
 }
@@ -1102,6 +1340,148 @@ function deleteHabit(id) {
   setHabits(habits); addHistory(`Deleted habit`, h?.name); renderSections();
 }
 
+// ===== PRAYERS SYSTEM =====
+const PRAYERS = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+const DEFAULT_TIMES = { Fajr: '05:00', Dhuhr: '12:30', Asr: '15:45', Maghrib: '18:15', Isha: '19:45' };
+
+function getPrayerSettings() { return STORAGE.get('prayerSettings', { times: DEFAULT_TIMES, streak: 0, longestStreak: 0, freezeTokens: 0, treeStage: 0, lastPrayedDate: null, missedPrayerFreezeUsed: false }); }
+function setPrayerSettings(s) { STORAGE.set('prayerSettings', s); }
+
+function getPrayerCompletions() { return STORAGE.get('prayerCompletions', {}); }
+function setPrayerCompletions(c) { STORAGE.set('prayerCompletions', c); }
+
+function renderPrayers() {
+  const container = document.getElementById('prayersContainer');
+  if (!container) return;
+  const settings = getPrayerSettings();
+  const comps = getPrayerCompletions();
+  const todayStr = today();
+  const todayComp = comps[todayStr] || {};
+  
+  const treeStage = settings.treeStage || 0;
+  const stageLevel = Math.floor(treeStage / 40);
+  let appleColor = '🍎';
+  if (treeStage >= 120) appleColor = '🍎✨'; // golden
+  else if (treeStage >= 80) appleColor = '🍎💙'; // blue
+  else if (treeStage >= 40) appleColor = '🍎❤️'; // red
+  
+  container.innerHTML = `
+    <h3>🕌 Daily Prayers</h3>
+    ${PRAYERS.map(p => `
+      <div class="prayer-item">
+        <span class="prayer-name">${p}</span>
+        <input type="time" class="prayer-time" value="${settings.times[p] || DEFAULT_TIMES[p]}" data-prayer="${p}" onchange="updatePrayerTime('${p}', this.value)">
+        <div class="prayer-tick">
+          <button class="tick-btn ${todayComp[p] === 'prayed' ? 'active' : ''}" onclick="togglePrayer('${p}', 'prayed')">🕌 Prayed</button>
+          <button class="tick-btn ${todayComp[p] === 'full' ? 'active' : ''}" onclick="togglePrayer('${p}', 'full')">🕌 Full</button>
+          <button class="tick-btn ${todayComp[p] === 'jamaat' ? 'active' : ''}" onclick="togglePrayer('${p}', 'jamaat')">🕌 Jamaat</button>
+        </div>
+      </div>
+    `).join('')}
+    <div class="prayer-streak-tree">
+      <div class="tree-stage">${appleColor.repeat(Math.min(10, Math.ceil(treeStage/10)))}</div>
+      <div><strong>${treeStage} Days Streak</strong> | Longest: ${settings.longestStreak || 0}</div>
+      <div class="apple-count">🍎 ${treeStage} apples</div>
+      ${settings.freezeTokens > 0 ? `<div class="freeze-token" onclick="useFreezeToken()">❄️ Freeze Token (${settings.freezeTokens})</div>` : ''}
+    </div>
+  `;
+}
+
+function updatePrayerTime(prayer, time) {
+  const settings = getPrayerSettings();
+  settings.times[prayer] = time;
+  setPrayerSettings(settings);
+  addHistory(`Updated prayer time`, `${prayer}: ${time}`);
+  // Schedule alarm for this prayer
+  scheduleAlarm(`prayer_${prayer}`, time, `🕌 ${prayer} Prayer Time`, true);
+}
+
+function togglePrayer(prayer, type) {
+  const comps = getPrayerCompletions();
+  const todayStr = today();
+  if (!comps[todayStr]) comps[todayStr] = {};
+  
+  if (comps[todayStr][prayer] === type) {
+    delete comps[todayStr][prayer];
+  } else {
+    comps[todayStr][prayer] = type;
+  }
+  setPrayerCompletions(comps);
+  
+  // Update streak
+  updatePrayerStreak();
+  renderPrayers();
+  addHistory(`Prayer recorded`, `${prayer} - ${type}`);
+  addXP(5, `Prayer: ${prayer}`);
+}
+
+function updatePrayerStreak() {
+  const comps = getPrayerCompletions();
+  const settings = getPrayerSettings();
+  let todayStr = today();
+  let todayComps = comps[todayStr] || {};
+  let allPrayersDone = PRAYERS.every(p => todayComps[p]);
+  
+  let lastDate = settings.lastPrayedDate;
+  let yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  let yesterdayStr = yesterday.toISOString().split('T')[0];
+  
+  if (allPrayersDone) {
+    if (!lastDate) {
+      settings.streak = 1;
+    } else if (lastDate === yesterdayStr) {
+      settings.streak++;
+    } else if (lastDate !== todayStr) {
+      // Check if missed
+      let missed = true;
+      if (settings.missedPrayerFreezeUsed) {
+        settings.missedPrayerFreezeUsed = false;
+        missed = false;
+      }
+      if (missed) {
+        settings.streak = 1;
+      } else {
+        settings.streak++;
+      }
+    }
+    settings.lastPrayedDate = todayStr;
+    settings.treeStage = (settings.treeStage || 0) + 1;
+    if (settings.streak > (settings.longestStreak || 0)) settings.longestStreak = settings.streak;
+    
+    // Give freeze token every 40 days
+    if (settings.treeStage % 40 === 0 && settings.treeStage > 0) {
+      settings.freezeTokens = (settings.freezeTokens || 0) + 1;
+      addHistory(`Freeze token earned!`, `40-day streak!`);
+    }
+  } else if (lastDate === yesterdayStr && !allPrayersDone) {
+    // Missed a prayer - check freeze token
+    if (settings.freezeTokens > 0) {
+      settings.freezeTokens--;
+      settings.missedPrayerFreezeUsed = true;
+      addHistory(`Freeze token used`, `Saved streak`);
+    } else {
+      settings.streak = 0;
+      settings.treeStage = 0;
+      addHistory(`Prayer streak broken`, `Missed a prayer`);
+    }
+  }
+  
+  setPrayerSettings(settings);
+}
+
+function useFreezeToken() {
+  const settings = getPrayerSettings();
+  if (settings.freezeTokens > 0) {
+    settings.freezeTokens--;
+    settings.missedPrayerFreezeUsed = true;
+    setPrayerSettings(settings);
+    renderPrayers();
+    addHistory(`Freeze token used`, `Prayer streak saved`);
+    showNotification("❄️ Freeze token used! Streak saved!", "success");
+  }
+}
+
 // ===== TIME TABLE =====
 function getTimetable() { return STORAGE.get('timetable', []); }
 function setTimetable(t) { STORAGE.set('timetable', t); }
@@ -1114,16 +1494,17 @@ function renderTimetable() {
   cont.innerHTML = `<div class="timetable-grid">${tt.map(t => `<div class="timetable-row"><div class="timetable-time">${esc(t.time)}</div><div class="timetable-item" onclick="editTimetable('${t.id}')"><div class="timetable-subject">${esc(t.subject)}</div>${t.note?`<div class="timetable-note">${esc(t.note)}</div>`:''}</div></div>`).join('')}</div>`;
 }
 function showAddTimetable() {
-  showModal(`<h3>Add Timetable Entry</h3><div class="field-group"><label>Time (HH:MM)</label><input type="time" id="ttTime" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Subject</label><input type="text" id="ttSubject" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Notes</label><input type="text" id="ttNote" style="width:100%;margin-bottom:12px;padding:10px"></div><div class="field-group"><label>Alarm (offline beep + notification)</label><input type="time" id="ttAlarm" style="width:100%;margin-bottom:12px;padding:10px"></div><button class="btn-primary" onclick="addTimetable()">Save</button>`);
+  showModal(`<h3>Add Timetable Entry</h3><div class="field-group"><label>Time (HH:MM)</label><input type="time" id="ttTime" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Subject</label><input type="text" id="ttSubject" style="width:100%;margin:12px 0;padding:10px"></div><div class="field-group"><label>Notes</label><input type="text" id="ttNote" style="width:100%;margin-bottom:12px;padding:10px"></div><div class="field-group"><label>Alarm</label><input type="time" id="ttAlarm" style="width:100%;margin-bottom:12px;padding:10px"></div><button class="btn-primary" onclick="addTimetable()">Save</button>`);
 }
 function addTimetable() {
   let time = document.getElementById('ttTime')?.value;
   let subj = document.getElementById('ttSubject')?.value.trim();
   if(!time || !subj) return;
   let tt = getTimetable();
-  let newItem = { id: genId(), time, subject: subj, note: document.getElementById('ttNote')?.value, alarmTime: document.getElementById('ttAlarm')?.value };
+  let alarmTime = document.getElementById('ttAlarm')?.value;
+  let newItem = { id: genId(), time, subject: subj, note: document.getElementById('ttNote')?.value, alarmTime };
   tt.push(newItem); setTimetable(tt); addHistory(`Added timetable`, `${time} - ${subj}`); closeModal(); renderTimetable();
-  if(newItem.alarmTime) scheduleTTAlarm(newItem);
+  if(alarmTime) scheduleAlarm(`tt_${newItem.id}`, alarmTime, `📅 ${subj}`, true);
 }
 function editTimetable(id) {
   let tt = getTimetable();
@@ -1136,59 +1517,142 @@ function updateTimetable(id) {
   if(!time || !subj) return;
   let tt = getTimetable();
   let idx = tt.findIndex(t => t.id === id);
-  if(idx !== -1) { tt[idx] = { ...tt[idx], time, subject: subj, note: document.getElementById('ttNote')?.value, alarmTime: document.getElementById('ttAlarm')?.value }; setTimetable(tt); addHistory(`Updated timetable`, `${time} - ${subj}`); closeModal(); renderTimetable(); }
+  if(idx !== -1) { 
+    tt[idx] = { ...tt[idx], time, subject: subj, note: document.getElementById('ttNote')?.value, alarmTime: document.getElementById('ttAlarm')?.value }; 
+    setTimetable(tt); addHistory(`Updated timetable`, `${time} - ${subj}`); closeModal(); renderTimetable();
+    if(tt[idx].alarmTime) scheduleAlarm(`tt_${id}`, tt[idx].alarmTime, `📅 ${subj}`, true);
+  }
 }
 function deleteTimetableItem(id) {
   let tt = getTimetable();
   let item = tt.find(t => t.id === id);
   tt = tt.filter(t => t.id !== id);
   setTimetable(tt); addHistory(`Deleted timetable`, item?.subject); closeModal(); renderTimetable();
-}
-function scheduleTTAlarm(item) {
-  let [h,m] = item.alarmTime.split(':');
-  let now = new Date();
-  let alarm = new Date();
-  alarm.setHours(parseInt(h), parseInt(m), 0, 0);
-  if(alarm <= now) alarm.setDate(alarm.getDate()+1);
-  let delay = alarm - now;
-  if(delay > 0) {
-    setTimeout(() => {
-      sendNotification("📅 Timetable Reminder", `${item.time} - ${item.subject}`);
-      scheduleTTAlarm(item);
-    }, delay);
-  }
+  if(alarmTimeouts[`tt_${id}`]) clearTimeout(alarmTimeouts[`tt_${id}`]);
 }
 
-// ===== NOTES + DRAWING =====
-let drawing = false, ctx = null, canvas = null, currentDrawing = null;
-function initCanvas() {
-  canvas = document.getElementById('drawCanvas');
-  if(!canvas) return;
-  canvas.width = 500; canvas.height = 300;
-  ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'white'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.strokeStyle = '#000'; ctx.lineWidth = 2;
-  let start = (e) => { drawing=true; let p = getCanvasPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); };
-  let draw = (e) => { if(!drawing) return; let p = getCanvasPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); };
-  let stop = () => { drawing=false; };
-  canvas.removeEventListener('mousedown', start); canvas.removeEventListener('mousemove', draw); canvas.removeEventListener('mouseup', stop);
-  canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stop);
-  canvas.addEventListener('touchstart', start); canvas.addEventListener('touchmove', draw); canvas.addEventListener('touchend', stop);
-  if(currentDrawing) { let img = new Image(); img.onload = () => ctx.drawImage(img,0,0); img.src = currentDrawing; }
+// ===== NOTES WITH DRAWING (Fullscreen Fix) =====
+let drawCtx = null, drawCanvas = null, drawingActive = false, currentTool = 'pen', drawColor = '#000000', drawSize = 3;
+let lastX = 0, lastY = 0;
+let currentDrawingData = null;
+
+function openDrawingModal() {
+  const modal = document.getElementById('drawingModal');
+  modal.classList.add('active');
+  setTimeout(() => {
+    drawCanvas = document.getElementById('drawCanvas');
+    drawCtx = drawCanvas.getContext('2d');
+    drawCanvas.width = drawCanvas.clientWidth;
+    drawCanvas.height = drawCanvas.clientHeight;
+    drawCtx.fillStyle = 'white';
+    drawCtx.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
+    drawCtx.strokeStyle = drawColor;
+    drawCtx.lineWidth = drawSize;
+    drawCtx.lineCap = 'round';
+    if (currentDrawingData) {
+      let img = new Image();
+      img.onload = () => drawCtx.drawImage(img, 0, 0, drawCanvas.width, drawCanvas.height);
+      img.src = currentDrawingData;
+    }
+    setupDrawingEvents();
+  }, 100);
 }
-function getCanvasPos(e) {
-  let rect = canvas.getBoundingClientRect();
-  let sx = canvas.width/rect.width, sy = canvas.height/rect.height;
-  let cx = e.touches ? e.touches[0].clientX : e.clientX;
-  let cy = e.touches ? e.touches[0].clientY : e.clientY;
-  return { x: (cx - rect.left)*sx, y: (cy - rect.top)*sy };
+
+function closeDrawingModal() {
+  document.getElementById('drawingModal').classList.remove('active');
+  currentDrawingData = null;
 }
-function toggleDrawing() {
-  let cont = document.getElementById('canvasContainer');
-  if(cont) cont.classList.toggle('hidden');
-  setTimeout(initCanvas, 100);
+
+function saveDrawingAndClose() {
+  if (drawCanvas) {
+    currentDrawingData = drawCanvas.toDataURL();
+  }
+  closeDrawingModal();
+  showNotification("Drawing saved! 🎨", "success");
 }
-function clearCanvas() { if(ctx) { ctx.fillStyle='white'; ctx.fillRect(0,0,canvas.width,canvas.height); currentDrawing=null; } }
+
+function setDrawTool(tool) {
+  currentTool = tool;
+  document.querySelectorAll('.shape-tool').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function setDrawColor(color) { drawColor = color; if(drawCtx) drawCtx.strokeStyle = color; }
+function setDrawSize(size) { drawSize = size; if(drawCtx) drawCtx.lineWidth = size; }
+function clearFullCanvas() { if(drawCtx) { drawCtx.fillStyle = 'white'; drawCtx.fillRect(0, 0, drawCanvas.width, drawCanvas.height); } }
+
+function setupDrawingEvents() {
+  let startDraw = (e) => {
+    drawingActive = true;
+    let pos = getDrawPos(e);
+    lastX = pos.x; lastY = pos.y;
+    if (currentTool === 'pen') {
+      drawCtx.beginPath();
+      drawCtx.moveTo(lastX, lastY);
+    }
+  };
+  let draw = (e) => {
+    if (!drawingActive) return;
+    let pos = getDrawPos(e);
+    if (currentTool === 'pen') {
+      drawCtx.lineTo(pos.x, pos.y);
+      drawCtx.stroke();
+      drawCtx.beginPath();
+      drawCtx.moveTo(pos.x, pos.y);
+    } else if (currentTool === 'square') {
+      let width = pos.x - lastX;
+      let height = pos.y - lastY;
+      drawCtx.fillStyle = 'white';
+      drawCtx.fillRect(lastX, lastY, width, height);
+      drawCtx.strokeRect(lastX, lastY, width, height);
+    } else if (currentTool === 'circle') {
+      let radius = Math.hypot(pos.x - lastX, pos.y - lastY);
+      drawCtx.beginPath();
+      drawCtx.arc(lastX, lastY, radius, 0, Math.PI * 2);
+      drawCtx.stroke();
+    } else if (currentTool === 'line') {
+      drawCtx.beginPath();
+      drawCtx.moveTo(lastX, lastY);
+      drawCtx.lineTo(pos.x, pos.y);
+      drawCtx.stroke();
+    } else if (currentTool === 'arrow') {
+      drawCtx.beginPath();
+      drawCtx.moveTo(lastX, lastY);
+      drawCtx.lineTo(pos.x, pos.y);
+      drawCtx.stroke();
+      let angle = Math.atan2(pos.y - lastY, pos.x - lastX);
+      let arrowX = pos.x - 10 * Math.cos(angle);
+      let arrowY = pos.y - 10 * Math.sin(angle);
+      drawCtx.beginPath();
+      drawCtx.moveTo(arrowX, arrowY);
+      drawCtx.lineTo(arrowX - 8 * Math.sin(angle), arrowY + 8 * Math.cos(angle));
+      drawCtx.lineTo(arrowX + 8 * Math.sin(angle), arrowY - 8 * Math.cos(angle));
+      drawCtx.fill();
+    }
+    lastX = pos.x; lastY = pos.y;
+  };
+  let stopDraw = () => { drawingActive = false; drawCtx.beginPath(); };
+  
+  drawCanvas.removeEventListener('mousedown', startDraw);
+  drawCanvas.removeEventListener('mousemove', draw);
+  drawCanvas.removeEventListener('mouseup', stopDraw);
+  drawCanvas.addEventListener('mousedown', startDraw);
+  drawCanvas.addEventListener('mousemove', draw);
+  drawCanvas.addEventListener('mouseup', stopDraw);
+  drawCanvas.addEventListener('touchstart', startDraw);
+  drawCanvas.addEventListener('touchmove', draw);
+  drawCanvas.addEventListener('touchend', stopDraw);
+}
+
+function getDrawPos(e) {
+  let rect = drawCanvas.getBoundingClientRect();
+  let scaleX = drawCanvas.width / rect.width;
+  let scaleY = drawCanvas.height / rect.height;
+  let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+}
+
 function noteSetFont(s) {
   let ta = document.getElementById('noteContent');
   if(s==='bold') ta.style.fontWeight = ta.style.fontWeight==='bold'?'normal':'bold';
@@ -1202,30 +1666,17 @@ function setNotes(n) { STORAGE.set('notes', n); }
 function saveNoteWithDrawing() {
   let title = document.getElementById('noteTitle')?.value.trim() || '';
   let content = document.getElementById('noteContent')?.value || '';
-  if(!title && !content && !currentDrawing) return;
+  if(!title && !content && !currentDrawingData) return;
   let notes = getNotes();
-  let drawingData = canvas ? canvas.toDataURL() : null;
-  notes.unshift({ id: genId(), title: title||"Untitled", content, drawingData, hasDrawing: !!drawingData, date: new Date().toISOString() });
+  notes.unshift({ id: genId(), title: title||"Untitled", content, drawingData: currentDrawingData, date: new Date().toISOString() });
   setNotes(notes.slice(0,50));
   document.getElementById('noteTitle').value = '';
   document.getElementById('noteContent').value = '';
-  if(canvas) clearCanvas();
-  addHistory(`Saved note + drawing`, title||"Untitled");
-  showNotification("Note + Drawing saved! 📝🎨", "success");
-  loadNotesList();
-}
-function saveNoteOnly() {
-  let title = document.getElementById('noteTitle')?.value.trim() || '';
-  let content = document.getElementById('noteContent')?.value || '';
-  if(!title && !content) return;
-  let notes = getNotes();
-  notes.unshift({ id: genId(), title: title||"Untitled", content, drawingData: null, hasDrawing: false, date: new Date().toISOString() });
-  setNotes(notes.slice(0,50));
-  document.getElementById('noteTitle').value = '';
-  document.getElementById('noteContent').value = '';
-  addHistory(`Saved note only`, title||"Untitled");
+  currentDrawingData = null;
+  addHistory(`Saved note`, title||"Untitled");
   showNotification("Note saved! 📝", "success");
   loadNotesList();
+  STORAGE.del('noteDraft');
 }
 function loadNotesList() {
   let notes = getNotes();
@@ -1240,12 +1691,7 @@ function editNote(id) {
   if(!note) return;
   document.getElementById('noteTitle').value = note.title;
   document.getElementById('noteContent').value = note.content;
-  if(note.drawingData && canvas) {
-    currentDrawing = note.drawingData;
-    let cont = document.getElementById('canvasContainer');
-    if(cont) cont.classList.remove('hidden');
-    setTimeout(() => { let img = new Image(); img.onload = () => { if(ctx){ ctx.fillStyle='white'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0,canvas.width,canvas.height); } }; img.src = note.drawingData; }, 200);
-  }
+  if(note.drawingData) currentDrawingData = note.drawingData;
   deleteNoteItem(id, false);
   addHistory(`Editing note`, note.title);
 }
@@ -1258,7 +1704,7 @@ function deleteNoteItem(id, show=true) {
   loadNotesList();
 }
 
-// ===== TASKS WITH OFFLINE ALARMS =====
+// ===== TASKS =====
 function getTasks() { return STORAGE.get('tasks', []); }
 function setTasks(t) { STORAGE.set('tasks', t); }
 function getTaskComps() { return STORAGE.get('taskComps', {}); }
@@ -1272,16 +1718,17 @@ function renderTasks() {
   cont.innerHTML = tasks.map(t => `<div class="task-item"><div class="task-check ${comps[t.id]?'done':''}" onclick="toggleTask('${t.id}')">${comps[t.id]?'✓':''}</div><div class="task-info"><div><strong>${esc(t.name)}</strong> ${t.alarm?`<span class="alarm-badge">⏰ ${t.alarmTime}</span>`:''}</div>${t.note?`<div style="font-size:0.8rem;color:var(--text2)">${esc(t.note)}</div>`:''}</div><button class="btn-secondary" style="padding:4px 8px" onclick="editTaskItem('${t.id}')">✏️</button><button class="btn-danger" style="padding:4px 8px" onclick="deleteTaskItem('${t.id}')">🗑️</button></div>`).join('');
 }
 function showAddTask() {
-  showModal(`<h3>Add Task</h3><input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea><div class="field-group"><label>Alarm Time (offline beep + notification)</label><input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px"></div><label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label><button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>`);
+  showModal(`<h3>Add Task</h3><input type="text" id="taskName" placeholder="Task name" style="width:100%;margin:12px 0;padding:10px"><textarea id="taskNote" placeholder="Notes" style="width:100%;margin:12px 0;padding:10px"></textarea><div class="field-group"><label>Alarm Time</label><input type="time" id="taskAlarm" style="width:100%;margin:12px 0;padding:10px"></div><label><input type="checkbox" id="alarmRepeat"> Repeat Daily</label><button class="btn-primary" onclick="addTask()" style="margin-top:12px">Add Task</button>`);
 }
 function addTask() {
   let name = document.getElementById('taskName')?.value.trim();
   if(!name) return;
   let tasks = getTasks();
   let alarm = document.getElementById('taskAlarm')?.value;
-  let newTask = { id: genId(), name, note: document.getElementById('taskNote')?.value, alarm: !!alarm, alarmTime: alarm, repeatDaily: document.getElementById('alarmRepeat')?.checked, createdAt: new Date().toISOString() };
+  let repeat = document.getElementById('alarmRepeat')?.checked;
+  let newTask = { id: genId(), name, note: document.getElementById('taskNote')?.value, alarm: !!alarm, alarmTime: alarm, repeatDaily: repeat, createdAt: new Date().toISOString() };
   tasks.push(newTask); setTasks(tasks); addHistory(`Added task`, name); closeModal(); renderTasks();
-  if(alarm) scheduleTaskAlarm(newTask);
+  if(alarm) scheduleAlarm(`task_${newTask.id}`, alarm, `✅ ${name}`, repeat);
 }
 function editTaskItem(id) {
   let tasks = getTasks();
@@ -1296,7 +1743,7 @@ function updateTaskItem(id) {
   if(idx !== -1) {
     tasks[idx] = { ...tasks[idx], name, note: document.getElementById('taskNote')?.value, alarm: !!document.getElementById('taskAlarm')?.value, alarmTime: document.getElementById('taskAlarm')?.value, repeatDaily: document.getElementById('alarmRepeat')?.checked };
     setTasks(tasks); addHistory(`Updated task`, name); closeModal(); renderTasks();
-    if(tasks[idx].alarm) scheduleTaskAlarm(tasks[idx]);
+    if(tasks[idx].alarm) scheduleAlarm(`task_${id}`, tasks[idx].alarmTime, `✅ ${name}`, tasks[idx].repeatDaily);
   }
 }
 function deleteTaskItem(id) {
@@ -1304,6 +1751,7 @@ function deleteTaskItem(id) {
   let t = tasks.find(tt => tt.id === id);
   tasks = tasks.filter(tt => tt.id !== id);
   setTasks(tasks); addHistory(`Deleted task`, t?.name); renderTasks();
+  if(alarmTimeouts[`task_${id}`]) clearTimeout(alarmTimeouts[`task_${id}`]);
 }
 function toggleTask(id) {
   let comps = getTaskComps();
@@ -1312,20 +1760,6 @@ function toggleTask(id) {
   if(comps[id]) { addXP(15, "Task completed"); addHistory(`Completed task`, `+15 XP`); showNotification("+15 XP! ✅", "success"); }
   else addXP(-15, "Task undone");
   renderTasks(); updateAnalytics();
-}
-function scheduleTaskAlarm(task) {
-  let [h,m] = task.alarmTime.split(':');
-  let now = new Date();
-  let alarm = new Date();
-  alarm.setHours(parseInt(h), parseInt(m), 0, 0);
-  if(alarm <= now) alarm.setDate(alarm.getDate()+1);
-  let delay = alarm - now;
-  if(delay > 0) {
-    setTimeout(() => {
-      sendNotification("⏰ Task Reminder", task.name);
-      if(task.repeatDaily) scheduleTaskAlarm(task);
-    }, delay);
-  }
 }
 
 // ===== CALCULATOR =====
@@ -1432,14 +1866,14 @@ function viewFull(id) {
 }
 function deleteGallery(id) { galleryItems = galleryItems.filter(i => i.id !== id); STORAGE.set('galleryItems', galleryItems); addHistory(`Deleted from gallery`, `1 item`); renderGallery(); }
 
-// ===== GAME WITH SMOOTH JOYSTICK (Bottom Center, No Lag) =====
+// ===== WITTY STAR GAME (Anti-Stress UI) =====
 let gameActive = false, gameAnim = null, gameCtx=null, gameCanvas=null, gamePlayer=null, gameStars=[], gameEnemies=[], gameScore=0;
 let gameTargetX = 0, gameTargetY = 0;
 let joyVecX = 0, joyVecY = 0, joyActiveFlag = false;
 
 function openGame() {
   let cont = document.createElement('div'); cont.className = 'game-container'; cont.id='gameCont';
-  cont.innerHTML = `<canvas id="gameCanvasEl" class="game-canvas"></canvas><div id="gameUIEl" class="game-ui"><h1 style="font-family:Orbitron;color:#00f2ff">WITTY STAR</h1><p id="gameMsgEl">Use Joystick | Avoid Red</p><button class="btn-primary" style="width:auto;padding:12px 30px" onclick="startGameInstance()">START</button></div><div id="gameScoreEl" class="game-score">Stars: 0</div><button class="game-close" onclick="closeGame()">✕</button><div class="joystick-container" id="joyCont"><div class="joystick-base" id="joyBase"><div class="joystick-thumb" id="joyThumb"></div></div></div>`;
+  cont.innerHTML = `<canvas id="gameCanvasEl" class="game-canvas"></canvas><div id="gameUIEl" class="game-ui"><h1 style="font-family:Orbitron;color:#00f2ff;text-shadow:0 0 20px #00f2ff">WITTY STAR</h1><p id="gameMsgEl" style="color:#ccc">Use Joystick | Avoid Red | Calm Mind</p><button class="btn-primary" style="width:auto;padding:12px 30px;border-radius:50px" onclick="startGameInstance()">START GAME</button></div><div id="gameScoreEl" class="game-score">Stars: 0</div><button class="game-close" onclick="closeGame()">✕</button><div class="joystick-container" id="joyCont"><div class="joystick-base" id="joyBase"><div class="joystick-thumb" id="joyThumb"></div></div></div>`;
   document.body.appendChild(cont);
   gameCanvas = document.getElementById('gameCanvasEl'); gameCtx = gameCanvas.getContext('2d');
   function resizeGame() { if(gameCanvas) { gameCanvas.width = window.innerWidth; gameCanvas.height = window.innerHeight; gameTargetX = gameCanvas.width/2; gameTargetY = gameCanvas.height/2; } }
@@ -1447,13 +1881,11 @@ function openGame() {
   
   let joyBase = document.getElementById('joyBase'), joyThumb = document.getElementById('joyThumb');
   let joyRadius = 45;
-  let centerX = 0, centerY = 0;
-  
   function updateJoystickPos(e) {
     let touch = e.touches ? e.touches[0] : e;
     let rect = joyBase.getBoundingClientRect();
-    centerX = rect.left + rect.width/2;
-    centerY = rect.top + rect.height/2;
+    let centerX = rect.left + rect.width/2;
+    let centerY = rect.top + rect.height/2;
     let dx = touch.clientX - centerX;
     let dy = touch.clientY - centerY;
     let dist = Math.hypot(dx, dy);
@@ -1462,22 +1894,16 @@ function openGame() {
     joyVecX = dx / joyRadius;
     joyVecY = dy / joyRadius;
   }
-  
-  function resetJoystick() {
-    joyThumb.style.transform = 'translate(-50%, -50%)';
-    joyVecX = 0; joyVecY = 0;
-  }
-  
-  function onJoystickStart(e) { e.preventDefault(); joyActiveFlag = true; updateJoystickPos(e); }
-  function onJoystickMove(e) { e.preventDefault(); if(joyActiveFlag) updateJoystickPos(e); }
-  function onJoystickEnd() { joyActiveFlag = false; resetJoystick(); }
-  
-  joyBase.addEventListener('touchstart', onJoystickStart);
-  joyBase.addEventListener('touchmove', onJoystickMove);
-  joyBase.addEventListener('touchend', onJoystickEnd);
-  joyBase.addEventListener('mousedown', onJoystickStart);
+  function resetJoystick() { joyThumb.style.transform = 'translate(-50%, -50%)'; joyVecX = 0; joyVecY = 0; }
+  function onStart(e) { e.preventDefault(); joyActiveFlag = true; updateJoystickPos(e); }
+  function onMove(e) { e.preventDefault(); if(joyActiveFlag) updateJoystickPos(e); }
+  function onEnd() { joyActiveFlag = false; resetJoystick(); }
+  joyBase.addEventListener('touchstart', onStart);
+  joyBase.addEventListener('touchmove', onMove);
+  joyBase.addEventListener('touchend', onEnd);
+  joyBase.addEventListener('mousedown', onStart);
   window.addEventListener('mousemove', (e) => { if(joyActiveFlag) updateJoystickPos(e); });
-  window.addEventListener('mouseup', onJoystickEnd);
+  window.addEventListener('mouseup', onEnd);
   
   class GamePlayer {
     constructor() { this.x=gameCanvas.width/2; this.y=gameCanvas.height/2; this.history=[]; }
@@ -1499,17 +1925,17 @@ function openGame() {
       gameCtx.stroke();
       gameCtx.beginPath(); gameCtx.arc(this.x,this.y,8,0,Math.PI*2);
       gameCtx.fillStyle="#fff"; gameCtx.fill();
-      gameCtx.beginPath(); gameCtx.arc(this.x,this.y,10,0,Math.PI*2);
+      gameCtx.shadowBlur = 15; gameCtx.shadowColor = "#00f2ff";
+      gameCtx.beginPath(); gameCtx.arc(this.x,this.y,12,0,Math.PI*2);
       gameCtx.strokeStyle="#00f2ff"; gameCtx.stroke();
+      gameCtx.shadowBlur = 0;
     }
   }
-  
   class GameStar {
     constructor() { this.reset(); }
     reset() { this.x=20+Math.random()*(gameCanvas.width-40); this.y=20+Math.random()*(gameCanvas.height-40); }
-    draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,6,0,Math.PI*2); gameCtx.fillStyle="#FFD700"; gameCtx.fill(); }
+    draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,7,0,Math.PI*2); gameCtx.fillStyle="#FFD700"; gameCtx.fill(); gameCtx.shadowBlur = 10; gameCtx.shadowColor = "#FFD700"; gameCtx.fill(); gameCtx.shadowBlur = 0; }
   }
-  
   class GameEnemy {
     constructor() {
       let side=Math.floor(Math.random()*4);
@@ -1523,9 +1949,8 @@ function openGame() {
       this.angle=Math.atan2(dy,dx);
     }
     update() { this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; }
-    draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,10,0,Math.PI*2); gameCtx.fillStyle="#ff3333"; gameCtx.fill(); }
+    draw() { gameCtx.beginPath(); gameCtx.arc(this.x,this.y,10,0,Math.PI*2); gameCtx.fillStyle="#ff4444"; gameCtx.fill(); gameCtx.shadowBlur = 10; gameCtx.shadowColor = "#ff0000"; gameCtx.fill(); gameCtx.shadowBlur = 0; }
   }
-  
   window.startGameInstance = function() {
     gameScore=0; gameStars=[]; gameEnemies=[]; gameActive=true;
     document.getElementById('gameUIEl').style.display='none';
@@ -1535,18 +1960,16 @@ function openGame() {
     for(let i=0;i<8;i++) gameStars.push(new GameStar());
     addHistory(`Started game`, `Witty Star`);
   };
-  
   function gameOverInstance() {
     gameActive=false;
     document.getElementById('gameUIEl').style.display='flex';
-    document.getElementById('gameMsgEl').innerText = "GAME OVER! Score: "+gameScore;
+    document.getElementById('gameMsgEl').innerHTML = `GAME OVER!<br>Score: ${gameScore}`;
     let xp=Math.floor(gameScore/2);
     if(xp>0) { addXP(xp,"Witty Star"); addHistory(`Game over`,`Score: ${gameScore}, +${xp} XP`); showNotification(`+${xp} XP from game! ⭐`,"success"); }
   }
-  
   function gameLoop() {
     if(!gameCanvas||!gameCtx) return;
-    gameCtx.fillStyle="#000"; gameCtx.fillRect(0,0,gameCanvas.width,gameCanvas.height);
+    gameCtx.fillStyle="#0f0f23"; gameCtx.fillRect(0,0,gameCanvas.width,gameCanvas.height);
     if(gameActive && gamePlayer) {
       gamePlayer.update(); gamePlayer.draw();
       gameStars.forEach(s=>{ s.draw(); if(Math.hypot(gamePlayer.x-s.x,gamePlayer.y-s.y)<25){ gameScore++; document.getElementById('gameScoreEl').innerText="Stars: "+gameScore; s.reset(); if(gameScore%5===0){ addXP(5,"Witty Star"); addHistory(`Game milestone`,`${gameScore} stars`); } } });
@@ -1555,10 +1978,98 @@ function openGame() {
     }
     gameAnim = requestAnimationFrame(gameLoop);
   }
-  
   window.closeGame = function() { if(gameAnim) cancelAnimationFrame(gameAnim); document.getElementById('gameCont')?.remove(); gameActive=false; };
   gameLoop();
 }
+
+// ===== WITTY CHESS GAME =====
+let chessBoard = null, chessSelected = null, chessTurn = 'white', chessGameActive = false;
+
+function openChess() {
+  let cont = document.createElement('div'); cont.className = 'chess-container'; cont.id='chessCont';
+  cont.innerHTML = `<div class="chess-board" id="chessBoard"></div><button class="chess-close" onclick="closeChess()">✕</button>`;
+  document.body.appendChild(cont);
+  initChessBoard();
+  chessGameActive = true;
+}
+
+function initChessBoard() {
+  chessBoard = [
+    ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
+    ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
+    ['', '', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', '', ''],
+    ['', '', '', '', '', '', '', ''],
+    ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
+    ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖']
+  ];
+  chessTurn = 'white';
+  chessSelected = null;
+  renderChessBoard();
+}
+
+function renderChessBoard() {
+  let boardDiv = document.getElementById('chessBoard');
+  if (!boardDiv) return;
+  boardDiv.innerHTML = '';
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      let piece = chessBoard[i][j];
+      let isLight = (i + j) % 2 === 0;
+      let square = document.createElement('div');
+      square.className = `chess-square ${isLight ? 'light' : 'dark'}`;
+      if (chessSelected && chessSelected.row === i && chessSelected.col === j) square.classList.add('selected');
+      square.textContent = piece;
+      square.style.fontSize = '2rem';
+      square.onclick = (function(row, col) { return function() { onChessSquareClick(row, col); }; })(i, j);
+      boardDiv.appendChild(square);
+    }
+  }
+}
+
+function onChessSquareClick(row, col) {
+  if (!chessGameActive) return;
+  if (chessSelected === null) {
+    let piece = chessBoard[row][col];
+    if (piece && ((chessTurn === 'white' && '♙♖♘♗♕♔'.includes(piece)) || (chessTurn === 'black' && '♟♜♞♝♛♚'.includes(piece)))) {
+      chessSelected = { row, col };
+      renderChessBoard();
+    }
+  } else {
+    let fromRow = chessSelected.row, fromCol = chessSelected.col;
+    let piece = chessBoard[fromRow][fromCol];
+    let isValid = isValidMove(piece, fromRow, fromCol, row, col);
+    if (isValid) {
+      chessBoard[row][col] = piece;
+      chessBoard[fromRow][fromCol] = '';
+      chessTurn = chessTurn === 'white' ? 'black' : 'white';
+      chessSelected = null;
+      renderChessBoard();
+      addHistory(`Chess move`, `${piece} moved`);
+    } else {
+      chessSelected = null;
+      renderChessBoard();
+    }
+  }
+}
+
+function isValidMove(piece, fromRow, fromCol, toRow, toCol) {
+  let deltaRow = toRow - fromRow;
+  let deltaCol = toCol - fromCol;
+  let targetPiece = chessBoard[toRow][toCol];
+  if (targetPiece && ((chessTurn === 'white' && '♙♖♘♗♕♔'.includes(targetPiece)) || (chessTurn === 'black' && '♟♜♞♝♛♚'.includes(targetPiece)))) return false;
+  if (piece === '♙') return deltaRow === -1 && Math.abs(deltaCol) === 1 && targetPiece;
+  if (piece === '♟') return deltaRow === 1 && Math.abs(deltaCol) === 1 && targetPiece;
+  if (piece === '♖' || piece === '♜') return (fromRow === toRow || fromCol === toCol);
+  if (piece === '♘' || piece === '♞') return (Math.abs(deltaRow) === 2 && Math.abs(deltaCol) === 1) || (Math.abs(deltaRow) === 1 && Math.abs(deltaCol) === 2);
+  if (piece === '♗' || piece === '♝') return Math.abs(deltaRow) === Math.abs(deltaCol);
+  if (piece === '♕' || piece === '♛') return (fromRow === toRow || fromCol === toCol) || Math.abs(deltaRow) === Math.abs(deltaCol);
+  if (piece === '♔' || piece === '♚') return Math.abs(deltaRow) <= 1 && Math.abs(deltaCol) <= 1;
+  return true;
+}
+
+function closeChess() { document.getElementById('chessCont')?.remove(); chessGameActive = false; }
 
 // ===== THEMES =====
 function setTheme(t) { document.documentElement.setAttribute('data-theme', t); STORAGE.set('theme', t); addHistory(`Theme changed`, t); showNotification(`Theme: ${t} 🎨`, "success"); }
@@ -1593,7 +2104,7 @@ function saveProfile() {
   initApp();
 }
 function initApp() {
-  renderSections(); renderTimetable(); renderTasks(); loadNotesList(); updateXPDisplay(); updateAnalytics(); renderHistory(); applySavedTheme();
+  renderSections(); renderPrayers(); renderTimetable(); renderTasks(); loadNotesList(); updateXPDisplay(); updateAnalytics(); renderHistory(); applySavedTheme(); loadDraft();
   let p = getProfile();
   if(p && document.getElementById('profileCard')) document.getElementById('profileCard').innerHTML = `<div><strong>Name:</strong> ${esc(p.name)}</div><div><strong>Username:</strong> @${esc(p.username)}</div><div><strong>Member:</strong> ${new Date(p.createdAt).toLocaleDateString()}</div><div><strong>Total XP:</strong> ${STORAGE.get('xp',0)}</div>`;
 }
@@ -1602,6 +2113,7 @@ function showTab(tab) {
   document.getElementById(`tab-${tab}`)?.classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.querySelector(`.nav-btn[data-tab="${tab}"]`)?.classList.add('active');
+  if(tab==='prayers') renderPrayers();
   if(tab==='timetable') renderTimetable();
   if(tab==='notes') loadNotesList();
   if(tab==='tasks') renderTasks();
@@ -1621,7 +2133,7 @@ function showXPInfo() {
   showModal(`<h3>⭐ Your Progress</h3><div style="text-align:center;font-size:3rem">${r.icon}</div><div style="text-align:center;font-size:1.5rem">${r.name}</div><div>${xp} XP</div><div class="progress-bar"><div class="progress-fill" style="width:${((xp-r.min)/(next.next-r.min))*100}%"></div></div>`);
 }
 function exportData() {
-  let data = { xp: STORAGE.get('xp',0), sections: getSections(), habits: getHabits(), completions: getCompletions(), tasks: getTasks(), taskComps: getTaskComps(), timetable: getTimetable(), notes: getNotes(), profile: getProfile(), history: STORAGE.get('history',[]) };
+  let data = { xp: STORAGE.get('xp',0), sections: getSections(), habits: getHabits(), completions: getCompletions(), tasks: getTasks(), taskComps: getTaskComps(), timetable: getTimetable(), notes: getNotes(), profile: getProfile(), history: STORAGE.get('history',[]), prayerSettings: getPrayerSettings(), prayerCompletions: getPrayerCompletions() };
   let blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
   let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup-${today()}.json`; a.click(); URL.revokeObjectURL(a.href);
   addHistory(`Exported data`, `Backup created`);
@@ -1639,6 +2151,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if(Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
 });
 window.calcInput = calcInput; window.updateConvUI = updateConvUI; window.convLen = convLen; window.convWt = convWt; window.convTemp = convTemp; window.calcAge = calcAge; window.calcBudget = calcBudget;
+window.setDrawTool = setDrawTool; window.setDrawColor = setDrawColor; window.setDrawSize = setDrawSize; window.clearFullCanvas = clearFullCanvas; window.saveDrawingAndClose = saveDrawingAndClose; window.closeDrawingModal = closeDrawingModal;
+window.updatePrayerTime = updatePrayerTime; window.togglePrayer = togglePrayer; window.useFreezeToken = useFreezeToken;
 </script>
 </body>
 </html>
